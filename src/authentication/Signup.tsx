@@ -2,30 +2,22 @@ import React from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { FaGoogle } from "react-icons/fa";
 import "../index.css";
-import background from "../bg-1.jpg";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Login() {
-  const bgStyle = {
-    backgroundImage: `url(${background})`,
-    height: "100vh",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat"
-  };
   return (
-    <Container fluid style={bgStyle}>
+    <Container fluid style={{ backgroundColor: "#318F9B" }}>
       <Row className="vh-100 d-flex justify-content-center align-items-center">
-        <Col md={8} lg={6} xs={12} />
         <Col md={6} lg={4} xs={8}>
           <Card className="shadow">
             <Card.Body>
               <div className="mb-3 mt-md-4 mx-4">
                 <h2 className="fw-bold mb-4" style={{ textAlign: "center" }}>
-                  Login
+                  Sign Up
                 </h2>
                 <div className="mb-3">
                   <Form>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Group className="mb-3" controlId="formEmail">
                       <Form.Label
                         className="text-center"
                         style={{ fontWeight: "bold" }}
@@ -35,7 +27,7 @@ function Login() {
                       <Form.Control type="email" placeholder="Enter email" />
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formEmail">
+                    <Form.Group className="mb-3" controlId="formPassword">
                       <Form.Label
                         className="text-center"
                         style={{ fontWeight: "bold" }}
@@ -44,24 +36,31 @@ function Login() {
                       </Form.Label>
                       <Form.Control type="password" placeholder="Password" />
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="formPassword">
-                      <p className="small">
-                        <a className="text-primary" href="#!">
-                          Forgot password?
-                        </a>
-                      </p>
+
+                    <Form.Group
+                      className="mb-3"
+                      controlId="formConfirmPassword"
+                    >
+                      <Form.Label
+                        className="text-center"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Confirm Password
+                      </Form.Label>
+                      <Form.Control type="password" placeholder="Password" />
                     </Form.Group>
+
                     <div className="d-grid">
                       <Button variant="primary" type="submit">
-                        Login
+                        Continue
                       </Button>
                     </div>
                   </Form>
                   <div className="mt-3">
                     <p className="mb-0  text-center">
-                      Don&apos;t have an account?{" "}
+                      Already have an account?{" "}
                       <a href="{''}" className="text-primary fw-bold">
-                        Sign Up
+                        Login
                       </a>
                     </p>
                   </div>

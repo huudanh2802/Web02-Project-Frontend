@@ -1,8 +1,13 @@
-import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { GroupList } from "./routes/group-list/group-list";
 import "./App.css";
 
 function App() {
-  return <h1>Hello</h1>;
+  return (
+    <Routes>
+      <Route path="/grouplist" element={<GroupList />} />
+    </Routes>
+  );
 }
 
 export default App;

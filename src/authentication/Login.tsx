@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { FaGoogle } from "react-icons/fa";
 import "../index.css";
 import background from "../bg-1.jpg";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -63,6 +64,12 @@ function Login() {
                         Sign Up
                       </a>
                     </p>
+                  </div>
+                  <hr />
+                  <div className="d-grid mt-3">
+                    <Button variant="outline-dark">
+                      <FaGoogle /> Continue with Google
+                    </Button>
                   </div>
                 </div>
               </div>

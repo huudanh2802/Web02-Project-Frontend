@@ -17,8 +17,10 @@ function Login() {
   // Sign-up forms
   const [form, setForm] = useState(0);
   const updateForm = useCallback(() => setForm(1), []);
+  const returnForm = useCallback(() => setForm(0), []);
 
   if (form === 0)
+    // First form: Email & password
     return (
       <Container fluid style={bgStyle}>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
@@ -94,9 +96,90 @@ function Login() {
       </Container>
     );
 
+  // Second form: Account information
   return (
-    <Container fluid style={{ backgroundColor: "#318F9B" }}>
-      <div>a</div>
+    <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
+      <Row className="vh-100 d-flex justify-content-center align-items-center">
+        <Col md={6} lg={4} xs={8}>
+          <Card className="shadow">
+            <Card.Body>
+              <div className="mb-3 mt-md-4 mx-4">
+                <h2 className="fw-bold mb-4" style={{ textAlign: "center" }}>
+                  Account Information
+                </h2>
+                <div className="mb-3">
+                  <Form>
+                    <Form.Group className="mb-3" controlId="formFullName">
+                      <Form.Label
+                        className="text-center"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Full name
+                      </Form.Label>
+                      <Form.Control
+                        type="fullname"
+                        placeholder="Enter full name"
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formDob">
+                      <Form.Label
+                        className="text-center"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Date of Birth
+                      </Form.Label>
+                      <Form.Control
+                        type="date"
+                        placeholder="Select Date of Birth"
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formGender">
+                      <Form.Label
+                        className="text-center"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Gender
+                      </Form.Label>
+                      <Form.Select>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                      </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formType">
+                      <Form.Label
+                        className="text-center"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Account type
+                      </Form.Label>
+                      <Form.Select>
+                        <option>Student</option>
+                        <option>Teacher</option>
+                      </Form.Select>
+                    </Form.Group>
+
+                    <div className="d-grid mt-4">
+                      <Button variant="primary" type="submit">
+                        Sign up
+                      </Button>
+                    </div>
+
+                    <div className="d-grid mt-3">
+                      <Button variant="outline-dark" onClick={returnForm}>
+                        Back
+                      </Button>
+                    </div>
+                  </Form>
+                </div>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 }

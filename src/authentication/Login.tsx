@@ -1,17 +1,35 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import React from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { FaGoogle } from "react-icons/fa";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../index.css";
 import background from "../bg-1.jpg";
+import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+type FormInputs = {
+  email: string;
+  password: string;
+};
+
 function Login() {
+  // Form handling
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormInputs>();
+  const onSubmit: SubmitHandler<FormInputs> = (data) => console.log(data);
+
   const bgStyle = {
     backgroundImage: `url(${background})`,
     height: "100vh",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat"
   };
+
   return (
     <Container fluid style={bgStyle}>
       <Row className="vh-100 d-flex justify-content-center align-items-center">
@@ -24,26 +42,47 @@ function Login() {
                   Login
                 </h2>
                 <div className="mb-3">
-                  <Form>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form onSubmit={handleSubmit(onSubmit)}>
+                    <Form.Group className="mb-3" controlId="formEmail">
                       <Form.Label
                         className="text-center"
                         style={{ fontWeight: "bold" }}
                       >
                         Email address
                       </Form.Label>
-                      <Form.Control type="email" placeholder="Enter email" />
+                      <Form.Control
+                        type="email"
+                        placeholder="name@example.com"
+                        {...register("email", { required: true })}
+                      />
                     </Form.Group>
+                    {errors.email && (
+                      <p className="error">
+                        <FaExclamationTriangle className="mx-2" />
+                        This field is required
+                      </p>
+                    )}
 
-                    <Form.Group className="mb-3" controlId="formEmail">
+                    <Form.Group className="mb-3" controlId="formPassword">
                       <Form.Label
                         className="text-center"
                         style={{ fontWeight: "bold" }}
                       >
                         Password
                       </Form.Label>
-                      <Form.Control type="password" placeholder="Password" />
+                      <Form.Control
+                        type="password"
+                        placeholder=""
+                        {...register("password", { required: true })}
+                      />
                     </Form.Group>
+                    {errors.password && (
+                      <p className="error">
+                        <FaExclamationTriangle className="mx-2" />
+                        This field is required
+                      </p>
+                    )}
+
                     <Form.Group className="mb-3" controlId="formPassword">
                       <p className="small">
                         <a className="text-primary" href="#!">

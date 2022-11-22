@@ -1,11 +1,89 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import React, { useState, useCallback } from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { FaGoogle } from "react-icons/fa";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../index.css";
-import background from "../bg-1.jpg";
+import background from "../bg-2.jpg";
+import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Login() {
+type FormOneInputs = {
+  email: string;
+  password: string;
+  confirm: string;
+};
+
+type FormTwoInputs = {
+  fullname: string;
+  dob: string;
+  gender: number;
+  type: number;
+};
+
+function Signup() {
+  // Sign-up forms
+  const [form, setForm] = useState(0);
+  const updateForm = useCallback(() => setForm(1), []);
+  const returnForm = useCallback(() => setForm(0), []);
+
+  // Data
+  const [data, setData] = useState({
+    authen: {
+      email: "",
+      password: ""
+    },
+    info: {
+      fullname: "",
+      dob: "",
+      gender: 0,
+      type: 0
+    }
+  });
+
+  // Form handling
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormOneInputs>();
+  const onSubmit: SubmitHandler<FormOneInputs> = (authenData) => {
+    console.log(authenData);
+    setData({
+      authen: {
+        email: authenData.email,
+        password: authenData.password
+      },
+      info: {
+        fullname: "",
+        dob: "",
+        gender: 0,
+        type: 0
+      }
+    });
+    updateForm();
+  };
+
+  const {
+    register: registerInfo,
+    handleSubmit: handleSubmitInfo,
+    formState: { errors: errorsInfo }
+  } = useForm<FormTwoInputs>();
+  const onSubmitInfo: SubmitHandler<FormTwoInputs> = (infoData) => {
+    console.log(infoData);
+    setData({
+      authen: data.authen,
+      info: {
+        fullname: infoData.fullname,
+        dob: infoData.dob,
+        gender: infoData.gender,
+        type: infoData.type
+      }
+    });
+    console.log(data);
+  };
+
   // Background style
   const bgStyle = {
     backgroundImage: `url(${background})`,
@@ -13,11 +91,6 @@ function Login() {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat"
   };
-
-  // Sign-up forms
-  const [form, setForm] = useState(0);
-  const updateForm = useCallback(() => setForm(1), []);
-  const returnForm = useCallback(() => setForm(0), []);
 
   if (form === 0)
     // First form: Email & password
@@ -33,7 +106,7 @@ function Login() {
                     Sign Up
                   </h2>
                   <div className="mb-3">
-                    <Form>
+                    <Form onSubmit={handleSubmit(onSubmit)}>
                       <Form.Group className="mb-3" controlId="formEmail">
                         <Form.Label
                           className="text-center"
@@ -41,8 +114,18 @@ function Login() {
                         >
                           Email address
                         </Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" />
+                        <Form.Control
+                          type="email"
+                          placeholder="name@example.com"
+                          {...register("email", { required: true })}
+                        />
                       </Form.Group>
+                      {errors.email && (
+                        <p className="error">
+                          <FaExclamationTriangle className="mx-2" />
+                          This field is required
+                        </p>
+                      )}
 
                       <Form.Group className="mb-3" controlId="formPassword">
                         <Form.Label
@@ -51,8 +134,20 @@ function Login() {
                         >
                           Password
                         </Form.Label>
-                        <Form.Control type="password" placeholder="Password" />
+                        <Form.Control
+                          type="password"
+                          {...register("password", {
+                            required: true,
+                            minLength: 8
+                          })}
+                        />
                       </Form.Group>
+                      {errors.password && (
+                        <p className="error">
+                          <FaExclamationTriangle className="mx-2" />
+                          Password is required
+                        </p>
+                      )}
 
                       <Form.Group
                         className="mb-3"
@@ -64,11 +159,20 @@ function Login() {
                         >
                           Confirm Password
                         </Form.Label>
-                        <Form.Control type="password" placeholder="Password" />
+                        <Form.Control
+                          type="password"
+                          {...register("confirm", { required: true })}
+                        />
                       </Form.Group>
+                      {errors.confirm && (
+                        <p className="error">
+                          <FaExclamationTriangle className="mx-2" />
+                          This field is required
+                        </p>
+                      )}
 
                       <div className="d-grid">
-                        <Button variant="primary" onClick={updateForm}>
+                        <Button variant="primary" type="submit">
                           Continue
                         </Button>
                       </div>
@@ -108,19 +212,26 @@ function Login() {
                   Account Information
                 </h2>
                 <div className="mb-3">
-                  <Form>
+                  <Form onSubmit={handleSubmitInfo(onSubmitInfo)}>
                     <Form.Group className="mb-3" controlId="formFullName">
                       <Form.Label
                         className="text-center"
                         style={{ fontWeight: "bold" }}
                       >
-                        Full name
+                        Your name
                       </Form.Label>
                       <Form.Control
                         type="fullname"
-                        placeholder="Enter full name"
+                        placeholder="Your name"
+                        {...registerInfo("fullname", { required: true })}
                       />
                     </Form.Group>
+                    {errorsInfo.fullname && (
+                      <p className="error">
+                        <FaExclamationTriangle className="mx-2" />
+                        This field is required
+                      </p>
+                    )}
 
                     <Form.Group className="mb-3" controlId="formDob">
                       <Form.Label
@@ -132,8 +243,15 @@ function Login() {
                       <Form.Control
                         type="date"
                         placeholder="Select Date of Birth"
+                        {...registerInfo("dob", { required: true })}
                       />
                     </Form.Group>
+                    {errorsInfo.dob && (
+                      <p className="error">
+                        <FaExclamationTriangle className="mx-2" />
+                        This field is required
+                      </p>
+                    )}
 
                     <Form.Group className="mb-3" controlId="formGender">
                       <Form.Label
@@ -142,12 +260,20 @@ function Login() {
                       >
                         Gender
                       </Form.Label>
-                      <Form.Select>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Other</option>
+                      <Form.Select
+                        {...registerInfo("gender", { required: true })}
+                      >
+                        <option value="0">Male</option>
+                        <option value="1">Female</option>
+                        <option value="2">Other</option>
                       </Form.Select>
                     </Form.Group>
+                    {errorsInfo.gender && (
+                      <p className="error">
+                        <FaExclamationTriangle className="mx-2" />
+                        This field is required
+                      </p>
+                    )}
 
                     <Form.Group className="mb-3" controlId="formType">
                       <Form.Label
@@ -156,9 +282,11 @@ function Login() {
                       >
                         Account type
                       </Form.Label>
-                      <Form.Select>
-                        <option>Student</option>
-                        <option>Teacher</option>
+                      <Form.Select
+                        {...registerInfo("type", { required: true })}
+                      >
+                        <option value="0">Student</option>
+                        <option value="1">Teacher</option>
                       </Form.Select>
                     </Form.Group>
 
@@ -184,4 +312,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;

@@ -1,12 +1,16 @@
-import { Route, Routes } from "react-router-dom";
-import { GroupList } from "./routes/group-list/group-list";
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Menu from "./components/Menu/Menu";
+import "./components/Menu/Menu.css";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/grouplist" element={<GroupList />} />
-    </Routes>
+    <Router>
+      <Menu />
+      <Routes>
+        <Route path="/" />
+      </Routes>
+    </Router>
   );
 }
 

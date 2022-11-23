@@ -1,14 +1,18 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate
+} from "react-router-dom";
 import Menu from "./components/Menu/Menu";
-import "./components/Menu/Menu.css";
 
 function App() {
   return (
     <Router>
-      <Menu />
       <Routes>
-        <Route path="/" />
+        <Route path="/group" element={<Menu />} />
+        <Route path="" element={<Navigate to="/group" replace />} />
       </Routes>
     </Router>
   );

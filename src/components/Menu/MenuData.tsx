@@ -9,7 +9,7 @@ import * as fc from "react-icons/fc";
 export const MenuData = [
   {
     title: "Group List",
-    path: "/",
+    path: "/grouplist",
     icon: <md.MdGroups />,
     cName: "nav-text"
   },

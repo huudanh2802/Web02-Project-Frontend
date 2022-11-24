@@ -1,17 +1,14 @@
 /* eslint-disable */
-import * as md from "react-icons/md";
-import * as fc from "react-icons/fc";
 import * as fa from "react-icons/fa";
-import * as ai from "react-icons/ai";
 
 import { Card, Col, Row, Form, Navbar } from "react-bootstrap";
-import Container from 'react-bootstrap/Container';
+import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { MenuData } from "./MenuData";
-import "./Menu.css"
+import "./Menu.css";
 import { IconContext } from "react-icons";
 
 import "./Menu.css";
@@ -21,35 +18,42 @@ const Menu = () => {
   const showSidebar = () => setSidebar(!sidebar);
   return (
     <>
-      <IconContext.Provider value={{ color: '#fff' }}>
+      <IconContext.Provider value={{ color: "#fff" }}>
         <Navbar className="navbar">
           <Link to="#" className="menu-bars">
             <fa.FaBars onClick={showSidebar} />
           </Link>
         </Navbar>
-        <ListGroup className={sidebar ? 'nav-menu active' : 'nav-menu'}>
+        <ListGroup className={sidebar ? "nav-menu active" : "nav-menu"}>
           {MenuData.map((item, index) => {
             return (
-              <ListGroup.Item onClick={showSidebar} key={index} className={item.cName}>
+              <ListGroup.Item
+                onClick={showSidebar}
+                key={index}
+                className={item.cName}
+              >
                 <Link to={item.path}>
                   {item.icon}
                   <span>{item.title}</span>
                 </Link>
               </ListGroup.Item>
-            )
+            );
           })}
 
-          <ListGroup.Item>
+          <ListGroup.Item style={{ marginTop: "auto" }}>
             <Container>
-              <Row className="m-auto">
-                <Col class="md-6">
-                  <h2 className="m-auto">Khoi Doan</h2>
+              <Row>
+                <Col>
+                  <img src="assets/avatar.svg" width="40px" alt="" />
                 </Col>
-                <Col class="md-6">
-                  <img src="assets/avatar.svg" width="40px" />
-                  <h3 className="m-auto">example@gmail.com</h3>
+                <Col>
+                  <Row>
+                    <h3 className="m-auto">Khoi Doan</h3>
+                  </Row>
+                  <Row>
+                    <h4 className="m-auto">example@gmail.com</h4>
+                  </Row>
                 </Col>
-
               </Row>
             </Container>
           </ListGroup.Item>

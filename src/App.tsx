@@ -6,22 +6,24 @@ import {
   Route,
   Navigate
 } from "react-router-dom";
-import Menu from "./components/Menu/Menu";
 
 import { NewGroup } from "./routes/NewGroup";
 import { InviteMember } from "./routes/InviteMember";
 import { GroupList } from "./routes/GroupList";
+import { ManageUser } from "./routes/ManageUser";
+import { GroupInfo } from "./routes/GroupInfo";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/group" element={<Menu />} />
         <Route path="/grouplist" element={<GroupList />} />
+        <Route path="/grouplist/:id" element={<GroupInfo />} />
         <Route path="/newgroup" element={<NewGroup />} />
         <Route path="/invite" element={<InviteMember />} />
+        <Route path="/manageuser" element={<ManageUser />} />
 
-        <Route path="" element={<Navigate to="/group" replace />} />
+        <Route path="" element={<Navigate to="/grouplist" replace />} />
       </Routes>
     </Router>
   );

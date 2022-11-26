@@ -1,10 +1,10 @@
 /* eslint-disable */
 import Menu from "../components/Menu/Menu"
-export function NewGroup(){
+export function ManageUser(){
     return(
         <>
             <Menu/>
-            <h1>New Group</h1>
+            <h1>User Profile</h1>
         </>
     )
 }

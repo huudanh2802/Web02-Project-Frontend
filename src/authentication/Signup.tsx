@@ -5,6 +5,8 @@ import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../index.css";
 import background from "../bg-2.jpg";
@@ -12,6 +14,9 @@ import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Signup() {
+  // Routing
+  const navigate = useNavigate();
+
   // Form switching
   const [form, setForm] = useState(0);
 
@@ -44,7 +49,10 @@ function Signup() {
     handleSubmit: handleSubmitInfo,
     formState: formStateInfo
   } = useForm(formInfoOptions);
-  const onSubmitInfo = (data: FieldValues) => alert(JSON.stringify(data));
+  const onSubmitInfo = (data: FieldValues) => {
+    alert(JSON.stringify(data));
+    navigate("/verification");
+  };
   const { errors: errorsInfo } = formStateInfo;
 
   // Background style
@@ -153,7 +161,7 @@ function Signup() {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Already have an account?{" "}
-                        <a href="{''}" className="text-primary fw-bold">
+                        <a href="#login" className="text-primary fw-bold">
                           Login
                         </a>
                       </p>

@@ -5,6 +5,7 @@ import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../index.css";
 import background from "../bg-1.jpg";
@@ -99,7 +100,7 @@ function Login() {
                   <div className="mt-3">
                     <p className="mb-0  text-center">
                       Don&apos;t have an account?{" "}
-                      <a href="{''}" className="text-primary fw-bold">
+                      <a href="/signup" className="text-primary fw-bold">
                         Sign up
                       </a>
                     </p>

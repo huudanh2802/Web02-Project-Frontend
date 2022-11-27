@@ -14,7 +14,7 @@ export function InviteMember() {
       <Container
         style={{
           maxWidth: "700px",
-          height: "100vh",
+          height: "80vh",
           alignItems: "center",
           justifyContent: "center",
           display: "flex",

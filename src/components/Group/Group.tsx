@@ -47,7 +47,7 @@ function Group() {
                       </Col>
                       <Col xs={6}>
                         <Card.Link
-                          href={`/grouplist/${group.groupId}`}
+                          href={`/grouplist/${group.groupName}`}
                           style={{ color: "#389CB2", fontWeight: "bold" }}
                         >
                           {group.groupName}
@@ -65,7 +65,7 @@ function Group() {
                           {group.createDate}
                         </Card.Text>
                         <Row>
-                          {GroupCreatedData[index].membersAva
+                          {GroupCreatedData[index].members
                             .slice(0, 3)
                             .map((m) => (
                               <Col xs={1}>
@@ -106,7 +106,7 @@ function Group() {
                       </Col>
                       <Col xs={6}>
                         <Card.Link
-                          href={`/grouplist/${group.groupId}`}
+                          href={`/grouplist/${group.groupName}`}
                           style={{ color: "#389CB2", fontWeight: "bold" }}
                         >
                           {group.groupName}
@@ -124,7 +124,7 @@ function Group() {
                           {group.createDate}
                         </Card.Text>
                         <Row>
-                          {GroupJoinedData[index].membersAva
+                          {GroupJoinedData[index].members
                             .slice(0, 3)
                             .map((m) => (
                               <Col xs={1}>

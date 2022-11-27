@@ -28,7 +28,7 @@ const Menu = () => {
           >
             <Nav.Link href="#profile" style={{ color: "white", alignItems: "center" , paddingTop: "12px", paddingLeft: "8px"}}>
               <img
-                src="assets/profileAvatar.png"
+                src="/assets/profileAvatar.png"
                 style={{ width: 30, height: 30, marginRight: "3px", marginBottom: "3px" }}
               />
               Khoi Doan

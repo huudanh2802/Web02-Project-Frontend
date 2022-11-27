@@ -18,7 +18,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/grouplist" element={<GroupList />} />
-        <Route path="/grouplist/:id" element={<GroupInfo />} />
+        <Route path="/grouplist/:name" element={<GroupInfo />} />
         <Route path="/newgroup" element={<NewGroup />} />
         <Route path="/invite" element={<InviteMember />} />
         <Route path="/manageuser" element={<ManageUser />} />

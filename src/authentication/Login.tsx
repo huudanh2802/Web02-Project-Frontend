@@ -24,9 +24,10 @@ function Login() {
   // Background style
   const bgStyle = {
     backgroundImage: `url(${background})`,
-    height: "100vh",
+    height: "100%",
     backgroundSize: "cover",
-    backgroundRepeat: "no-repeat"
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center"
   };
 
   // First form: Email & password

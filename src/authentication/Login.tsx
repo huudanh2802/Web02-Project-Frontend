@@ -2,27 +2,26 @@
 
 import React from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../index.css";
 import background from "../bg-1.jpg";
 import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-type FormInputs = {
-  email: string;
-  password: string;
-};
-
 function Login() {
   // Form handling
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<FormInputs>();
-  const onSubmit: SubmitHandler<FormInputs> = (data) => console.log(data);
+  const formAuthSchema = Yup.object().shape({
+    email: Yup.string().required("Email is required"),
+    password: Yup.string().required("Password is required")
+  });
+  const formOptions = { resolver: yupResolver(formAuthSchema) };
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { errors } = formState;
 
+  // Background style
   const bgStyle = {
     backgroundImage: `url(${background})`,
     height: "100vh",
@@ -30,6 +29,7 @@ function Login() {
     backgroundRepeat: "no-repeat"
   };
 
+  // First form: Email & password
   return (
     <Container fluid style={bgStyle}>
       <Row className="vh-100 d-flex justify-content-center align-items-center">
@@ -42,7 +42,11 @@ function Login() {
                   Login
                 </h2>
                 <div className="mb-3">
-                  <Form onSubmit={handleSubmit(onSubmit)}>
+                  <Form
+                    onSubmit={handleSubmit((data) =>
+                      alert(JSON.stringify(data))
+                    )}
+                  >
                     <Form.Group className="mb-3" controlId="formEmail">
                       <Form.Label
                         className="text-center"
@@ -53,13 +57,13 @@ function Login() {
                       <Form.Control
                         type="email"
                         placeholder="name@example.com"
-                        {...register("email", { required: true })}
+                        {...register("email")}
                       />
                     </Form.Group>
-                    {errors.email && (
+                    {errors.email && errors.email.type === "required" && (
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
-                        This field is required
+                        Email account is required
                       </p>
                     )}
 
@@ -70,26 +74,21 @@ function Login() {
                       >
                         Password
                       </Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder=""
-                        {...register("password", { required: true })}
-                      />
+                      <Form.Control type="password" {...register("password")} />
                     </Form.Group>
-                    {errors.password && (
+                    {errors.password && errors.password.type === "required" && (
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
-                        This field is required
+                        Password is required
+                      </p>
+                    )}
+                    {errors.password && errors.password.type === "min" && (
+                      <p className="error">
+                        <FaExclamationTriangle className="mx-2" />
+                        Password must contain at least 6 characters
                       </p>
                     )}
 
-                    <Form.Group className="mb-3" controlId="formPassword">
-                      <p className="small">
-                        <a className="text-primary" href="#!">
-                          Forgot password?
-                        </a>
-                      </p>
-                    </Form.Group>
                     <div className="d-grid">
                       <Button variant="primary" type="submit">
                         Login
@@ -100,7 +99,7 @@ function Login() {
                     <p className="mb-0  text-center">
                       Don&apos;t have an account?{" "}
                       <a href="{''}" className="text-primary fw-bold">
-                        Sign Up
+                        Sign up
                       </a>
                     </p>
                   </div>

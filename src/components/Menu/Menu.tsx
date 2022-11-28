@@ -1,8 +1,7 @@
 /* eslint-disable */
 import * as fa from "react-icons/fa";
 
-import { Card, Col, Row, Form, Navbar } from "react-bootstrap";
-import Container from "react-bootstrap/Container";
+import { Nav, Navbar } from "react-bootstrap";
 import ListGroup from "react-bootstrap/ListGroup";
 
 import { Link } from "react-router-dom";
@@ -23,6 +22,21 @@ const Menu = () => {
           <Link to="#" className="menu-bars">
             <fa.FaBars onClick={showSidebar} />
           </Link>
+          <Nav
+            className="ms-auto"
+            style={{ display: "flex", flexDirection: "row", padding: "0 1rem",  alignItems: "center" }}
+          >
+            <Nav.Link href="#profile" style={{ color: "white", alignItems: "center" , paddingTop: "12px", paddingLeft: "8px"}}>
+              <img
+                src="/assets/profileAvatar.png"
+                style={{ width: 30, height: 30, marginRight: "3px", marginBottom: "3px" }}
+              />
+              Khoi Doan
+            </Nav.Link>
+            <Nav.Link href="#logout" style={{ color: "white", textDecoration: "underline" }}>
+              Logout
+            </Nav.Link>
+          </Nav>
         </Navbar>
         <ListGroup className={sidebar ? "nav-menu active" : "nav-menu"}>
           {MenuData.map((item, index) => {
@@ -39,24 +53,6 @@ const Menu = () => {
               </ListGroup.Item>
             );
           })}
-
-          <ListGroup.Item style={{ marginTop: "auto" }}>
-            <Container>
-              <Row>
-                <Col>
-                  <img src="assets/avatar.svg" width="40px" alt="" />
-                </Col>
-                <Col>
-                  <Row>
-                    <h3 className="m-auto">Khoi Doan</h3>
-                  </Row>
-                  <Row>
-                    <h4 className="m-auto">example@gmail.com</h4>
-                  </Row>
-                </Col>
-              </Row>
-            </Container>
-          </ListGroup.Item>
         </ListGroup>
       </IconContext.Provider>
     </>

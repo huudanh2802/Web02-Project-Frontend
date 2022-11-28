@@ -16,7 +16,7 @@ export const MenuData = [
   {
     title: "Invite Member",
     path: "/invite",
-    icon: <fc.FcInvite />,
+    icon: <md.MdAdd />,
     cName: "nav-text"
   },
   {
@@ -26,7 +26,7 @@ export const MenuData = [
     cName: "nav-text"
   },
   {
-    title: "Manage User",
+    title: "User Profile",
     path: "/manageuser",
     icon: <md.MdManageAccounts />,
     cName: "nav-text"

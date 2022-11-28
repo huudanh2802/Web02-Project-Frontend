@@ -1,38 +1,153 @@
 /* eslint-disable */
-
-import { Row, Col, Card, Container } from "react-bootstrap";
-import { GroupData } from "./GroupData";
-
-import "./Group.css"
+import { Row, Col, Card, Container, Form } from "react-bootstrap";
+import { GroupCreatedData } from "./GroupCreatedData";
+import { GroupJoinedData } from "./GroupJoinedData";
+import { useState } from "react";
 
 function Group() {
-  return (
-    <Container>
-      {GroupData.map((group, index) => {
-        return (
-          <>
-            <Card key={index}>
-              <Col xs={6}>
-                <Card.Body>
-                  <Card.Img
-                    src={group.groupAvaSrc}
-                    style={{ maxWidth: "100px", maxHeight: "100px" }}
-                  />
-                </Card.Body>
-              </Col>
+  const [selected, setSelected] = useState("");
+  const handleChange = (event: any) => {
+    setSelected(event.target.value);
+  };
 
-              <Col xs={6}>
-                <Card.Body>
-                  <Card.Title>{group.groupName}</Card.Title>
-                  <Card.Text>{group.createDate}</Card.Text>
-                  <Card.Text>{group.numMembers} Members</Card.Text>
-                </Card.Body>
-              </Col>
-            </Card>
-          </>
-        );
-      })}
-    </Container>
+  return (
+    <>
+      <Container
+        style={{
+          padding: "24px 0 16px 8px",
+          display: "flex",
+          maxWidth: "800px",
+          justifyContent: "space-around"
+        }}
+      >
+        <Form>
+          <Form.Control type="input" placeholder="Search for group... " />
+        </Form>
+        <select value={selected} onChange={handleChange}>
+          <option value="">---Sort by---</option>
+          <option value="name">Group Name</option>
+          <option value="date">Date</option>
+        </select>
+      </Container>
+
+      <Container style={{ maxWidth: "700px", padding: "8px 0 8px 8px" }}>
+        <h5 style={{ color: "#4AB2C9", fontWeight: "bold" }}>Created</h5>
+        <Row>
+          {GroupCreatedData.map((group, index) => {
+            return (
+              <>
+                <Card key={index}>
+                  <Card.Body>
+                    <Row>
+                      <Col xs={3}>
+                        <Card.Img
+                          src={group.groupAvaSrc}
+                          style={{ maxWidth: "100px", maxHeight: "100px" }}
+                        />
+                      </Col>
+                      <Col xs={6}>
+                        <Card.Link
+                          href={`/grouplist/${group.groupName}`}
+                          style={{ color: "#389CB2", fontWeight: "bold" }}
+                        >
+                          {group.groupName}
+                        </Card.Link>
+                        <Card.Text>
+                          <Card.Img
+                            src="assets/groupChat1.png"
+                            style={{ width: "35px", height: "35px" }}
+                          ></Card.Img>
+                          {group.numMembers} Members{" "}
+                          <Card.Img
+                            src="assets/iconClock.svg"
+                            style={{ width: "25px", height: "25px" }}
+                          ></Card.Img>
+                          {group.createDate}
+                        </Card.Text>
+                        <Row>
+                          {GroupCreatedData[index].members
+                            .slice(0, 3)
+                            .map((m) => (
+                              <Col xs={1}>
+                                <Card.Img
+                                  src={m.imgSrc}
+                                  style={{ width: "25px", height: "25px" }}
+                                ></Card.Img>
+                              </Col>
+                            ))}
+                          <Col xs={4}>
+                            <Card.Text>have joined</Card.Text>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Card.Body>
+                </Card>
+              </>
+            );
+          })}
+        </Row>
+      </Container>
+
+      <Container style={{ maxWidth: "700px", padding: "8px 0 8px 8px" }}>
+        <h5 style={{ color: "#4AB2C9", fontWeight: "bold" }}>Joined</h5>
+        <Row>
+          {GroupJoinedData.map((group, index) => {
+            return (
+              <>
+                <Card key={index}>
+                  <Card.Body>
+                    <Row>
+                      <Col xs={3}>
+                        <Card.Img
+                          src={group.groupAvaSrc}
+                          style={{ maxWidth: "100px", maxHeight: "100px" }}
+                        />
+                      </Col>
+                      <Col xs={6}>
+                        <Card.Link
+                          href={`/grouplist/${group.groupName}`}
+                          style={{ color: "#389CB2", fontWeight: "bold" }}
+                        >
+                          {group.groupName}
+                        </Card.Link>
+                        <Card.Text>
+                          <Card.Img
+                            src="assets/groupChat1.png"
+                            style={{ width: "35px", height: "35px" }}
+                          ></Card.Img>
+                          {group.numMembers} Members{" "}
+                          <Card.Img
+                            src="assets/iconClock.svg"
+                            style={{ width: "25px", height: "25px" }}
+                          ></Card.Img>
+                          {group.createDate}
+                        </Card.Text>
+                        <Row>
+                          {GroupJoinedData[index].members
+                            .slice(0, 3)
+                            .map((m) => (
+                              <Col xs={1}>
+                                <Card.Img
+                                  src={m.imgSrc}
+                                  style={{ width: "25px", height: "25px" }}
+                                ></Card.Img>
+                              </Col>
+                            ))}
+                          <Col xs={4}>
+                            <Card.Text>have joined</Card.Text>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Card.Body>
+                </Card>
+              </>
+            );
+          })}
+        </Row>
+      </Container>
+    </>
   );
 }
 

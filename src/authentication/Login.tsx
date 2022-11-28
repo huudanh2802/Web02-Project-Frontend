@@ -2,9 +2,10 @@
 
 import React from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import axios from "axios";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../index.css";
@@ -21,6 +22,19 @@ function Login() {
   const formOptions = { resolver: yupResolver(formAuthSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
+  const onSubmit = (data: FieldValues) => {
+    axios
+      .post("http://localhost:8081/user/login", {
+        email: data.email,
+        password: data.password
+      })
+      .then((res: any) => {
+        console.log(JSON.stringify(res));
+      })
+      .catch((err: any) => {
+        alert(err.response.data.error);
+      });
+  };
 
   // Background style
   const bgStyle = {
@@ -44,11 +58,7 @@ function Login() {
                   Login
                 </h2>
                 <div className="mb-3">
-                  <Form
-                    onSubmit={handleSubmit((data) =>
-                      alert(JSON.stringify(data))
-                    )}
-                  >
+                  <Form onSubmit={handleSubmit(onSubmit)}>
                     <Form.Group className="mb-3" controlId="formEmail">
                       <Form.Label
                         className="text-center"

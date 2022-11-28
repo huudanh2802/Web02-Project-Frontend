@@ -29,7 +29,11 @@ function Login() {
         password: data.password
       })
       .then((res: any) => {
-        console.log(JSON.stringify(res));
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("id", res.data.id);
+        localStorage.setItem("email", res.data.email);
+
+        alert("Login successful!");
       })
       .catch((err: any) => {
         alert(err.response.data.error);

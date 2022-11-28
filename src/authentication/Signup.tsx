@@ -6,6 +6,7 @@ import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../index.css";
@@ -16,6 +17,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function Signup() {
   // Routing
   const navigate = useNavigate();
+
+  // Data
+  const [auth, setAuth] = useState({
+    email: "",
+    password: ""
+  });
 
   // Form switching
   const [form, setForm] = useState(0);
@@ -33,7 +40,10 @@ function Signup() {
   const formOptions = { resolver: yupResolver(formAuthSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const onSubmit = (data: FieldValues) => {
-    alert(JSON.stringify(data));
+    setAuth({
+      email: data.email,
+      password: data.password
+    });
     setForm(1);
   };
   const { errors } = formState;
@@ -50,8 +60,20 @@ function Signup() {
     formState: formStateInfo
   } = useForm(formInfoOptions);
   const onSubmitInfo = (data: FieldValues) => {
-    alert(JSON.stringify(data));
-    navigate("/verification");
+    axios
+      .post("http://localhost:8081/user/signup", {
+        email: auth.email,
+        password: auth.password
+      })
+      .then(() => {
+        alert(JSON.stringify(auth));
+        alert(JSON.stringify(data));
+        alert("Sign-up successful!");
+        navigate("/verification");
+      })
+      .catch((err: any) => {
+        alert(err.response.data.error);
+      });
   };
   const { errors: errorsInfo } = formStateInfo;
 
@@ -161,7 +183,7 @@ function Signup() {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Already have an account?{" "}
-                        <a href="#login" className="text-primary fw-bold">
+                        <a href="/login" className="text-primary fw-bold">
                           Login
                         </a>
                       </p>

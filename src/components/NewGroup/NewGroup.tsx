@@ -4,6 +4,7 @@
 import { Row, Col, Form, InputGroup, Button } from "react-bootstrap";
 import { useEffect, useState, createContext } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 // import {Image} from "react-bootstrap";
 import MemberSelection from "../Common/MemberSelection/MemberSelection";
@@ -16,7 +17,7 @@ import NewGroupDTO from "../../dtos/NewGroupDTO";
 
 export default function NewGroup() {
   const mockData = {
-    id: "1231312",
+    id: "638398bb2797c4a83dc2bb04",
     email: "huudanh2802"
   };
 
@@ -34,7 +35,27 @@ export default function NewGroup() {
     member: []
   });
 
-  const onSubmit = handleSubmit((data) => console.log(newGroup));
+  function sendData() {
+    axios({
+      method: "post",
+      url: `http://localhost:8081/group/newgroup`,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      },
+
+      data: newGroup
+    }).then((response) => {
+      console.log(response);
+    });
+  }
+
+  const onSubmit = handleSubmit((data) => {
+    newGroup.name = data.name;
+    newGroup.owner = data.owner;
+    console.log(newGroup);
+    sendData();
+  });
 
   useEffect(() => {
     setValue("owner", mockData);

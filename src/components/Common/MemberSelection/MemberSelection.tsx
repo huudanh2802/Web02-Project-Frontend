@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 import MemberRoleDTO from "../../../dtos/MemberRoleDTO";
@@ -15,26 +16,16 @@ export default function MemberSelection({
 }) {
   const [memberSelection, setMemberSelection] = useState<MemberRoleDTO[]>([]);
 
-  function setMockData() {
-    const mockData = [
-      {
-        id: "1231312",
-        email: "huudanh2802"
-      },
-      {
-        id: "1233312",
-        email: "huudanh2802"
-      },
-      {
-        id: "1233312",
-        email: "huudanh2802"
-      }
-    ];
-    setMemberSelection(mockData);
+  function setData() {
+    axios({
+      method: "get",
+      url: `http://localhost:8081/user/memberselection/63803669e9913569938867be`
+    }).then((response) => {
+      setMemberSelection(response.data);
+    });
   }
-
   useEffect(() => {
-    setMockData();
+    setData();
   }, []);
 
   const memberRole = memberSelection.map((memberData) => (

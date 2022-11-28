@@ -22,7 +22,7 @@ function MemberRole({
   memberData: MemberRoleDTO;
   add: boolean;
   newGroup: NewGroupDTO | null;
-  setNewGroup: ?React.Dispatch<React.SetStateAction<NewGroupDTO>>;
+  setNewGroup: React.Dispatch<React.SetStateAction<NewGroupDTO>> | null;
 }) {
   function setRoleMember(event: any) {
     const role = event.value;

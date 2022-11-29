@@ -6,6 +6,7 @@ import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../index.css";
@@ -39,6 +40,25 @@ function Login() {
         alert(err.response.data.error);
       });
   };
+
+  // Google login
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (response) => {
+      try {
+        const result = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${response.access_token}`
+            }
+          }
+        );
+        console.log(result.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  });
 
   // Background style
   const bgStyle = {
@@ -121,7 +141,10 @@ function Login() {
                   </div>
                   <hr />
                   <div className="d-grid mt-3">
-                    <Button variant="outline-dark">
+                    <Button
+                      variant="outline-dark"
+                      onClick={() => googleLogin()}
+                    >
                       <FaGoogle /> Continue with Google
                     </Button>
                   </div>

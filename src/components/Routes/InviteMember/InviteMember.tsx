@@ -1,6 +1,7 @@
+/* eslint-disable */
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
+import { GroupCreatedData } from "../../Group/GroupCreatedData";
 import { useState } from "react";
-import { GroupCreatedData } from "../components/Group/GroupCreatedData";
 
 export default function InviteMember() {
   const [link, setLink] = useState(false);

@@ -4,7 +4,7 @@
   border-color: #00000042;
 }
 
-.container {
+.mt-3 .container {
   border: solid 2px;
   border-width: 2px;
   border-color: #0dcaf0;
@@ -34,6 +34,7 @@
 
   color: #ffffff;
 }
+
 .createBtn {
   background: #4ac99b;
   border: 1px solid #a4a4a4;

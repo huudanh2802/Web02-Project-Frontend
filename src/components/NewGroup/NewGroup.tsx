@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Row, Col, Form, InputGroup, Button } from "react-bootstrap";
+import { Row, Col, Form, InputGroup, Button, Container } from "react-bootstrap";
 import { useEffect, useState, createContext } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -63,7 +63,7 @@ export default function NewGroup() {
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="mt-3 container">
+      <Container className="mt-3">
         <Row className="m-4">
           {/* <Col lg={4}>
           <Form.Group controlId="formFile" className="mb-3 ">
@@ -111,7 +111,7 @@ export default function NewGroup() {
             </Row>
           </Col>
         </Row>
-      </div>
+      </Container>
     </form>
   );
 }

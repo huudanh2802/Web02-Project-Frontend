@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { Navigate, Route, Routes } from "react-router";
-import { BrowserRouter } from "react-router-dom";
 import Menu from "../components/Menu/Menu";
 import { NewGroupPage } from "../components/Routes/NewGroupPage/NewGroupPage";
-import GroupInfo from "../routes/GroupInfo";
-import GroupList from "../routes/GroupList";
-import InviteMember from "../routes/InviteMember";
-import ManageUser from "../routes/ManageUser";
+import { GroupInfo } from "../components/Routes/GroupInfo/GroupInfo";
+import GroupList from "../components/Routes/GroupList/GroupList";
+import InviteMember from "../components/Routes/InviteMember/InviteMember";
+import { ManageUser } from "../components/Routes/ManageUser/ManageUser";
 
 export default function GroupRouter() {
   return (

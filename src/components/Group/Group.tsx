@@ -5,11 +5,6 @@ import { GroupJoinedData } from "./GroupJoinedData";
 import { useState } from "react";
 
 function Group() {
-  const [selected, setSelected] = useState("");
-  const handleChange = (event: any) => {
-    setSelected(event.target.value);
-  };
-
   return (
     <>
       <Container
@@ -20,14 +15,6 @@ function Group() {
           justifyContent: "space-around"
         }}
       >
-        <Form>
-          <Form.Control type="input" placeholder="Search for group... " />
-        </Form>
-        <select value={selected} onChange={handleChange}>
-          <option value="">---Sort by---</option>
-          <option value="name">Group Name</option>
-          <option value="date">Date</option>
-        </select>
       </Container>
 
       <Container style={{ maxWidth: "700px", padding: "8px 0 8px 8px" }}>

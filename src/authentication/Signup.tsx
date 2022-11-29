@@ -75,6 +75,22 @@ function Signup() {
           }
         );
         console.log(result.data);
+
+        // Authenticate
+        axios
+          .post("http://localhost:8081/user/googleAuthen", {
+            email: result.data.email
+          })
+          .then((res: any) => {
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("id", res.data.id);
+            localStorage.setItem("email", res.data.email);
+
+            alert(JSON.stringify(res.data));
+          })
+          .catch((err: any) => {
+            alert(err.response.data.error);
+          });
       } catch (err) {
         console.log(err);
       }

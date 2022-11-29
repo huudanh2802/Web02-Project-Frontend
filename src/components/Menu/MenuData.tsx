@@ -8,26 +8,22 @@ import * as fc from "react-icons/fc";
 
 export const MenuData = [
   {
-    title: "Group List",
-    path: "/grouplist",
+    path: "/group/grouplist",
     icon: <md.MdGroups />,
     cName: "nav-text"
   },
   {
-    title: "Invite Member",
-    path: "/invite",
+    path: "/group/invite",
     icon: <md.MdAdd />,
     cName: "nav-text"
   },
   {
-    title: "New Group",
-    path: "/newgroup",
+    path: "/group/newgroup",
     icon: <md.MdCreateNewFolder />,
     cName: "nav-text"
   },
   {
-    title: "User Profile",
-    path: "/manageuser",
+    path: "/group/manageuser",
     icon: <md.MdManageAccounts />,
     cName: "nav-text"
   }

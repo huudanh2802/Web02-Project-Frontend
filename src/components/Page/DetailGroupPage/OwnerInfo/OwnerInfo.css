@@ -1,0 +1,12 @@
+.owner{
+    border: black!important;
+    width:800px;
+}
+.owner-row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center
+}
+

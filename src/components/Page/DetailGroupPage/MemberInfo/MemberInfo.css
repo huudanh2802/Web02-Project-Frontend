@@ -1,0 +1,36 @@
+.role-assign{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
+    justify-content: space-around
+}
+.member{
+    border-radius: 0!important;
+    border: none!important;
+    margin:0!important;
+}
+.member-row{
+    border-radius: none!important;
+    border: none!important;
+}
+.name-text{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 30px;
+    
+    color: rgba(16, 66, 77, 0.5);
+    
+}
+
+.role.text{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    
+    color: rgba(0, 0, 0, 0.5);
+}

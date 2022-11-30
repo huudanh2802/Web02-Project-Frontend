@@ -5,6 +5,7 @@ import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 
@@ -15,6 +16,9 @@ import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Login() {
+  // Routing
+  const navigate = useNavigate();
+
   // Form handling
   const formAuthSchema = Yup.object().shape({
     email: Yup.string().required("Email is required"),
@@ -37,6 +41,7 @@ function Login() {
         localStorage.setItem("email", res.data.email);
 
         alert("Login successful!");
+        navigate("/group/grouplist");
       })
       .catch((err: any) => {
         alert(err.response.data.error);
@@ -60,7 +65,8 @@ function Login() {
         // Authenticate
         axios
           .post("http://localhost:8081/user/googleAuthen", {
-            email: result.data.email
+            email: result.data.email,
+            fullname: result.data.name
           })
           .then((res: any) => {
             localStorage.setItem("token", res.data.token);

@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Container, Row, Col, Card } from "react-bootstrap";
-import "../index.css";
+import "../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -19,6 +19,7 @@ export default function Confirm() {
   }
   useEffect(() => {
     confirmToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

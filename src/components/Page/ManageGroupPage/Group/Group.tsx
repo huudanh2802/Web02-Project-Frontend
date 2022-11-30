@@ -13,12 +13,21 @@ function Group() {
   function getOwnGroup(){
     const localId = localStorage.getItem("id");
 
-    axios({
-      method: "get",
-      url: `http://localhost:8081/group/owngroup/${localId}`
-    }).then((response) => {
-      setOwnGroup(response.data);
-    });
+    axios
+      .get(`http://localhost:8081/group/owngroup/${localId}`)
+      .then((response) => {
+        setOwnGroup(response.data);
+      })
+      .catch((err: any) => {
+        console.log(err.response.data.error);
+      });
+
+    // axios({
+    //   method: "get",
+    //   url: `http://localhost:8081/group/owngroup/${localId}`
+    // }).then((response) => {
+    //   setOwnGroup(response.data);
+    // });
   }
   function getMemberGroup(){
     const localId = localStorage.getItem("id");

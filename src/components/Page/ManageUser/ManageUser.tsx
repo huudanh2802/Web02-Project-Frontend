@@ -47,7 +47,7 @@ export function ManageUser() {
         >
           <Row>
             <Col xs={4}>
-              <img src="assets/profilePicture.svg" />
+              <img src="/assets/profilePicture.svg" />
             </Col>
             <Col>
               <Row style={{ marginTop: "50px" }}>

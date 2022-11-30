@@ -55,7 +55,7 @@ function MemberRole({
           // eslint-disable-next-line react/style-prop-object
           className="ava"
           fluid
-          src="assets/profileAvatar.png"
+          src="/assets/profileAvatar.png"
         />
       </Col>
       <Col lg={3}>

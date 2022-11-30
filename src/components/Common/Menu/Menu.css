@@ -61,6 +61,11 @@ span {
 
 .router-icon{
     font-size:200%;
+    color:black !important
+}
+
+.router-list-icon{
+    color:black !important
 }
 
 .menu-container{

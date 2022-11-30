@@ -1,0 +1,41 @@
+.memberRole{
+    margin:10px;
+    background: #FFFFFF!important;
+box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25)!important;
+    width:80%;
+
+}
+
+.member-wrapper{
+    background: #FFFFFF;
+border: 1px solid #A4A4A4;
+box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.ulWrapper{
+    width: auto; 
+    height: 700px; 
+    overflow: auto;
+    list-style-type: none;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    width:5px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #4AB2C9;
+    border-radius: 20px; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

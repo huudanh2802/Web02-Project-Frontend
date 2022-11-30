@@ -1,0 +1,56 @@
+.ava {
+  max-width: 100px !important;
+}
+
+.iconBtn {
+  background:white!important ;
+  background-color: transparent;
+  border-radius:20px;
+  border:none!important;
+  width:53px!important;
+  color:black!important;
+  --bs-btn-color: none !important; /* White text */
+  padding: 12px 16px; /* Some padding */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.member {
+  background: #ffffff !important;
+  border: 3px solid #318f9b !important;
+  border-radius: 20px !important;
+  align-items: center !important;
+}
+.iconBtn {
+  background: #4ac99b;
+  border: 1px solid #a4a4a4;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 22px;
+  width: 130px;
+}
+
+.text{
+  margin-top:30px;
+  font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 25px;
+line-height: 30px;
+
+color: rgba(16, 66, 77, 0.5);
+}
+
+.role{
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.noAdd{
+  width:50%;
+  margin-left:20px;
+}
+

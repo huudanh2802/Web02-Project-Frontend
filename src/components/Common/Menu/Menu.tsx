@@ -8,12 +8,15 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MenuData } from "./MenuData";
 import "./Menu.css";
+import { useNavigate } from "react-router-dom";
 import { IconContext } from "react-icons";
 
 import "./Menu.css";
 
 export default function Menu  ()  {
-  const [user,setUser]=useState("")
+  const [user,setUser]=useState("");
+  // Routing
+  const navigate = useNavigate();
 
   useEffect(()=>{
     const localEmail=localStorage.getItem('email');
@@ -63,7 +66,14 @@ export default function Menu  ()  {
                   />
                   {user}
                 </Nav.Link>
-                <Nav.Link href="#logout" style={{ color: "white", textDecoration: "underline" }}>
+                <Nav.Link 
+                  onClick={() => {
+                    localStorage.removeItem("email");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("id");
+                    navigate("/login");
+                  }} 
+                  style={{ color: "white", textDecoration: "underline" }}>
                   Logout
                 </Nav.Link>
               </Nav>

@@ -31,6 +31,7 @@ function Signup() {
   // First form handling
   const formAuthSchema = Yup.object().shape({
     email: Yup.string().required("Email is required"),
+    fullname: Yup.string().required("Email is required"),
     password: Yup.string()
       .required("Password is required")
       .min(6, "Password must contain at least 6 characters"),
@@ -49,6 +50,7 @@ function Signup() {
     axios
       .post("http://localhost:8081/user/signup", {
         email: data.email,
+        fullname: data.fullname,
         password: data.password
       })
       .then(() => {
@@ -79,14 +81,15 @@ function Signup() {
         // Authenticate
         axios
           .post("http://localhost:8081/user/googleAuthen", {
-            email: result.data.email
+            email: result.data.email,
+            fullname: result.data.name
           })
           .then((res: any) => {
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("id", res.data.id);
             localStorage.setItem("email", res.data.email);
 
-            alert(JSON.stringify(res.data));
+            alert("JSON.stringify(res.data)");
           })
           .catch((err: any) => {
             alert(err.response.data.error);
@@ -167,6 +170,26 @@ function Signup() {
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
                         Email account is required
+                      </p>
+                    )}
+
+                    <Form.Group className="mb-3" controlId="formFullName">
+                      <Form.Label
+                        className="text-center"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Your name
+                      </Form.Label>
+                      <Form.Control
+                        type="fullname"
+                        placeholder="Your name"
+                        {...register("fullname", { required: true })}
+                      />
+                    </Form.Group>
+                    {errors.fullname && errors.fullname.type === "required" && (
+                      <p className="error">
+                        <FaExclamationTriangle className="mx-2" />
+                        Your full name is required
                       </p>
                     )}
 

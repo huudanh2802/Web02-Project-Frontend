@@ -29,7 +29,7 @@ const refreshTokenFn = async () => {
 
     return session;
   } catch (error) {
-    alert("Please log in");
+    // alert("Please log in");
     localStorage.removeItem("id");
     localStorage.removeItem("email");
     localStorage.removeItem("token");

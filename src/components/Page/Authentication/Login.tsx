@@ -74,6 +74,7 @@ function Login() {
             localStorage.setItem("email", res.data.email);
 
             alert(JSON.stringify(res.data));
+            navigate("/group/grouplist");
           })
           .catch((err: any) => {
             alert(err.response.data.error);

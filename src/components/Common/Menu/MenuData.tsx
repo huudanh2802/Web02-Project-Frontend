@@ -13,11 +13,6 @@ export const MenuData = [
     cName: "nav-text"
   },
   {
-    path: "/group/invite",
-    icon: <md.MdAdd />,
-    cName: "nav-text"
-  },
-  {
     path: "/group/newgroup",
     icon: <md.MdCreateNewFolder />,
     cName: "nav-text"

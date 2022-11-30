@@ -7,11 +7,11 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 
 // import {Image} from "react-bootstrap";
-import MemberSelection from "../Common/MemberSelection/MemberSelection";
-import MemberRole from "../Common/MemberRole/MemberRole";
+import MemberSelection from "../MemberSelection/MemberSelection";
 import "./NewGroup.css";
 
-import NewGroupDTO from "../../dtos/NewGroupDTO";
+import NewGroupDTO from "../../../../dtos/NewGroupDTO";
+import MemberRole from "../MemberRole/MemberRole";
 
 // const defaultImgPath = "assets/group1.png";
 

@@ -1,12 +1,12 @@
 /* eslint-disable */
-import Menu from "../../Menu/Menu";
 import { Col, Container, Row, Form, Card, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import NewGroupDTO from "../../../dtos/NewGroupDTO";
 import MemberRoleDTO from "../../../dtos/MemberRoleDTO";
-import MemberRole from "../../Common/MemberRole/MemberRole";
 import { useState } from "react";
-import MemberSelection from "../../Common/MemberSelection/MemberSelection";
+import Menu from "../../Common/Menu/Menu";
+import MemberRole from "../NewGroupPage/MemberRole/MemberRole";
+import MemberSelection from "../NewGroupPage/MemberSelection/MemberSelection";
 
 export function GroupInfo() {
   const { name } = useParams();

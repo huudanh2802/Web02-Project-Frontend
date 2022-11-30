@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import MemberRoleDTO from "../../../dtos/MemberRoleDTO";
-import NewGroupDTO from "../../../dtos/NewGroupDTO";
+import MemberRoleDTO from "../../../../dtos/MemberRoleDTO";
+import NewGroupDTO from "../../../../dtos/NewGroupDTO";
 import MemberRole from "../MemberRole/MemberRole";
 
 import "./MemberSelection.css";
@@ -17,9 +17,11 @@ export default function MemberSelection({
   const [memberSelection, setMemberSelection] = useState<MemberRoleDTO[]>([]);
 
   function setData() {
+    const localId = localStorage.getItem("id");
+
     axios({
       method: "get",
-      url: `http://localhost:8081/user/memberselection/63803669e9913569938867be`
+      url: `http://localhost:8081/user/memberselection/${localId}`
     }).then((response) => {
       setMemberSelection(response.data);
     });

@@ -3,7 +3,6 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import Menu from "../../Menu/Menu";
 
 export function ManageUser() {
   const [user, setUser] = useState({

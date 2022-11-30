@@ -5,7 +5,7 @@ import {  Nav, Navbar,Image, Col, Container, Row } from "react-bootstrap";
 import ListGroup from "react-bootstrap/ListGroup";
 
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MenuData } from "./MenuData";
 import "./Menu.css";
 import { IconContext } from "react-icons";
@@ -13,17 +13,24 @@ import { IconContext } from "react-icons";
 import "./Menu.css";
 
 export default function Menu  ()  {
+  const [user,setUser]=useState("")
 
+  useEffect(()=>{
+    const localEmail=localStorage.getItem('email');
+    if(localEmail){
+      setUser(localEmail);      
+    }  
+  },[])
   return (
     <>
-    <Container className="menu-container" >
+    <Container className="menu-container"  >
       <Row>
       <Navbar className="navbar">
       <IconContext.Provider value={{ color: "#fff" }}>
         <Col lg={2} style={{height:"inherit"}}>
-          <Image src="assets/kahot-logo.png" fluid className="logo"/>
+          <Image src="/assets/kahot-logo.png" fluid className="logo"/>
         </Col>
-     <Col lg={8} style={{height:"inherit"}}>
+     <Col lg={7} style={{height:"inherit"}}>
      <ListGroup className={"nav-menu"}>
           {MenuData.map((item, index) => {
             return (
@@ -43,10 +50,10 @@ export default function Menu  ()  {
           })}
         </ListGroup>
      </Col>
-        <Col lg={2} style={{height:"inherit"}}>
+        <Col lg={3} style={{height:"inherit"}}>
         <Nav
             className="ms-auto"
-            style={{ display: "flex", flexDirection: "row", padding: "0 1rem",  alignItems: "center" }}
+            style={{ display: "flex", flexDirection: "row", padding: "0 1rem",  alignItems: "center" ,justifyContent:"flex-end"}}
           >
 
             <Nav.Link href="#profile" style={{ color: "white", alignItems: "center" , paddingTop: "12px", paddingLeft: "8px"}}>
@@ -54,7 +61,7 @@ export default function Menu  ()  {
                 src="/assets/profileAvatar.png"
                 style={{ width: 30, height: 30, marginRight: "3px", marginBottom: "3px" }}
               />
-              Khoi Doan
+              {user}
             </Nav.Link>
             <Nav.Link href="#logout" style={{ color: "white", textDecoration: "underline" }}>
               Logout

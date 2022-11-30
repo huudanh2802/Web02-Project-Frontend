@@ -1,4 +1,4 @@
-import NewGroup from "../../NewGroup/NewGroup";
+import NewGroup from "./NewGroup/NewGroup";
 
 /* eslint-disable */
 export function NewGroupPage(){

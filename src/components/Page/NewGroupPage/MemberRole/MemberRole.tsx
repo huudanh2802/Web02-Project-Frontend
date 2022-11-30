@@ -2,10 +2,10 @@ import { Col, Row, Image, Button } from "react-bootstrap";
 import React from "react";
 import { FaInfo } from "react-icons/fa";
 import Select from "react-select";
-import MemberRoleDTO from "../../../dtos/MemberRoleDTO";
-import NewGroupDTO from "../../../dtos/NewGroupDTO";
-import { removeItem } from "../../../helpers/functions";
 import "./MemberRole.css";
+import MemberRoleDTO from "../../../../dtos/MemberRoleDTO";
+import NewGroupDTO from "../../../../dtos/NewGroupDTO";
+import { removeItem } from "../../../../helpers/functions";
 
 const roleOptions = [
   { value: 3, label: "Select..." },

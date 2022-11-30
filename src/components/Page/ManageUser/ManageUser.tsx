@@ -14,7 +14,7 @@ export function ManageUser() {
     const localId = localStorage.getItem("id");
     axios({
       method: "get",
-      url: `http://localhost:8081/user/get/638398bb2797c4a83dc2bb04`
+      url: `${process.env.REACT_APP_API_SERVER}/user/get/638398bb2797c4a83dc2bb04`
     }).then((response) => {
       setUser(response.data);
     });

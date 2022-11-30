@@ -32,7 +32,7 @@ export default function GroupInfo() {
     };
     axios({
       method: "post",
-      url: `http://localhost:8081/group/checkowner/`,
+      url: `${process.env.REACT_APP_API_SERVER}/group/checkowner/`,
       data: checkOwnerDTO
     }).then((response) => {
       setOwner(response.data);
@@ -42,7 +42,7 @@ export default function GroupInfo() {
   function getGroupMember() {
     axios({
       method: "get",
-      url: `http://localhost:8081/group/get/${groupId}`
+      url: `${process.env.REACT_APP_API_SERVER}/group/get/${groupId}`
     }).then((response) => {
       setGroupMember(response.data);
       console.log(response.data);

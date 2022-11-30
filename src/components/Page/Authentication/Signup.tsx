@@ -48,7 +48,7 @@ function Signup() {
     // });
     // setForm(1);
     axios
-      .post("http://localhost:8081/user/signup", {
+      .post(`${process.env.REACT_APP_API_SERVER}/user/signup`, {
         email: data.email,
         fullname: data.fullname,
         password: data.password
@@ -80,7 +80,7 @@ function Signup() {
 
         // Authenticate
         axios
-          .post("http://localhost:8081/user/googleAuthen", {
+          .post(`${process.env.REACT_APP_API_SERVER}/user/googleAuthen`, {
             email: result.data.email,
             fullname: result.data.name
           })
@@ -113,7 +113,7 @@ function Signup() {
   // } = useForm(formInfoOptions);
   // const onSubmitInfo = (data: FieldValues) => {
   //   axios
-  //     .post("http://localhost:8081/user/signup", {
+  //     .post(`${process.env.REACT_APP_API_SERVER}/user/signup", {
   //       email: auth.email,
   //       password: auth.password
   //     })

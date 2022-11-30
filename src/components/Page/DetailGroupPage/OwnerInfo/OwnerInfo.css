@@ -9,4 +9,12 @@
     justify-content: center;
     align-items: center
 }
-
+.owner-text{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 30px;
+    
+    color: rgba(16, 66, 77, 0.5);
+}

@@ -1,8 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Form, Card, Button } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import CheckOwnerDTO from "../../../../dtos/CheckOwnerDTO";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
@@ -14,6 +16,13 @@ import "./DetailGroupInfo.css";
 export default function DetailGroupInfo() {
   const { groupId } = useParams();
   const [owner, setOwner] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm();
+
   const [groupMember, setGroupMember] = useState<GroupInfoDTO>({
     id: "",
     name: "",
@@ -57,12 +66,24 @@ export default function DetailGroupInfo() {
     getGroupMember();
   }, []);
 
+  function onSubmit(data: any) {
+    const email = data;
+    console.log(data);
+    axiosPrivate({
+      method: "post",
+      url: `${process.env.REACT_APP_API_SERVER}/group/invitebyemail/${groupId}`,
+      data: email
+    }).then((response) => {
+      alert(response.data);
+    });
+  }
+
   return (
     <Container className="group-container">
       <h2 className="group-title">Group Info</h2>
       <Card>
         <Row>
-          <Col>
+          <Col lg={3}>
             <img src="/assets/group1.png" width={150} height={150} />
           </Col>
           <Col>
@@ -85,8 +106,40 @@ export default function DetailGroupInfo() {
                   margin: "8px 0 8px 0"
                 }}
               >
-                Links
+                Links :{" "}
+                {`${process.env.REACT_APP_BASE_URL}/group/autojoin/${groupMember.id}`}
               </h5>
+            </Row>
+            <Row
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "baseline"
+              }}
+            >
+              <Col lg={2}>
+                <h5
+                  style={{
+                    color: "#389CB2",
+                    fontWeight: "bold",
+                    margin: "8px 0 8px 0"
+                  }}
+                >
+                  Invite by email:
+                </h5>
+              </Col>
+              <Col>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <input
+                    placeholder="Enter email"
+                    {...register("email", { required: true })}
+                    style={{ width: "200px", marginRight: "20px" }}
+                  />
+                  <Button variant="secondary" type="submit">
+                    Submit
+                  </Button>
+                </form>
+              </Col>
             </Row>
           </Col>
         </Row>

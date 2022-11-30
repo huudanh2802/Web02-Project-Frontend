@@ -7,6 +7,7 @@ import { NewGroupPage } from "../components/Page/NewGroupPage/NewGroupPage";
 import ManageUser from "../routes/ManageUser";
 import InviteMember from "../components/Page/InviteMember/InviteMember";
 import DetailGroupInfo from "../components/Page/DetailGroupPage/DetailGroupInfo/DetailGroupInfo";
+import AutoJoin from "../components/Page/AutoJoin/AutoJoin";
 
 export default function GroupRouter() {
   return (
@@ -19,6 +20,7 @@ export default function GroupRouter() {
         <Route path="newgroup" element={<NewGroupPage />} />
         <Route path="invite" element={<InviteMember />} />
         <Route path="manageuser" element={<ManageUser />} />
+        <Route path="autojoin/:groupId" element={<AutoJoin />} />
       </Routes>
     </>
   );

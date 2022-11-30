@@ -37,14 +37,17 @@
 
 .createBtn {
   background: #4ac99b;
-  border: 1px solid #a4a4a4;
+  border: 1px solid #a4a4a4!important;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   border-radius: 22px;
+  width:100px;
 }
 
 .cancelBtn {
-  background: #ff0101;
-  border: 1px solid #a4a4a4;
+  background: #ff0101!important;
+  border: 1px solid #ff0101 !important ;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   border-radius: 22px;
+  width:100px;
+
 }

@@ -2,8 +2,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Row, Col, Form, InputGroup, Button, Container } from "react-bootstrap";
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 // import {Image} from "react-bootstrap";
 import MemberSelection from "../MemberSelection/MemberSelection";
@@ -16,6 +17,7 @@ import { axiosPrivate } from "../../../../token/axiosPrivate";
 // const defaultImgPath = "assets/group1.png";
 
 export default function NewGroup() {
+  const navigate = useNavigate();
   const localData = {
     id: localStorage.getItem("id")!,
     email: localStorage.getItem("email")!
@@ -46,15 +48,18 @@ export default function NewGroup() {
 
       data: newGroup
     }).then((response) => {
-      console.log(response);
+      navigate(`/group/detail/${response.data}`);
     });
   }
 
   const onSubmit = handleSubmit((data) => {
-    newGroup.name = data.name;
-    newGroup.owner = data.owner;
-    console.log(newGroup);
-    sendData();
+    try {
+      newGroup.name = data.name;
+      newGroup.owner = data.owner;
+      sendData();
+    } catch (e) {
+      console.log(e);
+    }
   });
 
   useEffect(() => {
@@ -80,7 +85,7 @@ export default function NewGroup() {
                   aria-label="GroupName"
                   aria-describedby="basic-addon1"
                   className="input-box"
-                  {...register("name")}
+                  {...register("name", { required: "This field is required" })}
                 />
               </InputGroup>
             </Row>
@@ -98,14 +103,9 @@ export default function NewGroup() {
               <MemberSelection newGroup={newGroup} setNewGroup={setNewGroup} />
             </Row>
             <Row className="m-4 ">
-              <Col lg={6} className="d-flex justify-content-center">
+              <Col lg={12} className="d-flex justify-content-center">
                 <Button type="submit" className="createBtn" variant="primary">
                   Create
-                </Button>
-              </Col>
-              <Col lg={6} className="d-flex justify-content-center">
-                <Button type="button" className="cancelBtn" variant="primary">
-                  Cancel
                 </Button>
               </Col>
             </Row>

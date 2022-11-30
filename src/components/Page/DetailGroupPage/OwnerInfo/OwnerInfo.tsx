@@ -6,7 +6,7 @@ import "./OwnerInfo.css";
 export default function OwnerInfo({ owner }: { owner: MemberDTO }) {
   return (
     <Row className="owner">
-      <Col lg={3}>
+      <Col lg={2}>
         <Image
           // eslint-disable-next-line react/style-prop-object
           className="ava"
@@ -15,7 +15,7 @@ export default function OwnerInfo({ owner }: { owner: MemberDTO }) {
         />
       </Col>
       <Col lg={3} className="owner-row">
-        <p className="text">{owner.email}</p>
+        <p className="owner-text">{owner.email}</p>
       </Col>
       <Col lg={3} className="owner-row">
         <Button type="button" className="iconBtn">

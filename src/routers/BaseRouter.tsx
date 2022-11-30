@@ -8,6 +8,7 @@ import Signup from "../components/Page/Authentication/Signup";
 import Verification from "../components/Page/Authentication/Verification";
 import Confirm from "../components/Page/Authentication/Confirm";
 import DetailGroupInfo from "../components/Page/DetailGroupPage/DetailGroupInfo/DetailGroupInfo";
+import AutoJoin from "../components/Page/AutoJoin/AutoJoin";
 
 export default function BaseRouter() {
   const isLoggedIn = localStorage.getItem("email") !== null;
@@ -19,6 +20,7 @@ export default function BaseRouter() {
         <Route path="detail/:id" element={<DetailGroupInfo />} />
         <Route path="newgroup" element={<NewGroupPage />} />
         <Route path="manageuser" element={<ManageUser />} />
+        <Route path="autojoin/:groupId" element={<AutoJoin />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />

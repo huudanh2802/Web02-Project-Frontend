@@ -9,9 +9,9 @@ import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import MemberInfo from "../MemberInfo/MemberInfo";
 import OwnerInfo from "../OwnerInfo/OwnerInfo";
-import "./GroupInfo.css";
+import "./DetailGroupInfo.css";
 
-export default function GroupInfo() {
+export default function DetailGroupInfo() {
   const { groupId } = useParams();
   const [owner, setOwner] = useState(false);
   const [groupMember, setGroupMember] = useState<GroupInfoDTO>({

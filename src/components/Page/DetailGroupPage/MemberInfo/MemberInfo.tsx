@@ -43,7 +43,17 @@ export default function MemberInfo({
         if (role === 1) removeItem(groupMember.coowner, memberDTO);
         else removeItem(groupMember.member, memberDTO);
         alert("User has been deleted");
-        setGroupMember(groupMember);
+        const testGroupInfo: GroupInfoDTO = {
+          id: "",
+          name: "",
+          owner: {
+            id: "",
+            email: ""
+          },
+          coowner: [],
+          member: []
+        };
+        setGroupMember(response.data);
       } else {
         // eslint-disable-next-line no-alert
         alert(response);
@@ -72,7 +82,7 @@ export default function MemberInfo({
             groupMember.coowner.push(memberDTO);
           }
           alert("User has been modify role");
-          setGroupMember(groupMember);
+          setGroupMember(response.data);
         } else {
           // eslint-disable-next-line no-alert
           alert(response);

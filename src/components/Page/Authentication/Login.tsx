@@ -31,7 +31,7 @@ function Login() {
   const { errors } = formState;
   const onSubmit = (data: FieldValues) => {
     axios
-      .post("http://localhost:8081/user/login", {
+      .post(`${process.env.REACT_APP_API_SERVER}/user/login`, {
         email: data.email,
         password: data.password
       })
@@ -64,7 +64,7 @@ function Login() {
 
         // Authenticate
         axios
-          .post("http://localhost:8081/user/googleAuthen", {
+          .post(`${process.env.REACT_APP_API_SERVER}/user/googleAuthen`, {
             email: result.data.email,
             fullname: result.data.name
           })

@@ -21,7 +21,7 @@ export default function MemberSelection({
 
     axios({
       method: "get",
-      url: `http://localhost:8081/user/memberselection/${localId}`
+      url: `${process.env.REACT_APP_API_SERVER}/user/memberselection/${localId}`
     }).then((response) => {
       setMemberSelection(response.data);
     });

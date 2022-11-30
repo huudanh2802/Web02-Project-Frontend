@@ -36,7 +36,7 @@ export default function MemberInfo({
     };
     axios({
       method: "delete",
-      url: `http://localhost:8081/group/member/`,
+      url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
       data: kickReq
     }).then((response) => {
       if (response.status === 200) {
@@ -60,7 +60,7 @@ export default function MemberInfo({
       };
       axios({
         method: "put",
-        url: `http://localhost:8081/group/member/`,
+        url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
         data: updateReq
       }).then((response) => {
         if (response.status === 200) {

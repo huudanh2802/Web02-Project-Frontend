@@ -38,7 +38,7 @@ export default function NewGroup() {
   function sendData() {
     axios({
       method: "post",
-      url: `http://localhost:8081/group/newgroup`,
+      url: `${process.env.REACT_APP_API_SERVER}/group/newgroup`,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json"

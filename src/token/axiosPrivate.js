@@ -1,7 +1,7 @@
 import axios from "axios";
 import { memoizedRefreshToken } from "./refreshToken";
 
-axios.defaults.baseURL = "http://localhost:8081";
+axios.defaults.baseURL = process.env.REACT_APP_API_SERVER;
 
 axios.interceptors.request.use(
   async (config) => {

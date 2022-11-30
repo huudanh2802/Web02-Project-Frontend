@@ -4,7 +4,7 @@ import "../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { axiosPrivate } from "../token/axiosPrivate";
+import { axiosPrivate } from "../../../token/axiosPrivate";
 
 export default function Confirm() {
   const { token } = useParams();

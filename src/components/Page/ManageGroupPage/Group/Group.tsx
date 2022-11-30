@@ -14,7 +14,7 @@ function Group() {
     const localId = localStorage.getItem("id");
 
     axios
-      .get(`http://localhost:8081/group/owngroup/${localId}`)
+      .get(`${process.env.REACT_APP_API_SERVER}/group/owngroup/${localId}`)
       .then((response) => {
         setOwnGroup(response.data);
       })
@@ -24,7 +24,7 @@ function Group() {
 
     // axios({
     //   method: "get",
-    //   url: `http://localhost:8081/group/owngroup/${localId}`
+    //   url: `${process.env.REACT_APP_API_SERVER}/group/owngroup/${localId}`
     // }).then((response) => {
     //   setOwnGroup(response.data);
     // });
@@ -34,7 +34,7 @@ function Group() {
 
     axios({
       method: "get",
-      url: `http://localhost:8081/group/membergroup/${localId}`
+      url: `${process.env.REACT_APP_API_SERVER}/group/membergroup/${localId}`
     }).then((response) => {
       setMemberGroup(response.data);
     });

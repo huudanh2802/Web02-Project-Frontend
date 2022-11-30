@@ -9,17 +9,17 @@ import * as fc from "react-icons/fc";
 export const MenuData = [
   {
     path: "/group/grouplist",
-    icon: <md.MdGroups />,
+    icon: <md.MdGroups className="router-list-icon" />,
     cName: "nav-text"
   },
   {
     path: "/group/newgroup",
-    icon: <md.MdCreateNewFolder />,
+    icon: <md.MdCreateNewFolder className="router-list-icon" />,
     cName: "nav-text"
   },
   {
     path: "/group/manageuser",
-    icon: <md.MdManageAccounts />,
+    icon: <md.MdManageAccounts className="router-list-icon" />,
     cName: "nav-text"
   }
 ];

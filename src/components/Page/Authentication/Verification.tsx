@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import "../index.css";
+import "../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Login() {

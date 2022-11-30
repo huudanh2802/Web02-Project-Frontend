@@ -9,8 +9,8 @@ import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
-import "../index.css";
-import background from "../bg-1.jpg";
+import "../../../index.css";
+import background from "../../../bg-1.jpg";
 import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 

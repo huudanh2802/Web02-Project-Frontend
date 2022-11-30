@@ -56,16 +56,16 @@ export default function Menu  ()  {
             <Col lg={3} style={{height:"inherit"}}>
             <Nav
                 className="ms-auto"
-                style={{ display: "flex", flexDirection: "row", padding: "0 1rem",  alignItems: "center" ,justifyContent:"flex-end"}}
+                style={{ display: "flex", flexDirection: "row", marginTop:"10px ",  alignItems: "center" ,justifyContent:"flex-end"}}
               >
 
-                <Nav.Link href="#profile" style={{ color: "white", alignItems: "center" , paddingTop: "12px", paddingLeft: "8px"}}>
+                <Nav  style={{ color: "white", alignItems: "center" , paddingLeft: "8px"}}>
                   <img
                     src="/assets/profileAvatar.png"
                     style={{ width: 30, height: 30, marginRight: "3px", marginBottom: "3px" }}
                   />
                   {user}
-                </Nav.Link>
+                </Nav>
                 <Nav.Link 
                   onClick={() => {
                     localStorage.removeItem("email");

@@ -18,7 +18,7 @@ export const MenuData = [
     cName: "nav-text"
   },
   {
-    path: "/group/manageuser",
+    path: "/group/myprofile",
     icon: <md.MdManageAccounts className="router-list-icon" />,
     cName: "nav-text"
   }

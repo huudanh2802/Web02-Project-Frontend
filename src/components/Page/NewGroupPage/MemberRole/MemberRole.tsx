@@ -3,6 +3,7 @@ import React from "react";
 import { FaInfo } from "react-icons/fa";
 import Select from "react-select";
 import "./MemberRole.css";
+import { useNavigate } from "react-router";
 import MemberRoleDTO from "../../../../dtos/MemberRoleDTO";
 import NewGroupDTO from "../../../../dtos/NewGroupDTO";
 import { removeItem } from "../../../../helpers/functions";
@@ -24,6 +25,7 @@ function MemberRole({
   newGroup: NewGroupDTO | null;
   setNewGroup: React.Dispatch<React.SetStateAction<NewGroupDTO>> | null;
 }) {
+  const navigate = useNavigate();
   function setRoleMember(event: any) {
     const role = event.value;
     switch (role) {
@@ -47,7 +49,11 @@ function MemberRole({
       }
     }
   }
-
+  // eslint-disable-next-line no-unused-vars
+  const redirectProfile = (event: any) => {
+    console.log("Hello");
+    navigate(`/group/profile/${memberData.id}`);
+  };
   return (
     <Row className={add ? "member" : "member noAdd"}>
       <Col lg={2}>
@@ -62,7 +68,7 @@ function MemberRole({
         <p className="email-text">{memberData.email}</p>
       </Col>
       <Col lg={3} className="d-flex flex-row justify-content-center">
-        <Button type="button" className="iconBtn">
+        <Button type="button" className="iconBtn" onClick={redirectProfile}>
           <FaInfo className="icon" />
         </Button>
       </Col>

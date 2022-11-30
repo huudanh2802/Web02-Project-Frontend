@@ -68,7 +68,6 @@ export default function DetailGroupInfo() {
 
   function onSubmit(data: any) {
     const email = data;
-    console.log(data);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/invitebyemail/${groupId}`,

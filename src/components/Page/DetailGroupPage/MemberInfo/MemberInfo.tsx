@@ -2,6 +2,7 @@
 import React from "react";
 import { Image, Row, Col, Button } from "react-bootstrap";
 import { FaInfo } from "react-icons/fa";
+import { useNavigate } from "react-router";
 import Select from "react-select";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 import MemberDTO from "../../../../dtos/MemberDTO";
@@ -23,6 +24,7 @@ export default function MemberInfo({
   memberDTO: MemberDTO;
   owner: boolean;
 }) {
+  const navigate = useNavigate();
   const roleOptions = [
     { value: 1, label: "Co-owner" },
     { value: 2, label: "Member" }
@@ -90,6 +92,11 @@ export default function MemberInfo({
       });
     }
   }
+
+  const redirectProfile = (event: any) => {
+    console.log("Hello");
+    navigate(`/group/profile/${memberDTO.id}`);
+  };
   return (
     <Row className="member">
       <Col lg={2}>
@@ -100,7 +107,7 @@ export default function MemberInfo({
         <p className="name-text">{memberDTO.email}</p>
       </Col>
       <Col lg={1} className="member-row">
-        <Button type="button" className="iconBtn">
+        <Button type="button" className="iconBtn" onClick={redirectProfile}>
           <FaInfo className="icon" />
         </Button>
       </Col>

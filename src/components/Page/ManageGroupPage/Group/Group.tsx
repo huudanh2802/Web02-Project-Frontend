@@ -64,9 +64,11 @@ function Group() {
           <option value="date">Date</option>
         </select>
       </Container> */}
+      <Container >
 
+<h5 style={{ color: "#4AB2C9", fontWeight: "bold" }}>Created</h5>
+</Container>
       <Container className="container-group">
-        <h5 style={{ color: "#4AB2C9", fontWeight: "bold" }}>Created</h5>
         <Row>
           {ownGroup.map((group, index) => {
             return (
@@ -77,9 +79,11 @@ function Group() {
           })}
         </Row>
       </Container>
+      <Container >
 
+      <h5 style={{ color: "#4AB2C9", fontWeight: "bold" }}>Joined</h5>
+</Container>
       <Container className="container-group">
-        <h5 style={{ color: "#4AB2C9", fontWeight: "bold" }}>Joined</h5>
         <Row>
           {memberGroup.map((group, index) => {
             return (

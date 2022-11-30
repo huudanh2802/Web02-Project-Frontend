@@ -4,7 +4,6 @@
 import { Row, Col, Form, InputGroup, Button, Container } from "react-bootstrap";
 import { useEffect, useState, createContext } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 
 // import {Image} from "react-bootstrap";
 import MemberSelection from "../MemberSelection/MemberSelection";
@@ -12,13 +11,14 @@ import "./NewGroup.css";
 
 import NewGroupDTO from "../../../../dtos/NewGroupDTO";
 import MemberRole from "../MemberRole/MemberRole";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
 
 // const defaultImgPath = "assets/group1.png";
 
 export default function NewGroup() {
-  const mockData = {
-    id: "638398bb2797c4a83dc2bb04",
-    email: "huudanh2802"
+  const localData = {
+    id: localStorage.getItem("id")!,
+    email: localStorage.getItem("email")!
   };
 
   const {
@@ -30,13 +30,13 @@ export default function NewGroup() {
 
   const [newGroup, setNewGroup] = useState<NewGroupDTO>({
     name: "",
-    owner: mockData,
+    owner: localData,
     coowner: [],
     member: []
   });
 
   function sendData() {
-    axios({
+    axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/newgroup`,
       headers: {
@@ -58,8 +58,8 @@ export default function NewGroup() {
   });
 
   useEffect(() => {
-    setValue("owner", mockData);
-  }, [mockData, setValue]);
+    setValue("owner", localData);
+  }, [localData, setValue]);
 
   return (
     <form onSubmit={onSubmit}>
@@ -87,7 +87,7 @@ export default function NewGroup() {
             <Row className="m-3">
               <h2 className="title">Owner</h2>
               <MemberRole
-                memberData={mockData}
+                memberData={localData}
                 add={false}
                 newGroup={null}
                 setNewGroup={null}

@@ -14,6 +14,7 @@ import "../../../index.css";
 import background from "../../../bg-2.jpg";
 import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axiosPublic from "../../../token/axiosPublic";
 
 function Signup() {
   // Routing
@@ -47,8 +48,8 @@ function Signup() {
     //   password: data.password
     // });
     // setForm(1);
-    axios
-      .post(`${process.env.REACT_APP_API_SERVER}/user/signup`, {
+    axiosPublic
+      .post(`/user/signup`, {
         email: data.email,
         fullname: data.fullname,
         password: data.password

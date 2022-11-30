@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
 import React from "react";
 import { Image, Row, Col, Button } from "react-bootstrap";
 import { FaInfo } from "react-icons/fa";
@@ -8,6 +7,7 @@ import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 import MemberDTO from "../../../../dtos/MemberDTO";
 import ModifyGroupDTO from "../../../../dtos/ModifyGroupDTO";
 import { removeItem } from "../../../../helpers/functions";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
 import "./MemberInfo.css";
 
 export default function MemberInfo({
@@ -34,7 +34,7 @@ export default function MemberInfo({
       role,
       memberId: memberDTO.id
     };
-    axios({
+    axiosPrivate({
       method: "delete",
       url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
       data: kickReq
@@ -58,7 +58,7 @@ export default function MemberInfo({
         role,
         memberId: memberDTO.id
       };
-      axios({
+      axiosPrivate({
         method: "put",
         url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
         data: updateReq

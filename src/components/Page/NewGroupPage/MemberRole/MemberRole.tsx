@@ -50,7 +50,7 @@ function MemberRole({
 
   return (
     <Row className={add ? "member" : "member noAdd"}>
-      <Col lg={3}>
+      <Col lg={2}>
         <Image
           // eslint-disable-next-line react/style-prop-object
           className="ava"
@@ -59,7 +59,7 @@ function MemberRole({
         />
       </Col>
       <Col lg={3}>
-        <p className="text">{memberData.email}</p>
+        <p className="email-text">{memberData.email}</p>
       </Col>
       <Col lg={3} className="d-flex flex-row justify-content-center">
         <Button type="button" className="iconBtn">

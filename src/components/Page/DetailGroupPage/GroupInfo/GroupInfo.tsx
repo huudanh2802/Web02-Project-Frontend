@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Form, Card, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import CheckOwnerDTO from "../../../../dtos/CheckOwnerDTO";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
 import MemberInfo from "../MemberInfo/MemberInfo";
 import OwnerInfo from "../OwnerInfo/OwnerInfo";
 import "./GroupInfo.css";
@@ -30,7 +30,7 @@ export default function GroupInfo() {
       ownerId,
       groupId: groupId!
     };
-    axios({
+    axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/checkowner/`,
       data: checkOwnerDTO
@@ -40,7 +40,7 @@ export default function GroupInfo() {
   }
 
   function getGroupMember() {
-    axios({
+    axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/group/get/${groupId}`
     }).then((response) => {

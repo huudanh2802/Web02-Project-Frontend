@@ -1,12 +1,9 @@
 import axios from "axios";
 import { memoizedRefreshToken } from "./refreshToken";
 
-axios.defaults.baseURL = process.env.REACT_APP_API_SERVER;
-
 axios.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem("token");
-
     if (token) {
       // eslint-disable-next-line no-param-reassign
       config.headers = {
@@ -24,7 +21,7 @@ axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const config = error?.config;
-    console.log("Hello World");
+
     if (error?.response?.status === 401 && !config?.sent) {
       config.sent = true;
 

@@ -1,8 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 import MemberRoleDTO from "../../../../dtos/MemberRoleDTO";
 import NewGroupDTO from "../../../../dtos/NewGroupDTO";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
 import MemberRole from "../MemberRole/MemberRole";
 
 import "./MemberSelection.css";
@@ -19,7 +19,7 @@ export default function MemberSelection({
   function setData() {
     const localId = localStorage.getItem("id");
 
-    axios({
+    axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/user/memberselection/${localId}`
     }).then((response) => {

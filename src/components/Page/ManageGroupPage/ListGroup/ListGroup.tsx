@@ -33,12 +33,11 @@ export default function ListGroup({
             />
           </Col>
           <Col lg={6}>
-            <Card.Link
-              href={`/grouplist/${group.id}`}
-              style={{ color: "#389CB2", fontWeight: "bold" }}
+            <Card
+              style={{ color: "#389CB2", fontWeight: "bold", border: "none" }}
             >
               {group.name}
-            </Card.Link>
+            </Card>
             <Card.Text>
               <Card.Img
                 src="/assets/groupChat1.png"

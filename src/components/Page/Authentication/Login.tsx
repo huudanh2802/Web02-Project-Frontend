@@ -6,7 +6,6 @@ import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
@@ -14,6 +13,7 @@ import "../../../index.css";
 import background from "../../../bg-1.jpg";
 import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axiosPublic from "../../../token/axiosPublic";
 
 function Login() {
   // Routing
@@ -30,8 +30,8 @@ function Login() {
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
   const onSubmit = (data: FieldValues) => {
-    axios
-      .post(`${process.env.REACT_APP_API_SERVER}/user/login`, {
+    axiosPublic
+      .post(`/user/login`, {
         email: data.email,
         password: data.password
       })
@@ -52,7 +52,7 @@ function Login() {
   const googleLogin = useGoogleLogin({
     onSuccess: async (response) => {
       try {
-        const result = await axios.get(
+        const result = await axiosPublic.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
           {
             headers: {
@@ -63,8 +63,8 @@ function Login() {
         console.log(result.data);
 
         // Authenticate
-        axios
-          .post(`${process.env.REACT_APP_API_SERVER}/user/googleAuthen`, {
+        axiosPublic
+          .post(`/user/googleAuthen`, {
             email: result.data.email,
             fullname: result.data.name
           })

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import GroupDTO from "../../../../dtos/GroupDTO";
 import ListGroup from "../ListGroup/ListGroup";
 import "./Group.css"
-import axios from "axios";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
 function Group() {
   const [selected, setSelected] = useState("");
   const [ownGroup,setOwnGroup] = useState<GroupDTO[]>([]);
@@ -13,7 +13,7 @@ function Group() {
   function getOwnGroup(){
     const localId = localStorage.getItem("id");
 
-    axios
+    axiosPrivate
       .get(`${process.env.REACT_APP_API_SERVER}/group/owngroup/${localId}`)
       .then((response) => {
         setOwnGroup(response.data);
@@ -32,7 +32,7 @@ function Group() {
   function getMemberGroup(){
     const localId = localStorage.getItem("id");
 
-    axios({
+    axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/group/membergroup/${localId}`
     }).then((response) => {

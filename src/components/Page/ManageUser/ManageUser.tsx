@@ -1,8 +1,7 @@
 /* eslint-disable*/
-import axios from "axios";
-import React from "react";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { axiosPrivate } from "../../../token/axiosPrivate";
 
 export function ManageUser() {
   const [user, setUser] = useState({
@@ -12,7 +11,7 @@ export function ManageUser() {
 
   function setData() {
     const localId = localStorage.getItem("id");
-    axios({
+    axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/user/get/638398bb2797c4a83dc2bb04`
     }).then((response) => {

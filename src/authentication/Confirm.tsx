@@ -4,21 +4,19 @@ import "../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import axios from "axios";
+import { axiosPrivate } from "../token/axiosPrivate";
 
 export default function Confirm() {
   const { token } = useParams();
   function confirmToken() {
-    axios({
-      method: "get",
-      url: `http://localhost:8081/user/verify/${token}`
-    }).then((response) => {
+    axiosPrivate.get(`/user/verify/${token}`).then((response) => {
       // eslint-disable-next-line no-console
       console.log(response);
     });
   }
   useEffect(() => {
     confirmToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

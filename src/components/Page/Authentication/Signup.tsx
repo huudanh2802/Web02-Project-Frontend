@@ -55,7 +55,7 @@ function Signup() {
         password: data.password
       })
       .then(() => {
-        alert(JSON.stringify(data));
+        // alert(JSON.stringify(data));
         alert("Sign-up successful!");
         navigate("/verification");
       })
@@ -90,7 +90,7 @@ function Signup() {
             localStorage.setItem("id", res.data.id);
             localStorage.setItem("email", res.data.email);
 
-            alert(JSON.stringify(res.data));
+            // alert(JSON.stringify(res.data));
             navigate("/group/grouplist");
           })
           .catch((err: any) => {

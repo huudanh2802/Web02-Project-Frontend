@@ -23,8 +23,6 @@
     gap:100px;
 }
 
-
-
 .nav-text {
     display: flex;
     justify-content: start;
@@ -35,11 +33,8 @@
     justify-content: center;
 }
 
-
-
 .nav-menu-items {
     width: 100%;
-
 }
 
 span {
@@ -72,4 +67,13 @@ span {
     max-width:100%!important;
     border:none!important;
     margin-bottom:20px;
+}
+
+.menu-end {
+    display: flex;
+    flex-direction: row;
+    margin-top: 8px;
+    margin-right: 16px;
+    align-items: center;
+    justify-content: flex-end;
 }

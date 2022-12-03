@@ -7,7 +7,7 @@ import GroupDTO from "../../../dtos/GroupDTO";
 
 import "./Kard.css";
 
-function Kard({ group, index }: { group: GroupDTO; index: Key }) {
+function GroupKard({ group, index }: { group: GroupDTO; index: Key }) {
   const navigate = useNavigate();
 
   const viewGroup = () => {
@@ -19,7 +19,7 @@ function Kard({ group, index }: { group: GroupDTO; index: Key }) {
     <Card key={index} className="kard" onClick={viewGroup}>
       <div className="kard-header">
         <img
-          src={`/assets/card-bg-${Math.floor(Math.random() * 6 + 1)}.jpg`}
+          src={`/assets/card-bg-${Math.floor(Math.random() * 8)}.jpg`}
           alt="bg"
         />
       </div>
@@ -31,7 +31,7 @@ function Kard({ group, index }: { group: GroupDTO; index: Key }) {
         <div className="time">
           <FaCalendar className="mx-2" />
           <small>
-            {moment(group.createdAt.toString()).format("MMMM Do YYYY")}
+            {moment(group.createdAt.toString()).format("MMMM Do, YYYY")}
           </small>
         </div>
       </div>
@@ -39,4 +39,4 @@ function Kard({ group, index }: { group: GroupDTO; index: Key }) {
   );
 }
 
-export default Kard;
+export default GroupKard;

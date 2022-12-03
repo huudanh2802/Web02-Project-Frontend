@@ -1,38 +1,53 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/alt-text */
-import { useEffect, useState } from "react";
-import { Col, Container, Row, Form, Card, Button } from "react-bootstrap";
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Tabs,
+  Tab,
+  Button,
+  Card,
+  Form
+} from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import UserKard from "../../../Common/Kard/UserKard";
 import CheckOwnerDTO from "../../../../dtos/CheckOwnerDTO";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
-import MemberInfo from "../MemberInfo/MemberInfo";
-import OwnerInfo from "../OwnerInfo/OwnerInfo";
+
 import "./DetailGroupInfo.css";
 
-export default function DetailGroupInfo() {
+function GroupInfo() {
   const { groupId } = useParams();
   const [owner, setOwner] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm();
 
   const [groupMember, setGroupMember] = useState<GroupInfoDTO>({
     id: "",
     name: "",
     owner: {
       id: "",
+      fullname: "",
       email: ""
     },
     coowner: [],
     member: []
   });
+
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data: any) => {
+    const email = data;
+    axiosPrivate({
+      method: "post",
+      url: `${process.env.REACT_APP_API_SERVER}/group/invitebyemail/${groupId}`,
+      data: email
+    }).then((response) => {
+      alert(response.data);
+    });
+  };
 
   function checkOwner(ownerId: string) {
     const checkOwnerDTO: CheckOwnerDTO = {
@@ -64,120 +79,104 @@ export default function DetailGroupInfo() {
       checkOwner(ownerId);
     }
     getGroupMember();
+    console.log(owner);
   }, []);
 
-  function onSubmit(data: any) {
-    const email = data;
-    axiosPrivate({
-      method: "post",
-      url: `${process.env.REACT_APP_API_SERVER}/group/invitebyemail/${groupId}`,
-      data: email
-    }).then((response) => {
-      alert(response.data);
-    });
-  }
-
   return (
-    <Container className="group-container">
-      <h2 className="group-title">Group Info</h2>
-      <Card>
-        <Row>
-          <Col lg={3}>
-            <img src="/assets/group1.png" width={150} height={150} />
-          </Col>
-          <Col>
-            <Row>
-              <h5
-                style={{
-                  color: "#389CB2",
-                  fontWeight: "bold",
-                  margin: "8px 0 8px 0"
-                }}
-              >
-                Group Name: {groupMember.name}
-              </h5>
-            </Row>
-            <Row>
-              <h5
-                style={{
-                  color: "#389CB2",
-                  fontWeight: "bold",
-                  margin: "8px 0 8px 0"
-                }}
-              >
-                Links :{" "}
-                {`${process.env.REACT_APP_BASE_URL}/group/autojoin/${groupMember.id}`}
-              </h5>
-            </Row>
-            <Row
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "baseline"
-              }}
-            >
-              <Col lg={2}>
-                <h5
-                  style={{
-                    color: "#389CB2",
-                    fontWeight: "bold",
-                    margin: "8px 0 8px 0"
-                  }}
-                >
-                  Invite by email:
-                </h5>
-              </Col>
-              <Col>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <input
-                    placeholder="Enter email"
-                    {...register("email", { required: true })}
-                    style={{ width: "200px", marginRight: "20px" }}
-                  />
-                  <Button variant="secondary" type="submit">
-                    Submit
-                  </Button>
-                </form>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Card>
-      <Row>
-        <h5 className="group-title">Owner</h5>
-        <OwnerInfo owner={groupMember.owner} />
-      </Row>
-      <h5 className="group-title">Member</h5>
-      <Row className="group-member">
-        {groupMember.coowner.length > 0 && (
-          <>
-            {groupMember.coowner.map((member) => (
-              <MemberInfo
+    <Container>
+      <h1 className="page-title" style={{ marginBottom: "32px" }}>
+        {groupMember.name}
+      </h1>
+      <Tabs defaultActiveKey="members" id="group-list-tab" className="mb-3">
+        <Tab eventKey="members" title="Members">
+          <Row xs={1} md={3} lg={6} style={{ marginTop: "16px" }}>
+            <Col>
+              <UserKard
                 groupMember={groupMember}
                 setGroupMember={setGroupMember}
-                memberDTO={member}
-                // eslint-disable-next-line jsx-a11y/aria-role
-                role={1}
+                info={groupMember.owner}
+                roleId={2}
                 owner={owner}
               />
-            ))}
-          </>
-        )}
-        {groupMember.member.length > 0 && (
-          <>
-            {groupMember.member.map((member) => (
-              <MemberInfo
-                groupMember={groupMember}
-                setGroupMember={setGroupMember}
-                memberDTO={member}
-                // eslint-disable-next-line jsx-a11y/aria-role
-                role={2}
-                owner={owner}
-              />
-            ))}
-          </>
-        )}
-      </Row>
+            </Col>
+            {groupMember.coowner.length > 0 && (
+              <>
+                {groupMember.coowner.map((member) => (
+                  <Col>
+                    <UserKard
+                      groupMember={groupMember}
+                      setGroupMember={setGroupMember}
+                      info={member}
+                      roleId={1}
+                      owner={owner}
+                    />
+                  </Col>
+                ))}
+              </>
+            )}
+            {groupMember.member.length > 0 && (
+              <>
+                {groupMember.member.map((member) => (
+                  <Col>
+                    <UserKard
+                      groupMember={groupMember}
+                      setGroupMember={setGroupMember}
+                      info={member}
+                      roleId={0}
+                      owner={owner}
+                    />
+                  </Col>
+                ))}
+              </>
+            )}
+          </Row>
+        </Tab>
+        <Tab eventKey="invite" title="Invite">
+          <Card className="shadow">
+            <Card.Body>
+              <div className="mb-3 mt-md-4 mx-4">
+                <div className="mb-3">
+                  <Form onSubmit={handleSubmit(onSubmit)}>
+                    <Form.Group className="mb-3" controlId="formEmail">
+                      <Form.Label
+                        className="text-center"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Email address
+                      </Form.Label>
+                      <Form.Control
+                        type="email"
+                        {...register("email", { required: true })}
+                        placeholder="name@example.com"
+                      />
+                    </Form.Group>
+
+                    <div className="d-grid gap-2">
+                      <Button variant="primary" type="submit">
+                        Invite
+                      </Button>
+                      <CopyToClipboard
+                        text={`${process.env.REACT_APP_BASE_URL}/group/autojoin/${groupMember.id}`}
+                      >
+                        <Button
+                          variant="outline-dark"
+                          onClick={() =>
+                            alert("Copied group's link to clipboard")
+                          }
+                        >
+                          Get Group&apos;s link
+                        </Button>
+                      </CopyToClipboard>
+                    </div>
+                  </Form>
+                </div>
+              </div>
+            </Card.Body>
+          </Card>
+        </Tab>
+      </Tabs>
     </Container>
   );
 }
+
+export default GroupInfo;

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Container, Row, Col, Tab, Tabs } from "react-bootstrap";
-import Kard from "../../../Common/Kard/Kard";
+import GroupKard from "../../../Common/Kard/GroupKard";
 import GroupDTO from "../../../../dtos/GroupDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
-
-import "./Group.css";
 
 function Group() {
   const [ownGroup, setOwnGroup] = useState<GroupDTO[]>([]);
@@ -49,7 +47,7 @@ function Group() {
           <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
             {ownGroup.map((group, index) => (
               <Col>
-                <Kard group={group} index={index} />
+                <GroupKard group={group} index={index} />
               </Col>
             ))}
           </Row>
@@ -59,7 +57,7 @@ function Group() {
           <Row xs={1} md={2} lg={4}>
             {memberGroup.map((group, index) => (
               <Col>
-                <Kard group={group} index={index} />
+                <GroupKard group={group} index={index} />
               </Col>
             ))}
           </Row>

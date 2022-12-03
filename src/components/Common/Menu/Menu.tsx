@@ -15,7 +15,7 @@ import "./Menu.css";
 function Menu() {
   const navigate = useNavigate();
 
-  const resetLocalStorage = () => {
+  const logout = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("token");
     localStorage.removeItem("id");
@@ -38,7 +38,7 @@ function Menu() {
                 alt="Avatar"
                 style={{ width: 32, height: 32, marginRight: "16px" }}
               />
-              <Button variant="light" onClick={() => resetLocalStorage()}>
+              <Button variant="light" onClick={() => logout()}>
                 Logout
               </Button>
             </Nav>

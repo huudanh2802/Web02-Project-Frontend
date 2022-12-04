@@ -11,9 +11,9 @@ import {
   Card,
   Form
 } from "react-bootstrap";
+import CopyToClipboard from "react-copy-to-clipboard";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useNavigate, useParams } from "react-router-dom";
 import UserKard from "../../../Common/Kard/UserKard";
 import CheckOwnerDTO from "../../../../dtos/CheckOwnerDTO";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
@@ -24,7 +24,7 @@ import "./DetailGroupInfo.css";
 function GroupInfo() {
   const { groupId } = useParams();
   const [owner, setOwner] = useState(false);
-
+  const navigate = useNavigate();
   const [groupMember, setGroupMember] = useState<GroupInfoDTO>({
     id: "",
     name: "",
@@ -173,6 +173,12 @@ function GroupInfo() {
               </div>
             </Card.Body>
           </Card>
+        </Tab>
+
+        <Tab eventKey="presentation" title="Prensentation">
+          <Button onClick={() => navigate(`/group/newpresentation/${groupId}`)}>
+            Create New Presentation
+          </Button>
         </Tab>
       </Tabs>
     </Container>

@@ -28,7 +28,11 @@ function Menu() {
       <Row>
         <Navbar className="navbar">
           <Col lg={2} style={{ height: "inherit" }}>
-            <Image src="/assets/kahot-logo.svg" className="logo" />
+            <Image
+              src="/assets/kahot-logo.svg"
+              className="logo"
+              onClick={() => navigate("/")}
+            />
           </Col>
           <Col lg={7} style={{ height: "inherit" }} />
           <Col lg={3} style={{ height: "inherit" }}>

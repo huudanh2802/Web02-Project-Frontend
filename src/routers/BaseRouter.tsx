@@ -10,6 +10,7 @@ import DetailGroupInfo from "../components/Page/DetailGroupPage/DetailGroupInfo/
 import AutoJoin from "../components/Page/AutoJoin/AutoJoin";
 import MyProfile from "../components/Page/ManageUser/MyProfile";
 import OtherProfile from "../components/Page/ManageUser/OtherProfile";
+import NewPresentation from "../components/Page/NewPresentation/NewPresentation";
 
 export default function BaseRouter() {
   const isLoggedIn = localStorage.getItem("email") !== null;
@@ -23,6 +24,7 @@ export default function BaseRouter() {
         <Route path="myprofile" element={<MyProfile />} />
         <Route path="autojoin/:groupId" element={<AutoJoin />} />
         <Route path="profile/:id" element={<OtherProfile />} />
+        <Route path="newpresentation/:groupId" element={<NewPresentation />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />

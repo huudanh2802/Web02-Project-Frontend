@@ -8,7 +8,6 @@ import MemberTab from "./Components/MemberTab";
 
 import CheckOwnerDTO from "../../../dtos/CheckOwnerDTO";
 import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
-import PresentationDTO from "../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
 import "./GroupDetail.css";
@@ -62,35 +61,18 @@ function GroupDetail() {
     console.log(owner);
   }, []);
 
-  const mockPresentations: PresentationDTO[] = [
-    {
-      id: "1",
-      name: "Course Introduction",
-      slideNum: 6,
-      createdAt: Date()
-    },
-    {
-      id: "2",
-      name: "Web Fundamentals",
-      slideNum: 10,
-      createdAt: Date()
-    },
-    {
-      id: "3",
-      name: "Final Examination",
-      slideNum: 4,
-      createdAt: Date()
-    }
-  ];
-
   return (
     <Container>
       <h1 className="page-title" style={{ marginBottom: "32px" }}>
         {groupMember.name}
       </h1>
-      <Tabs defaultActiveKey="members" id="group-list-tab" className="mb-3">
+      <Tabs
+        defaultActiveKey="presentations"
+        id="group-list-tab"
+        className="mb-3"
+      >
         <Tab eventKey="presentations" title="Presentations">
-          <PresentationTab presentations={mockPresentations} owner={owner} />
+          <PresentationTab owner={owner} groupId={groupId} />
         </Tab>
         <Tab eventKey="members" title="Members">
           <MemberTab

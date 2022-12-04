@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from "react";
 import { Container, Tabs, Tab } from "react-bootstrap";
-import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import PresentationTab from "./Components/PresentationTab";
 import MemberTab from "./Components/MemberTab";
@@ -29,18 +28,6 @@ function GroupDetail() {
     coowner: [],
     member: []
   });
-
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data: any) => {
-    const email = data;
-    axiosPrivate({
-      method: "post",
-      url: `${process.env.REACT_APP_API_SERVER}/group/invitebyemail/${groupId}`,
-      data: email
-    }).then((response) => {
-      alert(response.data);
-    });
-  };
 
   function checkOwner(ownerId: string) {
     const checkOwnerDTO: CheckOwnerDTO = {
@@ -103,14 +90,14 @@ function GroupDetail() {
       </h1>
       <Tabs defaultActiveKey="members" id="group-list-tab" className="mb-3">
         <Tab eventKey="presentations" title="Presentations">
-          <PresentationTab presentations={mockPresentations} />
+          <PresentationTab presentations={mockPresentations} owner={owner} />
         </Tab>
         <Tab eventKey="members" title="Members">
           <MemberTab
+            groupId={groupId}
             groupMember={groupMember}
             setGroupMember={setGroupMember}
             owner={owner}
-            inviteDTO={{ register, handleSubmit, onSubmit, groupMember }}
           />
         </Tab>
       </Tabs>

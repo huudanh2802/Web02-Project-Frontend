@@ -3,18 +3,17 @@ import { Row, Col, Button } from "react-bootstrap";
 import UserKard from "../../../Common/Kard/UserKard";
 import InviteModal from "./InviteModal";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
-import InviteDTO from "../../../../dtos/InviteDTO";
 
 function MemberTab({
+  groupId,
   groupMember,
   setGroupMember,
-  owner,
-  inviteDTO
+  owner
 }: {
+  groupId: string | undefined;
   groupMember: GroupInfoDTO;
   setGroupMember: React.Dispatch<React.SetStateAction<GroupInfoDTO>>;
   owner: boolean;
-  inviteDTO: InviteDTO;
 }) {
   const [showModal, setShowModal] = useState(false);
   const handleClose = () => setShowModal(false);
@@ -26,9 +25,10 @@ function MemberTab({
         Invite
       </Button>
       <InviteModal
-        inviteDTO={inviteDTO}
         showModal={showModal}
         handleClose={handleClose}
+        groupId={groupId}
+        groupMember={groupMember}
       />
       <Row xs={1} md={3} lg={6} style={{ marginTop: "16px" }}>
         <Col>

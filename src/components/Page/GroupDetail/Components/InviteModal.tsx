@@ -1,18 +1,34 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
 import { Modal, Form, Button } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import InviteDTO from "../../../../dtos/InviteDTO";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
+import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 
 function InviteModal({
-  inviteDTO,
   showModal,
-  handleClose
+  handleClose,
+  groupId,
+  groupMember
 }: {
-  inviteDTO: InviteDTO;
   showModal: boolean;
   handleClose: () => void;
+  groupId: string | undefined;
+  groupMember: GroupInfoDTO;
 }) {
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data: any) => {
+    const email = data;
+    axiosPrivate({
+      method: "post",
+      url: `${process.env.REACT_APP_API_SERVER}/group/invitebyemail/${groupId}`,
+      data: email
+    }).then((response) => {
+      alert(response.data);
+    });
+  };
+
   return (
     <Modal
       aria-labelledby="contained-modal-title-vcenter"
@@ -26,14 +42,14 @@ function InviteModal({
         <Modal.Title>Invite user</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={inviteDTO.handleSubmit(inviteDTO.onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3" controlId="formEmail">
             <Form.Label className="text-center" style={{ fontWeight: "bold" }}>
               Email address
             </Form.Label>
             <Form.Control
               type="email"
-              {...inviteDTO.register("email", { required: true })}
+              {...register("email", { required: true })}
               placeholder="name@example.com"
             />
           </Form.Group>
@@ -43,7 +59,7 @@ function InviteModal({
               Invite
             </Button>
             <CopyToClipboard
-              text={`${process.env.REACT_APP_BASE_URL}/group/autojoin/${inviteDTO.groupMember.id}`}
+              text={`${process.env.REACT_APP_BASE_URL}/group/autojoin/${groupMember.id}`}
             >
               <Button
                 variant="outline-dark"

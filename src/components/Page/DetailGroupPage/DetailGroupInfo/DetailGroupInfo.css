@@ -1,14 +1,3 @@
-.group-title {
-  color: #389cb2;
-  margin-bottom: 1rem;
-}
-.group-container {
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  max-width:1000px;
-}
-.group-member{
-  height: 700px; 
-  overflow: auto;
+.page-title {
+  font-weight: bold;
 }

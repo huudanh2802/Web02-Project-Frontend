@@ -50,6 +50,7 @@ export default function MemberInfo({
           name: "",
           owner: {
             id: "",
+            fullname: "",
             email: ""
           },
           coowner: [],

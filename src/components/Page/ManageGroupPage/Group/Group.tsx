@@ -1,100 +1,69 @@
-/* eslint-disable */
-import { Row, Col, Card, Container, Form } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Button, Container, Row, Col, Tab, Tabs } from "react-bootstrap";
+import GroupKard from "../../../Common/Kard/GroupKard";
 import GroupDTO from "../../../../dtos/GroupDTO";
-import ListGroup from "../ListGroup/ListGroup";
-import "./Group.css"
 import { axiosPrivate } from "../../../../token/axiosPrivate";
-function Group() {
-  const [selected, setSelected] = useState("");
-  const [ownGroup,setOwnGroup] = useState<GroupDTO[]>([]);
-  const [memberGroup,setMemberGroup] = useState<GroupDTO[]>([]);
 
-  function getOwnGroup(){
-    const localId = localStorage.getItem("id");
+function Group() {
+  const [ownGroup, setOwnGroup] = useState<GroupDTO[]>([]);
+  const [memberGroup, setMemberGroup] = useState<GroupDTO[]>([]);
+
+  function getOwnGroup() {
+    const id = localStorage.getItem("id");
 
     axiosPrivate
-      .get(`${process.env.REACT_APP_API_SERVER}/group/owngroup/${localId}`)
-      .then((response) => {
+      .get(`${process.env.REACT_APP_API_SERVER}/group/owngroup/${id}`)
+      .then((response: any) => {
         setOwnGroup(response.data);
       })
-      .catch((err: any) => {
-        console.log(err.response.data.error);
+      .catch((error: any) => {
+        console.log(error.response.data.error);
       });
-
-    // axios({
-    //   method: "get",
-    //   url: `${process.env.REACT_APP_API_SERVER}/group/owngroup/${localId}`
-    // }).then((response) => {
-    //   setOwnGroup(response.data);
-    // });
   }
-  function getMemberGroup(){
-    const localId = localStorage.getItem("id");
+
+  function getMemberGroup() {
+    const id = localStorage.getItem("id");
 
     axiosPrivate({
       method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/group/membergroup/${localId}`
-    }).then((response) => {
+      url: `${process.env.REACT_APP_API_SERVER}/group/membergroup/${id}`
+    }).then((response: any) => {
       setMemberGroup(response.data);
     });
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getOwnGroup();
     getMemberGroup();
-  },[])
-
-
-  const handleChange = (event: any) => {
-    setSelected(event.target.value);
-  };
+  }, []);
 
   return (
-    <>
-      {/* <Container
-        className="container-form"
-      >
-        <Form>
-          <Form.Control type="input" placeholder="Search for group... " />
-        </Form>
-        <select value={selected} onChange={handleChange}>
-          <option value="">---Sort by---</option>
-          <option value="name">Group Name</option>
-          <option value="date">Date</option>
-        </select>
-      </Container> */}
-      <Container >
+    <Container>
+      <Tabs defaultActiveKey="created" id="group-list-tab" className="mb-3">
+        <Tab eventKey="created" title="Created">
+          <Button href="/group/newgroup" variant="primary">
+            Create new Group
+          </Button>
+          <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
+            {ownGroup.map((group, index) => (
+              <Col>
+                <GroupKard group={group} index={index} />
+              </Col>
+            ))}
+          </Row>
+        </Tab>
 
-<h5 style={{ color: "#4AB2C9", fontWeight: "bold" }}>Created</h5>
-</Container>
-      <Container className="container-group">
-        <Row>
-          {ownGroup.map((group, index) => {
-            return (
-              <>
-                <ListGroup group={group} index={index}></ListGroup>
-              </>
-            );
-          })}
-        </Row>
-      </Container>
-      <Container >
-
-      <h5 style={{ color: "#4AB2C9", fontWeight: "bold" }}>Joined</h5>
-</Container>
-      <Container className="container-group">
-        <Row>
-          {memberGroup.map((group, index) => {
-            return (
-              <>
-              <ListGroup group={group} index={index}></ListGroup>
-              </>
-            );
-          })}
-        </Row>
-      </Container>
-    </>
+        <Tab eventKey="joined" title="Joined">
+          <Row xs={1} md={2} lg={4}>
+            {memberGroup.map((group, index) => (
+              <Col>
+                <GroupKard group={group} index={index} />
+              </Col>
+            ))}
+          </Row>
+        </Tab>
+      </Tabs>
+    </Container>
   );
 }
 

@@ -20,6 +20,8 @@ import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 
 import "./DetailGroupInfo.css";
+import ViewPresentationDTO from "../../../../dtos/ViewPresentationDTO";
+import PresentationKard from "../../../Common/Kard/PresentationKard";
 
 function GroupInfo() {
   const { groupId } = useParams();
@@ -36,7 +38,9 @@ function GroupInfo() {
     coowner: [],
     member: []
   });
-
+  const [groupPresentation, setGroupPresentation] = useState<
+    ViewPresentationDTO[]
+  >([]);
   const { register, handleSubmit } = useForm();
   const onSubmit = (data: any) => {
     const email = data;
@@ -49,6 +53,14 @@ function GroupInfo() {
     });
   };
 
+  function getPresentation() {
+    axiosPrivate({
+      method: "get",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/groupget/${groupId}`
+    }).then((response) => {
+      setGroupPresentation(response.data);
+    });
+  }
   function checkOwner(ownerId: string) {
     const checkOwnerDTO: CheckOwnerDTO = {
       ownerId,
@@ -79,6 +91,7 @@ function GroupInfo() {
       checkOwner(ownerId);
     }
     getGroupMember();
+    getPresentation();
     console.log(owner);
   }, []);
 
@@ -179,6 +192,15 @@ function GroupInfo() {
           <Button onClick={() => navigate(`/group/newpresentation/${groupId}`)}>
             Create New Presentation
           </Button>
+          {groupPresentation.length > 0 && (
+            <>
+              {groupPresentation.map((presentation, idx) => (
+                <Col>
+                  <PresentationKard presentation={presentation} index={idx} />
+                </Col>
+              ))}
+            </>
+          )}
         </Tab>
       </Tabs>
     </Container>

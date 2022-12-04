@@ -1,21 +1,19 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import "./NewPresentation.css";
-import Slider from "react-slick";
+import { useState, useMemo, useEffect } from "react";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useNavigation, useParams } from "react-router";
-import Select from "react-select";
 import { FaPlus } from "react-icons/fa";
-import { nextChar } from "../../../helpers/functions";
-
+import { useParams, useNavigate } from "react-router";
+import Select from "react-select";
+import Slider from "react-slick";
 import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
+import { nextChar } from "../../../helpers/functions";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
-export default function NewPresentation() {
-  const { groupId } = useParams();
+export default function Presentation() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
     question: "",
@@ -29,9 +27,9 @@ export default function NewPresentation() {
       }
     ]
   });
-  const [newPresenation, setNewPresentation] = useState<PresentationDTO>({
+  const [detailPresentation, setPresentation] = useState<PresentationDTO>({
     name: "",
-    groupId: groupId!,
+    groupId: "",
     slides: [currentSlide]
   });
   const {
@@ -52,26 +50,34 @@ export default function NewPresentation() {
     const result = await trigger("name");
     if (result) {
       axiosPrivate({
-        method: "post",
-        url: `${process.env.REACT_APP_API_SERVER}/presentation/newpresentation`,
+        method: "put",
+        url: `${process.env.REACT_APP_API_SERVER}/presentation/update/${id}`,
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json"
         },
 
-        data: newPresenation
+        data: detailPresentation
       }).then((response) => {
-        navigate(`/group/presentation/detail/${response.data}`);
+        alert("Presentation has been updated");
       });
     }
   }
   useEffect(() => {
-    reset(currentSlide);
-  }, [currentSlide, newPresenation, reset]);
+    axiosPrivate({
+      method: "get",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/get/${id}`
+    }).then((response) => {
+      console.log(response.data.slides[0]);
+      setCurrentSlide(response.data.slides[0]);
+      setPresentation(response.data);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = (data: any) => {
-    newPresenation.slides[currentSlide.idx] = currentSlide;
-    setNewPresentation(newPresenation);
+    detailPresentation.slides[currentSlide.idx] = currentSlide;
+    setPresentation(detailPresentation);
   };
 
   const addAnswer = (event: any) => {
@@ -125,7 +131,7 @@ export default function NewPresentation() {
     const newSlide: SlideDTO = {
       question: "",
       correct: "A",
-      idx: newPresenation.slides.length,
+      idx: detailPresentation.slides.length,
       answers: [
         {
           id: "A",
@@ -134,7 +140,7 @@ export default function NewPresentation() {
         }
       ]
     };
-    setNewPresentation((presentation) => ({
+    setPresentation((presentation) => ({
       ...presentation,
       slides: [...presentation.slides, newSlide]
     }));
@@ -142,32 +148,32 @@ export default function NewPresentation() {
     console.log(currentSlide);
   };
   function changeSlide(event: any, idx: number) {
-    const slideChange = newPresenation.slides[idx];
+    const slideChange = detailPresentation.slides[idx];
     setCurrentSlide(slideChange);
   }
 
   function resetIdx() {
-    for (let i = 0; i < newPresenation.slides.length; i += 1) {
-      newPresenation.slides[i].idx = i;
+    for (let i = 0; i < detailPresentation.slides.length; i += 1) {
+      detailPresentation.slides[i].idx = i;
     }
 
-    setNewPresentation(newPresenation);
+    setPresentation(detailPresentation);
   }
   function removeSlide(event: any) {
     if (currentSlide.idx === 0) {
-      newPresenation.slides.splice(0, 1);
-      setNewPresentation(newPresenation);
+      detailPresentation.slides.splice(0, 1);
+      setPresentation(detailPresentation);
       resetIdx();
-      setCurrentSlide(newPresenation.slides[0]);
+      setCurrentSlide(detailPresentation.slides[0]);
     } else {
-      setCurrentSlide(newPresenation.slides[currentSlide.idx - 1]);
-      newPresenation.slides.splice(currentSlide.idx, 1);
-      setNewPresentation(newPresenation);
+      setCurrentSlide(detailPresentation.slides[currentSlide.idx - 1]);
+      detailPresentation.slides.splice(currentSlide.idx, 1);
+      setPresentation(detailPresentation);
       resetIdx();
     }
   }
   const setName = (event: any) => {
-    setNewPresentation((presentation) => ({
+    setPresentation((presentation) => ({
       ...presentation,
       name: event.target.value
     }));
@@ -178,7 +184,7 @@ export default function NewPresentation() {
     arrows: false,
     swipeToSlide: true,
     slidesToShow: 5,
-    slideToScroll: newPresenation.slides.length,
+    slideToScroll: detailPresentation.slides.length,
     infinite: false
   };
   return (
@@ -191,6 +197,7 @@ export default function NewPresentation() {
               onChange={setName}
               placeholder="Enter Presentation Name"
               style={{ width: "inherit", height: "50px", fontSize: "34px" }}
+              value={detailPresentation.name}
             />
           </Col>
           <Col lg={4}>
@@ -207,7 +214,7 @@ export default function NewPresentation() {
       <Row>
         <Col lg={1}>
           <Slider {...settings}>
-            {newPresenation.slides.map((slide, idx) => (
+            {detailPresentation.slides.map((slide, idx) => (
               <Button
                 className={
                   idx === currentSlide.idx ? "selected-slide" : "slide"
@@ -254,6 +261,7 @@ export default function NewPresentation() {
                   <input
                     {...register("question", { required: true })}
                     onChange={setQuestion}
+                    value={currentSlide.question}
                   />
                   <Card.Header>Answer</Card.Header>
                   {currentSlide.answers.map((answer, idx) => (
@@ -308,7 +316,7 @@ export default function NewPresentation() {
                   </Button>
                 </Col>
               </Row>
-              {newPresenation.slides.length > 1 && (
+              {detailPresentation.slides.length > 1 && (
                 <Row>
                   <Col lg={12}>
                     <Button

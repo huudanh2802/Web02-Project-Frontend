@@ -14,14 +14,16 @@ import {
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import UserKard from "../../../Common/Kard/UserKard";
-import CheckOwnerDTO from "../../../../dtos/CheckOwnerDTO";
-import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
-import { axiosPrivate } from "../../../../token/axiosPrivate";
+import UserKard from "../../Common/Kard/UserKard";
+import PresentationKard from "../../Common/Kard/PresentationKard";
+import CheckOwnerDTO from "../../../dtos/CheckOwnerDTO";
+import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
+import PresentationDTO from "../../../dtos/PresentationDTO";
+import { axiosPrivate } from "../../../token/axiosPrivate";
 
-import "./DetailGroupInfo.css";
+import "./GroupDetail.css";
 
-function GroupInfo() {
+function GroupDetail() {
   const { groupId } = useParams();
   const [owner, setOwner] = useState(false);
 
@@ -82,12 +84,32 @@ function GroupInfo() {
     console.log(owner);
   }, []);
 
+  const mockPresentation: PresentationDTO = {
+    id: "1",
+    name: "Mock Presentation",
+    slideNum: 5,
+    createdAt: Date()
+  };
+
   return (
     <Container>
       <h1 className="page-title" style={{ marginBottom: "32px" }}>
         {groupMember.name}
       </h1>
       <Tabs defaultActiveKey="members" id="group-list-tab" className="mb-3">
+        {/* Presentations tab */}
+        <Tab eventKey="presentations" title="Presentations">
+          <Button variant="primary">New Presentation</Button>
+          <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
+            {Array.from({ length: 3 }).map(() => (
+              <Col>
+                <PresentationKard presentation={mockPresentation} index={0} />
+              </Col>
+            ))}
+          </Row>
+        </Tab>
+
+        {/* Members tab */}
         <Tab eventKey="members" title="Members">
           <Row xs={1} md={3} lg={6} style={{ marginTop: "16px" }}>
             <Col>
@@ -131,6 +153,8 @@ function GroupInfo() {
             )}
           </Row>
         </Tab>
+
+        {/* Invitation tab */}
         <Tab eventKey="invite" title="Invite">
           <Card className="shadow">
             <Card.Body>
@@ -179,4 +203,4 @@ function GroupInfo() {
   );
 }
 
-export default GroupInfo;
+export default GroupDetail;

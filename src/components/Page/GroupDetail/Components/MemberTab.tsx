@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col, Button } from "react-bootstrap";
+import { FaPlus } from "react-icons/fa";
 import UserKard from "../../../Common/Kard/UserKard";
 import InviteModal from "./InviteModal";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
@@ -22,7 +23,7 @@ function MemberTab({
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Invite
+        <FaPlus style={{ marginRight: "8px" }} /> Invite
       </Button>
       <InviteModal
         showModal={showModal}

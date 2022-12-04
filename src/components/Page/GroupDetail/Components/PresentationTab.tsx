@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Button, Row, Col } from "react-bootstrap";
+import { FaPlus } from "react-icons/fa";
 import NewPresentationModal from "./NewPresentationModal";
 import PresentationKard from "../../../Common/Kard/PresentationKard";
 import PresentationDTO from "../../../../dtos/PresentationDTO";
@@ -42,7 +43,7 @@ function PresentationTab({
     <>
       {owner && (
         <Button variant="primary" onClick={handleShow}>
-          New Presentation
+          <FaPlus style={{ marginRight: "8px" }} /> New Presentation
         </Button>
       )}
       <NewPresentationModal

@@ -12,7 +12,7 @@
 }
 
 .kard:hover {
-  background-color: rgb(220, 240, 243);
+  background-color: #dcf0f3;
   border-color: #4bb8ad;
   cursor: pointer;
 }

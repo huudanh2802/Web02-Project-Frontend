@@ -1,6 +1,8 @@
 import React, { Key } from "react";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { FaCalendar } from "react-icons/fa";
+import moment from "moment";
 import PresentationDTO from "../../../dtos/PresentationDTO";
 
 import "./Kard.css";
@@ -15,7 +17,7 @@ function PresentationKard({
   const navigate = useNavigate();
 
   const viewPresent = () => {
-    const link = `/presentation/${presentation.id.toString()}`;
+    const link = `/group/presentation/${presentation.id.toString()}`;
     navigate(link);
   };
 
@@ -32,6 +34,12 @@ function PresentationKard({
         <span className="tag tag-teal">
           {presentation.slideNum} Slide{presentation.slideNum === 1 ? "" : "s"}
         </span>
+        <div className="time">
+          <FaCalendar className="mx-2" />
+          <small>
+            {moment(presentation.createdAt.toString()).format("MMMM Do, YYYY")}
+          </small>
+        </div>
       </div>
     </Card>
   );

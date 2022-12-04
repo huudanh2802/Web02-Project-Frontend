@@ -7,6 +7,7 @@ import Signup from "../components/Page/Authentication/Signup";
 import Verification from "../components/Page/Authentication/Verification";
 import Confirm from "../components/Page/Authentication/Confirm";
 import GroupDetail from "../components/Page/GroupDetail/GroupDetail";
+import Presentation from "../components/Page/Presentation/Presentation";
 import AutoJoin from "../components/Page/AutoJoin/AutoJoin";
 import MyProfile from "../components/Page/ManageUser/MyProfile";
 import OtherProfile from "../components/Page/ManageUser/OtherProfile";
@@ -19,6 +20,7 @@ export default function BaseRouter() {
       <Route path="group" element={<GroupRouter />}>
         <Route path="grouplist" element={<GroupList />} />
         <Route path="detail/:id" element={<GroupDetail />} />
+        <Route path="presentation/:id" element={<Presentation />} />
         <Route path="newgroup" element={<NewGroupPage />} />
         <Route path="myprofile" element={<MyProfile />} />
         <Route path="autojoin/:groupId" element={<AutoJoin />} />

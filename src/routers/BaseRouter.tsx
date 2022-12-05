@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import { Navigate, Route, Routes } from "react-router";
+import io from "socket.io-client";
 import GroupList from "../components/Page/GroupList/GroupList";
 import { NewGroupPage } from "../components/Page/NewGroupPage/NewGroupPage";
 import GroupRouter from "./GroupRouter";
@@ -14,8 +16,15 @@ import NewPresentation from "../components/Page/NewPresentation/NewPresentation"
 import Presentation from "../components/Page/Presentation/Presentation";
 import Join from "../components/Page/Realtime/Join";
 
-export default function BaseRouter() {
+// Socket IO
+const socket = io(`${process.env.REACT_APP_API_SERVER}`);
+
+function BaseRouter() {
   const isLoggedIn = localStorage.getItem("email") !== null;
+
+  // Data handling
+  const [username, setUsername] = useState("");
+  const [presentation, setPresentation] = useState("");
 
   return (
     <Routes>
@@ -33,7 +42,18 @@ export default function BaseRouter() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/verification" element={<Verification />} />
       <Route path="/confirm/:token" element={<Confirm />} />
-      <Route path="/join" element={<Join />} />
+      <Route
+        path="/join"
+        element={
+          <Join
+            username={username}
+            setUsername={setUsername}
+            presentation={presentation}
+            setPresentation={setPresentation}
+            socket={socket}
+          />
+        }
+      />
       {isLoggedIn && (
         <Route path="" element={<Navigate to="/group/grouplist" replace />} />
       )}
@@ -43,3 +63,5 @@ export default function BaseRouter() {
     </Routes>
   );
 }
+
+export default BaseRouter;

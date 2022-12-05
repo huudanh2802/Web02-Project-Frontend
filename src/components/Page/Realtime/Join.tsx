@@ -1,29 +1,64 @@
 /* eslint-disable react/jsx-props-no-spreading */
-
 import React from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useForm, FieldValues } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-// import { useNavigate } from "react-router-dom";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 
 import { FaExclamationTriangle } from "react-icons/fa";
 import "../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Signup() {
+function Signup({
+  username,
+  setUsername,
+  presentation,
+  setPresentation,
+  socket
+}: {
+  username: string;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+  presentation: string;
+  setPresentation: React.Dispatch<React.SetStateAction<string>>;
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+}) {
   // Routing
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  // Realtime functions
+  const joinPresentation = () => {
+    if (username !== "" && presentation !== "") {
+      console.log(
+        `joinPresentation: ${JSON.stringify({ username, presentation })}`
+      );
+      socket.emit("join_presentation", { username, presentation });
+      navigate("/realtime", { replace: true });
+    }
+  };
+
+  // Handle changes
+  const handleChangeUsername = (event: any) => {
+    setUsername(event.target.value);
+    console.log(`Username: ${event.target.value} / ${username}`);
+  };
+  const handleChangePresentation = (event: any) => {
+    setPresentation(event.target.value);
+    console.log(`Presentation: ${event.target.value} / ${presentation}`);
+  };
 
   // Form handling
   const formSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required"),
-    presentationId: Yup.string().required("Room ID is required")
+    formUsername: Yup.string().required("Username is required"),
+    formPresentation: Yup.string().required("Room ID is required")
   });
   const formOptions = { resolver: yupResolver(formSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const onSubmit = (data: FieldValues) => {
     console.log(data);
+    joinPresentation();
   };
   const { errors } = formState;
 
@@ -49,16 +84,17 @@ function Signup() {
                       <Form.Control
                         type="username"
                         placeholder="Enter your username"
-                        {...register("username", { required: true })}
+                        {...register("formUsername", { required: true })}
+                        onChange={handleChangeUsername}
                       />
                     </Form.Group>
-                    {errors.username && (
+                    {errors.formUsername && (
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
                         Username is required
                       </p>
                     )}
-                    <Form.Group className="mb-3" controlId="formPresentationId">
+                    <Form.Group className="mb-3" controlId="formPresentation">
                       <Form.Label
                         className="text-center"
                         style={{ fontWeight: "bold" }}
@@ -68,13 +104,14 @@ function Signup() {
                       <Form.Control
                         type="id"
                         placeholder="Enter presentation ID"
-                        {...register("presentationId", { required: true })}
+                        {...register("formPresentation", { required: true })}
+                        onChange={handleChangePresentation}
                       />
                     </Form.Group>
-                    {errors.presentationId && (
+                    {errors.formPresentation && (
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
-                        Room ID is required
+                        Presentation ID is required
                       </p>
                     )}
 

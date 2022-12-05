@@ -14,14 +14,14 @@ import {
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import UserKard from "../../../Common/Kard/UserKard";
-import CheckOwnerDTO from "../../../../dtos/CheckOwnerDTO";
-import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
-import { axiosPrivate } from "../../../../token/axiosPrivate";
+import UserKard from "../../Common/Kard/UserKard";
+import CheckOwnerDTO from "../../../dtos/CheckOwnerDTO";
+import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
+import { axiosPrivate } from "../../../token/axiosPrivate";
 
-import "./DetailGroupInfo.css";
-import ViewPresentationDTO from "../../../../dtos/ViewPresentationDTO";
-import PresentationKard from "../../../Common/Kard/PresentationKard";
+import "./GroupDetail.css";
+import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
+import PresentationKard from "../../Common/Kard/PresentationKard";
 
 function GroupInfo() {
   const { groupId } = useParams();

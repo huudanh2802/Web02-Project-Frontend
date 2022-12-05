@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from "react-router";
-import ManageGroupPage from "../components/Page/ManageGroupPage/ManageGroupPage";
+import GroupList from "../components/Page/GroupList/GroupList";
 import { NewGroupPage } from "../components/Page/NewGroupPage/NewGroupPage";
 import GroupRouter from "./GroupRouter";
 import Login from "../components/Page/Authentication/Login";
 import Signup from "../components/Page/Authentication/Signup";
 import Verification from "../components/Page/Authentication/Verification";
 import Confirm from "../components/Page/Authentication/Confirm";
-import DetailGroupInfo from "../components/Page/DetailGroupPage/DetailGroupInfo/DetailGroupInfo";
+import GroupDetail from "../components/Page/GroupDetail/GroupDetail";
 import AutoJoin from "../components/Page/AutoJoin/AutoJoin";
 import MyProfile from "../components/Page/ManageUser/MyProfile";
 import OtherProfile from "../components/Page/ManageUser/OtherProfile";
@@ -19,8 +19,8 @@ export default function BaseRouter() {
   return (
     <Routes>
       <Route path="group" element={<GroupRouter />}>
-        <Route path="grouplist" element={<ManageGroupPage />} />
-        <Route path="detail/:id" element={<DetailGroupInfo />} />
+        <Route path="grouplist" element={<GroupList />} />
+        <Route path="detail/:id" element={<GroupDetail />} />
         <Route path="newgroup" element={<NewGroupPage />} />
         <Route path="myprofile" element={<MyProfile />} />
         <Route path="autojoin/:groupId" element={<AutoJoin />} />

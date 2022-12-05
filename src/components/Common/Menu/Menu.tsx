@@ -20,7 +20,7 @@ function Menu() {
     localStorage.removeItem("token");
     localStorage.removeItem("id");
     console.log("Local storage reset");
-    navigate("/login");
+    navigate("/join");
   };
 
   return (

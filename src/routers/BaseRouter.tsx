@@ -12,6 +12,7 @@ import MyProfile from "../components/Page/ManageUser/MyProfile";
 import OtherProfile from "../components/Page/ManageUser/OtherProfile";
 import NewPresentation from "../components/Page/NewPresentation/NewPresentation";
 import Presentation from "../components/Page/Presentation/Presentation";
+import Join from "../components/Page/Realtime/Join";
 
 export default function BaseRouter() {
   const isLoggedIn = localStorage.getItem("email") !== null;
@@ -32,11 +33,12 @@ export default function BaseRouter() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/verification" element={<Verification />} />
       <Route path="/confirm/:token" element={<Confirm />} />
+      <Route path="/join" element={<Join />} />
       {isLoggedIn && (
         <Route path="" element={<Navigate to="/group/grouplist" replace />} />
       )}
       {!isLoggedIn && (
-        <Route path="" element={<Navigate to="/login" replace />} />
+        <Route path="" element={<Navigate to="/join" replace />} />
       )}
     </Routes>
   );

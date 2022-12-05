@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button, Container, Row, Col, Tab, Tabs } from "react-bootstrap";
-import GroupKard from "../../../Common/Kard/GroupKard";
-import GroupDTO from "../../../../dtos/GroupDTO";
-import { axiosPrivate } from "../../../../token/axiosPrivate";
+import GroupKard from "../../Common/Kard/GroupKard";
+import GroupDTO from "../../../dtos/GroupDTO";
+import { axiosPrivate } from "../../../token/axiosPrivate";
 
-function Group() {
+function GroupList() {
   const [ownGroup, setOwnGroup] = useState<GroupDTO[]>([]);
   const [memberGroup, setMemberGroup] = useState<GroupDTO[]>([]);
 
@@ -67,4 +67,4 @@ function Group() {
   );
 }
 
-export default Group;
+export default GroupList;

@@ -71,13 +71,13 @@ function BaseRouter() {
 
       {isLoggedIn && (
         <Route
-          path="/lobby/:id"
+          path="/lobby/:presentation/:id"
           element={<LobbyHost game={game} socket={socket} />}
         />
       )}
       {!isLoggedIn && (
         <Route
-          path="/lobby/:id"
+          path="/lobby/:presentation/:id"
           element={<Lobby username={username} game={game} socket={socket} />}
         />
       )}

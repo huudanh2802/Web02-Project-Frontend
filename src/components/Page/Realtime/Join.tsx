@@ -39,11 +39,11 @@ function Join({
   useEffect(() => {
     socket.on(
       "join_game_result",
-      (data: { success: boolean; game: string }) => {
+      (data: { success: boolean; game: string; presentation: string }) => {
         console.log(`Game ${data.game} available: ${data.success}`);
         if (data.success === true) {
           console.log(`Game: ${data.game}`);
-          navigate(`/lobby/${data.game}`);
+          navigate(`/lobby/${data.presentation}/${data.game}`);
         } else if (data.success === false) {
           alert(`Failed to join non-existent game ${data.game}`);
         }
@@ -66,7 +66,7 @@ function Join({
   // Form handling
   const formSchema = Yup.object().shape({
     formUsername: Yup.string().required("Username is required"),
-    formGame: Yup.string().required("Room ID is required")
+    formGame: Yup.string().required("Game ID is required")
   });
   const formOptions = { resolver: yupResolver(formSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
@@ -121,7 +121,7 @@ function Join({
                         onChange={handleChangeGame}
                       />
                     </Form.Group>
-                    {errors.formGame && (
+                    {errors.formGame && errors.formGame.type === "required" && (
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
                         Game ID is required

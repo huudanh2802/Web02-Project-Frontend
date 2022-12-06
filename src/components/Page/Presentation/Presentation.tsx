@@ -190,8 +190,8 @@ export default function Presentation({
     const game = Math.floor(Math.random() * 10000);
     console.log(game);
     setGame(game.toString());
-    socket.emit("create_game", { game: game.toString() });
-    navigate(`/lobby/${game}`);
+    socket.emit("create_game", { game: game.toString(), presentation: id });
+    navigate(`/lobby/${id}/${game}`);
   };
 
   const settings = {

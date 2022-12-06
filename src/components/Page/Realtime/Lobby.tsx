@@ -20,7 +20,7 @@ function Lobby({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
   const navigate = useNavigate();
-  const { presentation, id } = useParams();
+  const { presentationId, id } = useParams();
 
   const leaveGame = () => {
     console.log(`leaveGame: ${JSON.stringify({ username, game })}`);
@@ -31,7 +31,7 @@ function Lobby({
   // Game handling
   useEffect(() => {
     socket.on("start_game", () => {
-      navigate(`/game/${presentation}/${id}`);
+      navigate(`/game/${presentationId}/${id}`);
     });
 
     return () => {
@@ -42,6 +42,7 @@ function Lobby({
   useEffect(() => {
     socket.on("end_game", () => {
       alert("Host has ended the game");
+      socket.emit("leave_game", { username, game });
       navigate("/join");
     });
 

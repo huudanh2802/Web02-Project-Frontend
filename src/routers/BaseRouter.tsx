@@ -72,21 +72,27 @@ function BaseRouter() {
       )}
       {isLoggedIn && (
         <Route
-          path="/lobby/:presentation/:id"
+          path="/lobby/:presentationId/:id"
           element={<LobbyHost game={game} socket={socket} />}
         />
       )}
       {!isLoggedIn && (
         <Route
-          path="/lobby/:presentation/:id"
+          path="/lobby/:presentationId/:id"
           element={<Lobby username={username} game={game} socket={socket} />}
         />
       )}
       {isLoggedIn && (
-        <Route path="/game/:presentation/:id" element={<GameHost />} />
+        <Route
+          path="/game/:presentationId/:id"
+          element={<GameHost socket={socket} />}
+        />
       )}
       {!isLoggedIn && (
-        <Route path="/game/:presentation/:id" element={<Game />} />
+        <Route
+          path="/game/:presentationId/:id"
+          element={<Game socket={socket} game={game} />}
+        />
       )}
     </Routes>
   );

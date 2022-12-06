@@ -17,7 +17,7 @@ function LobbyHost({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
   const navigate = useNavigate();
-  const { presentation, id } = useParams();
+  const { presentationId, id } = useParams();
 
   interface User {
     id: string;
@@ -40,7 +40,7 @@ function LobbyHost({
   // Game handling
   const startGame = () => {
     socket.emit("start_game", { game });
-    navigate(`/game/${presentation}/${id}`);
+    navigate(`/game/${presentationId}/${id}`);
   };
 
   const endGame = () => {

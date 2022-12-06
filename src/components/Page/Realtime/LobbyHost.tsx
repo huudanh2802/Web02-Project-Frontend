@@ -1,9 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
@@ -17,8 +16,8 @@ function LobbyHost({
   game: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
-  // Routing
   const navigate = useNavigate();
+  const { presentation, id } = useParams();
 
   interface User {
     id: string;
@@ -37,6 +36,12 @@ function LobbyHost({
       socket.off(`${game}_users`);
     };
   }, []);
+
+  // Game handling
+  const startGame = () => {
+    socket.emit("start_game", { game });
+    navigate(`/game/${presentation}/${id}`);
+  };
 
   const endGame = () => {
     socket.emit("end_game", { game });
@@ -64,7 +69,9 @@ function LobbyHost({
               </Row>
 
               <div className="d-grid mt-4">
-                <Button variant="primary">Start game</Button>
+                <Button variant="primary" onClick={startGame}>
+                  Start game
+                </Button>
               </div>
               <div className="d-grid mt-2">
                 <Button variant="danger" onClick={endGame}>

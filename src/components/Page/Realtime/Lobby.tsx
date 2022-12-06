@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
@@ -19,8 +19,8 @@ function Lobby({
   game: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
-  // Routing
   const navigate = useNavigate();
+  const { presentation, id } = useParams();
 
   const leaveGame = () => {
     console.log(`leaveGame: ${JSON.stringify({ username, game })}`);
@@ -28,14 +28,25 @@ function Lobby({
     navigate(`/join`);
   };
 
+  // Game handling
   useEffect(() => {
-    socket.on(`end_game`, () => {
+    socket.on("start_game", () => {
+      navigate(`/game/${presentation}/${id}`);
+    });
+
+    return () => {
+      socket.off("start_game");
+    };
+  });
+
+  useEffect(() => {
+    socket.on("end_game", () => {
       alert("Host has ended the game");
       navigate("/join");
     });
 
     return () => {
-      socket.off(`end_game`);
+      socket.off("end_game");
     };
   }, []);
 

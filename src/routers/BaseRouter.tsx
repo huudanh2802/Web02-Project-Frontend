@@ -17,6 +17,8 @@ import Presentation from "../components/Page/Presentation/Presentation";
 import Join from "../components/Page/Realtime/Join";
 import Lobby from "../components/Page/Realtime/Lobby";
 import LobbyHost from "../components/Page/Realtime/LobbyHost";
+import Game from "../components/Page/Realtime/Game";
+import GameHost from "../components/Page/Realtime/GameHost";
 
 // Socket IO
 const socket = io(`${process.env.REACT_APP_API_SERVER}`);
@@ -68,7 +70,6 @@ function BaseRouter() {
       {!isLoggedIn && (
         <Route path="" element={<Navigate to="/join" replace />} />
       )}
-
       {isLoggedIn && (
         <Route
           path="/lobby/:presentation/:id"
@@ -80,6 +81,12 @@ function BaseRouter() {
           path="/lobby/:presentation/:id"
           element={<Lobby username={username} game={game} socket={socket} />}
         />
+      )}
+      {isLoggedIn && (
+        <Route path="/game/:presentation/:id" element={<GameHost />} />
+      )}
+      {!isLoggedIn && (
+        <Route path="/game/:presentation/:id" element={<Game />} />
       )}
     </Routes>
   );

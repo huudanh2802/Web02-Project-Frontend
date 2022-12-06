@@ -121,7 +121,7 @@ function Join({
                         onChange={handleChangeGame}
                       />
                     </Form.Group>
-                    {errors.formGame && errors.formGame.type === "required" && (
+                    {errors.formGame && (
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
                         Game ID is required

@@ -16,6 +16,7 @@ import NewPresentation from "../components/Page/NewPresentation/NewPresentation"
 import Presentation from "../components/Page/Presentation/Presentation";
 import Join from "../components/Page/Realtime/Join";
 import Lobby from "../components/Page/Realtime/Lobby";
+import LobbyHost from "../components/Page/Realtime/LobbyHost";
 
 // Socket IO
 const socket = io(`${process.env.REACT_APP_API_SERVER}`);
@@ -29,7 +30,10 @@ function BaseRouter() {
 
   return (
     <Routes>
-      <Route path="group" element={<GroupRouter />}>
+      <Route
+        path="group"
+        element={<GroupRouter setGame={setGame} socket={socket} />}
+      >
         <Route path="grouplist" element={<GroupList />} />
         <Route path="detail/:id" element={<GroupDetail />} />
         <Route path="newgroup" element={<NewGroupPage />} />
@@ -37,7 +41,10 @@ function BaseRouter() {
         <Route path="autojoin/:groupId" element={<AutoJoin />} />
         <Route path="profile/:id" element={<OtherProfile />} />
         <Route path="newpresentation/:groupId" element={<NewPresentation />} />
-        <Route path="presentation/:id" element={<Presentation />} />
+        <Route
+          path="presentation/:id"
+          element={<Presentation setGame={setGame} socket={socket} />}
+        />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
@@ -55,15 +62,24 @@ function BaseRouter() {
           />
         }
       />
-      <Route
-        path="/lobby/:id"
-        element={<Lobby username={username} game={game} socket={socket} />}
-      />
       {isLoggedIn && (
         <Route path="" element={<Navigate to="/group/grouplist" replace />} />
       )}
       {!isLoggedIn && (
         <Route path="" element={<Navigate to="/join" replace />} />
+      )}
+
+      {isLoggedIn && (
+        <Route
+          path="/lobby/:id"
+          element={<LobbyHost game={game} socket={socket} />}
+        />
+      )}
+      {!isLoggedIn && (
+        <Route
+          path="/lobby/:id"
+          element={<Lobby username={username} game={game} socket={socket} />}
+        />
       )}
     </Routes>
   );

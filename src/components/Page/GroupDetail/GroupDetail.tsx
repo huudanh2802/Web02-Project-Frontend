@@ -100,7 +100,11 @@ function GroupInfo() {
       <h1 className="page-title" style={{ marginBottom: "32px" }}>
         {groupMember.name}
       </h1>
-      <Tabs defaultActiveKey="members" id="group-list-tab" className="mb-3">
+      <Tabs
+        defaultActiveKey="presentation"
+        id="group-list-tab"
+        className="mb-3"
+      >
         <Tab eventKey="members" title="Members">
           <Row xs={1} md={3} lg={6} style={{ marginTop: "16px" }}>
             <Col>

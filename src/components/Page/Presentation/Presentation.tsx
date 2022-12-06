@@ -1,18 +1,26 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router";
 import Select from "react-select";
 import Slider from "react-slick";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
 import { nextChar } from "../../../helpers/functions";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
-export default function Presentation() {
+export default function Presentation({
+  setGame,
+  socket
+}: {
+  setGame: React.Dispatch<React.SetStateAction<string>>;
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+}) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
@@ -181,6 +189,9 @@ export default function Presentation() {
   const present = () => {
     const game = Math.floor(Math.random() * 10000);
     console.log(game);
+    setGame(game.toString());
+    socket.emit("create_game", { game: game.toString() });
+    navigate(`/lobby/${game}`);
   };
 
   const settings = {

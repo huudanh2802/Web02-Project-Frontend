@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { useForm, FieldValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -28,14 +29,31 @@ function Join({
   // Routing
   const navigate = useNavigate();
 
-  // Realtime functions
   const joinGame = () => {
     if (username !== "" && game !== "") {
       console.log(`joinGame: ${JSON.stringify({ username, game })}`);
       socket.emit("join_game", { username, game });
-      navigate(`/lobby/${game}`, { replace: true });
     }
   };
+
+  useEffect(() => {
+    socket.on(
+      "join_game_result",
+      (data: { success: boolean; game: string }) => {
+        console.log(`Game ${data.game} available: ${data.success}`);
+        if (data.success === true) {
+          console.log(`Game: ${data.game}`);
+          navigate(`/lobby/${data.game}`);
+        } else if (data.success === false) {
+          alert(`Failed to join non-existent game ${data.game}`);
+        }
+      }
+    );
+
+    return () => {
+      socket.off("join_game_result");
+    };
+  }, []);
 
   // Handle changes
   const handleChangeUsername = (event: any) => {
@@ -52,8 +70,7 @@ function Join({
   });
   const formOptions = { resolver: yupResolver(formSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const onSubmit = () => {
     joinGame();
   };
   const { errors } = formState;

@@ -16,6 +16,11 @@ body {
   border: 1px solid #4bb8ad !important;
 }
 
+.general-icon {
+  margin-bottom: 4px;
+  margin-right: 8px;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

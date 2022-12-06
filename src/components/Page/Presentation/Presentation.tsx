@@ -178,6 +178,11 @@ export default function Presentation() {
       name: event.target.value
     }));
   };
+  const present = () => {
+    const game = Math.floor(Math.random() * 10000);
+    console.log(game);
+  };
+
   const settings = {
     vertical: true,
     verticalSwiping: true,
@@ -203,6 +208,9 @@ export default function Presentation() {
           <Col lg={4}>
             <Button variant="info" type="button" onClick={() => sendSlide()}>
               Save Presentation
+            </Button>
+            <Button variant="primary" type="button" onClick={() => present()}>
+              Present
             </Button>
           </Col>
         </Row>

@@ -15,6 +15,7 @@ import OtherProfile from "../components/Page/ManageUser/OtherProfile";
 import NewPresentation from "../components/Page/NewPresentation/NewPresentation";
 import Presentation from "../components/Page/Presentation/Presentation";
 import Join from "../components/Page/Realtime/Join";
+import Lobby from "../components/Page/Realtime/Lobby";
 
 // Socket IO
 const socket = io(`${process.env.REACT_APP_API_SERVER}`);
@@ -24,7 +25,7 @@ function BaseRouter() {
 
   // Data handling
   const [username, setUsername] = useState("");
-  const [presentation, setPresentation] = useState("");
+  const [game, setGame] = useState("");
 
   return (
     <Routes>
@@ -48,11 +49,15 @@ function BaseRouter() {
           <Join
             username={username}
             setUsername={setUsername}
-            presentation={presentation}
-            setPresentation={setPresentation}
+            game={game}
+            setGame={setGame}
             socket={socket}
           />
         }
+      />
+      <Route
+        path="/lobby/:id"
+        element={<Lobby username={username} game={game} socket={socket} />}
       />
       {isLoggedIn && (
         <Route path="" element={<Navigate to="/group/grouplist" replace />} />

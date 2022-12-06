@@ -32,7 +32,7 @@ function PresentationKard({
       <div className="kard-body">
         <header>{presentation.name}</header>
         <div className="time">
-          <FaCalendar className="mx-2" />
+          <FaCalendar className="general-icon" />
           <small>
             {moment(presentation.createdAt.toString()).format("MMMM Do, YYYY")}
           </small>

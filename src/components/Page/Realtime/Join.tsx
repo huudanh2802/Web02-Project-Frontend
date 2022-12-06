@@ -12,53 +12,49 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import "../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Signup({
+function Join({
   username,
   setUsername,
-  presentation,
-  setPresentation,
+  game,
+  setGame,
   socket
 }: {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  presentation: string;
-  setPresentation: React.Dispatch<React.SetStateAction<string>>;
+  game: string;
+  setGame: React.Dispatch<React.SetStateAction<string>>;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
   // Routing
   const navigate = useNavigate();
 
   // Realtime functions
-  const joinPresentation = () => {
-    if (username !== "" && presentation !== "") {
-      console.log(
-        `joinPresentation: ${JSON.stringify({ username, presentation })}`
-      );
-      socket.emit("join_presentation", { username, presentation });
-      navigate("/realtime", { replace: true });
+  const joinGame = () => {
+    if (username !== "" && game !== "") {
+      console.log(`joinGame: ${JSON.stringify({ username, game })}`);
+      socket.emit("join_game", { username, game });
+      navigate(`/lobby/${game}`, { replace: true });
     }
   };
 
   // Handle changes
   const handleChangeUsername = (event: any) => {
     setUsername(event.target.value);
-    console.log(`Username: ${event.target.value} / ${username}`);
   };
-  const handleChangePresentation = (event: any) => {
-    setPresentation(event.target.value);
-    console.log(`Presentation: ${event.target.value} / ${presentation}`);
+  const handleChangeGame = (event: any) => {
+    setGame(event.target.value);
   };
 
   // Form handling
   const formSchema = Yup.object().shape({
     formUsername: Yup.string().required("Username is required"),
-    formPresentation: Yup.string().required("Room ID is required")
+    formGame: Yup.string().required("Room ID is required")
   });
   const formOptions = { resolver: yupResolver(formSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const onSubmit = (data: FieldValues) => {
     console.log(data);
-    joinPresentation();
+    joinGame();
   };
   const { errors } = formState;
 
@@ -70,7 +66,7 @@ function Signup({
             <Card.Body>
               <div className="mb-3 mt-md-4 mx-4">
                 <h2 className="fw-bold mb-4" style={{ textAlign: "center" }}>
-                  Join a Presentation
+                  Join a Game
                 </h2>
                 <div className="mb-3">
                   <Form onSubmit={handleSubmit(onSubmit)}>
@@ -94,24 +90,24 @@ function Signup({
                         Username is required
                       </p>
                     )}
-                    <Form.Group className="mb-3" controlId="formPresentation">
+                    <Form.Group className="mb-3" controlId="formGame">
                       <Form.Label
                         className="text-center"
                         style={{ fontWeight: "bold" }}
                       >
-                        Presentation ID
+                        Game ID
                       </Form.Label>
                       <Form.Control
                         type="id"
-                        placeholder="Enter presentation ID"
-                        {...register("formPresentation", { required: true })}
-                        onChange={handleChangePresentation}
+                        placeholder="Enter game ID"
+                        {...register("formGame", { required: true })}
+                        onChange={handleChangeGame}
                       />
                     </Form.Group>
-                    {errors.formPresentation && (
+                    {errors.formGame && (
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
-                        Presentation ID is required
+                        Game ID is required
                       </p>
                     )}
 
@@ -123,7 +119,7 @@ function Signup({
                   </Form>
                   <div className="mt-3">
                     <p className="mb-0  text-center">
-                      Want to create presentations?{" "}
+                      Want to create games?{" "}
                       <a href="/login" className="text-primary fw-bold">
                         Login
                       </a>
@@ -139,4 +135,4 @@ function Signup({
   );
 }
 
-export default Signup;
+export default Join;

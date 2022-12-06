@@ -1,0 +1,58 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-vars */
+import React from "react";
+import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
+
+import "../../../index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+function Lobby({
+  username,
+  game,
+  socket
+}: {
+  username: string;
+  game: string;
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+}) {
+  // Routing
+  const navigate = useNavigate();
+
+  const leaveGame = () => {
+    console.log(`leaveGame: ${JSON.stringify({ username, game })}`);
+    socket.emit("leave_game", { username, game });
+    navigate(`/join`);
+  };
+
+  return (
+    <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
+      <Row className="vh-100 d-flex justify-content-center align-items-center">
+        <Col md={6} lg={4} xs={8}>
+          <Card className="shadow">
+            <Card.Body>
+              <div className="mb-3 mt-md-4 mx-4">
+                <h4 className="fw-bold" style={{ textAlign: "center" }}>
+                  You&apos;re in! Check for your name!
+                </h4>
+                <p style={{ textAlign: "center" }}>
+                  Also, please wait until the host starts the game
+                </p>
+              </div>
+
+              <div className="d-grid mt-4">
+                <Button variant="danger" onClick={leaveGame}>
+                  Leave game
+                </Button>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
+}
+
+export default Lobby;

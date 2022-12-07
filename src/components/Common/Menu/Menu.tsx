@@ -38,10 +38,11 @@ function Menu() {
           <Col lg={7} style={{ height: "inherit" }} />
           <Col lg={3} style={{ height: "inherit" }}>
             <Nav className="menu-end">
-              <img
+              <Image
                 src="/assets/avatar.svg"
                 alt="Avatar"
                 style={{ width: 32, height: 32, marginRight: "16px" }}
+                onClick={() => navigate("/group/myprofile")}
               />
               <Button variant="light" onClick={() => logout()}>
                 Logout

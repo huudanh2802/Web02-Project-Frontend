@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import {
@@ -35,6 +35,7 @@ function GameHost({
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<AnswerCounter[]>([]);
   const [showAnswer, setShowAnswer] = useState(false);
+  const navigate = useNavigate();
 
   // Game handling
   useEffect(() => {
@@ -75,9 +76,16 @@ function GameHost({
 
   const handleNextQuestion = () => {
     setShowAnswer(false);
+    setAnswer([]);
     setIdx(idx + 1);
     setSlide(presentation?.slides[idx]);
-    setAnswer([]);
+    socket.emit("next_question", { game, slide });
+  };
+
+  const handleFinishGame = () => {
+    alert("End of presentation");
+    socket.emit("finish_game", { game });
+    navigate(`/group/presentation/${presentationId}`);
   };
 
   return (
@@ -106,10 +114,10 @@ function GameHost({
           <div style={{ height: "95%", marginTop: "80px" }}>
             <ResponsiveContainer width="80%" height="70%">
               <BarChart style={{ marginLeft: "12%" }} data={answer}>
-                <XAxis dataKey="id" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
-                <Bar dataKey="count" fill="#4bb8ad" />
+                {answer.length > 0 && <XAxis dataKey="id" />}
+                {answer.length > 0 && <YAxis allowDecimals={false} />}
+                {answer.length > 0 && <Tooltip />}
+                {answer.length > 0 && <Bar dataKey="count" fill="#4bb8ad" />}
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -118,9 +126,14 @@ function GameHost({
               Show results
             </Button>
           )}
-          {showAnswer && (
+          {showAnswer && presentation && idx + 1 < presentation.slides.length && (
             <Button variant="primary" onClick={handleNextQuestion}>
               Next question
+            </Button>
+          )}
+          {showAnswer && presentation && idx + 1 >= presentation.slides.length && (
+            <Button variant="dark" onClick={handleFinishGame}>
+              Finish game
             </Button>
           )}
         </Col>

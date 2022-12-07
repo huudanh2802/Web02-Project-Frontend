@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import Answer from "./Answer";
@@ -10,9 +9,11 @@ import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
 function Game({
+  username,
   game,
   socket
 }: {
+  username: string;
   game: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
@@ -24,7 +25,9 @@ function Game({
   const [answer, setAnswer] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);
 
-  const getPresentation = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/game/get/${presentationId}`
@@ -33,21 +36,40 @@ function Game({
       setSlide(response.data.slides[idx]);
       console.log(response.data);
     });
-  };
-
-  useEffect(() => {
-    getPresentation();
-  }, []);
+  }, [idx, presentationId]);
 
   useEffect(() => {
     socket.on("show_answer", () => {
       setShowAnswer(true);
     });
 
+    socket.on("next_question", () => {
+      setIdx(idx + 1);
+      setSlide(presentation?.slides[idx]);
+      setShowAnswer(false);
+      setAnswer("");
+      setSubmitted(false);
+    });
+
+    socket.on("end_game", () => {
+      alert("Host has ended the game");
+      socket.emit("leave_game", { username, game });
+      navigate("/join");
+    });
+
+    socket.on("finish_game", () => {
+      alert("Game has ended");
+      socket.emit("leave_game", { username, game });
+      navigate("/join");
+    });
+
     return () => {
       socket.off("show_answer");
+      socket.off("next_question");
+      socket.off("end_game");
+      socket.off("finish_game");
     };
-  });
+  }, [idx, presentation?.slides, socket, username, game, navigate]);
 
   return (
     <Container fluid>

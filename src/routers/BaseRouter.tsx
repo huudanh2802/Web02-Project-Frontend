@@ -91,7 +91,7 @@ function BaseRouter() {
       {!isLoggedIn && (
         <Route
           path="/game/:presentationId/:id"
-          element={<Game socket={socket} game={game} />}
+          element={<Game socket={socket} game={game} username={username} />}
         />
       )}
     </Routes>

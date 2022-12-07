@@ -100,7 +100,11 @@ function GroupInfo() {
       <h1 className="page-title" style={{ marginBottom: "32px" }}>
         {groupMember.name}
       </h1>
-      <Tabs defaultActiveKey="members" id="group-list-tab" className="mb-3">
+      <Tabs
+        defaultActiveKey="presentation"
+        id="group-list-tab"
+        className="mb-3"
+      >
         <Tab eventKey="members" title="Members">
           <Row xs={1} md={3} lg={6} style={{ marginTop: "16px" }}>
             <Col>
@@ -190,10 +194,11 @@ function GroupInfo() {
 
         <Tab eventKey="presentation" title="Prensentation">
           <Button onClick={() => navigate(`/group/newpresentation/${groupId}`)}>
-            Create New Presentation
+            Create new Presentation
           </Button>
+          <Button onClick={() => navigate(`/join`)}>Join a Game</Button>
           {groupPresentation.length > 0 && (
-            <>
+            <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
               {groupPresentation.map((presentation, idx) => (
                 <Col>
                   <PresentationKard
@@ -203,7 +208,7 @@ function GroupInfo() {
                   />
                 </Col>
               ))}
-            </>
+            </Row>
           )}
         </Tab>
       </Tabs>

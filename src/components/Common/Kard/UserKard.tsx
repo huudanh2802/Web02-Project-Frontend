@@ -128,7 +128,7 @@ function UserKard({
         </Accordion>
       )}
       {(!owner || (owner && role === "Owner")) && (
-        <div className="d-grid" style={{ margin: "16px" }}>
+        <div className="d-grid" style={{ margin: "0 16px 16px" }}>
           <Button variant="primary" onClick={redirectProfile}>
             Info
           </Button>

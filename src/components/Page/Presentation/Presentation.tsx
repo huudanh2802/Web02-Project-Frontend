@@ -191,7 +191,7 @@ export default function Presentation({
     console.log(game);
     setGame(game.toString());
     socket.emit("create_game", { game: game.toString(), presentation: id });
-    navigate(`/lobby/${id}/${game}`);
+    navigate(`/lobbyhost/${id}/${game}`);
   };
 
   const settings = {

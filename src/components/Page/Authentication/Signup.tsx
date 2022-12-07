@@ -16,7 +16,11 @@ import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axiosPublic from "../../../token/axiosPublic";
 
-function Signup() {
+function Signup({
+  setUsername
+}: {
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+}) {
   // Routing
   const navigate = useNavigate();
 
@@ -89,6 +93,8 @@ function Signup() {
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("id", res.data.id);
             localStorage.setItem("email", res.data.email);
+            localStorage.setItem("fullname", res.data.fullname);
+            setUsername(res.data.fullname);
 
             // alert(JSON.stringify(res.data));
             navigate("/group/grouplist");

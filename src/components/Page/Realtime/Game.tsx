@@ -54,13 +54,21 @@ function Game({
     socket.on("end_game", () => {
       alert("Host has ended the game");
       socket.emit("leave_game", { username, game });
-      navigate("/join");
+      if (localStorage.getItem("fullname") === null) {
+        navigate("/join");
+      } else {
+        navigate("/group/grouplist");
+      }
     });
 
     socket.on("finish_game", () => {
       alert("Game has ended");
       socket.emit("leave_game", { username, game });
-      navigate("/join");
+      if (localStorage.getItem("fullname") === null) {
+        navigate("/join");
+      } else {
+        navigate("/group/grouplist");
+      }
     });
 
     return () => {
@@ -82,6 +90,7 @@ function Game({
       </Row>
       <Row sm={1} md={2} lg={2}>
         {!submitted &&
+          !showAnswer &&
           slide?.answers.map((a) => (
             <Col>
               <Answer
@@ -101,9 +110,14 @@ function Game({
           <h2>You have submitted your answer</h2>
         </div>
       )}
-      {showAnswer && slide && answer !== slide.correct && (
+      {showAnswer && slide && answer !== slide.correct && answer !== "" && (
         <div style={{ textAlign: "center", color: "red" }}>
           <h2>Your answer is incorrect</h2>
+        </div>
+      )}
+      {showAnswer && slide && answer !== slide.correct && answer === "" && (
+        <div style={{ textAlign: "center", color: "red" }}>
+          <h2>It is too late to answer</h2>
         </div>
       )}
       {showAnswer && slide && answer === slide.correct && (

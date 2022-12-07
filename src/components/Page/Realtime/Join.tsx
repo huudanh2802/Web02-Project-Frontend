@@ -75,6 +75,11 @@ function Join({
   };
   const { errors } = formState;
 
+  const loggedIn = localStorage.getItem("fullname");
+  if (loggedIn !== null) {
+    setUsername(loggedIn);
+  }
+
   return (
     <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
       <Row className="vh-100 d-flex justify-content-center align-items-center">
@@ -87,21 +92,39 @@ function Join({
                 </h2>
                 <div className="mb-3">
                   <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Form.Group className="mb-3" controlId="formUsername">
-                      <Form.Label
-                        className="text-center"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        Username
-                      </Form.Label>
-                      <Form.Control
-                        type="username"
-                        placeholder="Enter your username"
-                        {...register("formUsername", { required: true })}
-                        onChange={handleChangeUsername}
-                      />
-                    </Form.Group>
-                    {errors.formUsername && (
+                    {!loggedIn && (
+                      <Form.Group className="mb-3" controlId="formUsername">
+                        <Form.Label
+                          className="text-center"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          Username
+                        </Form.Label>
+                        <Form.Control
+                          type="username"
+                          placeholder="Enter your username"
+                          {...register("formUsername", { required: true })}
+                          onChange={handleChangeUsername}
+                        />
+                      </Form.Group>
+                    )}
+                    {loggedIn && (
+                      <Form.Group className="mb-3" controlId="formUsername">
+                        <Form.Label
+                          className="text-center"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          Username
+                        </Form.Label>
+                        <Form.Control
+                          plaintext
+                          readOnly
+                          defaultValue={username}
+                          {...register("formUsername", { required: true })}
+                        />
+                      </Form.Group>
+                    )}
+                    {!loggedIn && errors.formUsername && (
                       <p className="error">
                         <FaExclamationTriangle className="mx-2" />
                         Username is required
@@ -134,14 +157,16 @@ function Join({
                       </Button>
                     </div>
                   </Form>
-                  <div className="mt-3">
-                    <p className="mb-0  text-center">
-                      Want to create games?{" "}
-                      <a href="/login" className="text-primary fw-bold">
-                        Login
-                      </a>
-                    </p>
-                  </div>
+                  {!loggedIn && (
+                    <div className="mt-3">
+                      <p className="mb-0  text-center">
+                        Want to create games?{" "}
+                        <a href="/login" className="text-primary fw-bold">
+                          Login
+                        </a>
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </Card.Body>

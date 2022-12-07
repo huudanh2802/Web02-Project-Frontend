@@ -194,8 +194,9 @@ function GroupInfo() {
 
         <Tab eventKey="presentation" title="Prensentation">
           <Button onClick={() => navigate(`/group/newpresentation/${groupId}`)}>
-            Create New Presentation
+            Create new Presentation
           </Button>
+          <Button onClick={() => navigate(`/join`)}>Join a Game</Button>
           <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
             {groupPresentation.map((presentation, idx) => (
               <Col>

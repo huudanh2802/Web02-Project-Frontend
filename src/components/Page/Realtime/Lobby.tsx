@@ -43,7 +43,11 @@ function Lobby({
     socket.on("end_game", () => {
       alert("Host has ended the game");
       socket.emit("leave_game", { username, game });
-      navigate("/join");
+      if (localStorage.getItem("fullname") === null) {
+        navigate("/join");
+      } else {
+        navigate("/group/grouplist");
+      }
     });
 
     return () => {

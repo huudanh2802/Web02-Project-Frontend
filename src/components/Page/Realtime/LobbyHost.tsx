@@ -40,7 +40,7 @@ function LobbyHost({
   // Game handling
   const startGame = () => {
     socket.emit("start_game", { game });
-    navigate(`/game/${presentationId}/${id}`);
+    navigate(`/gamehost/${presentationId}/${id}`);
   };
 
   const endGame = () => {
@@ -51,7 +51,7 @@ function LobbyHost({
   return (
     <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
       <Row className="vh-100 d-flex justify-content-center align-items-center">
-        <Col md={6} lg={4} xs={8}>
+        <Col md={8} lg={6} xs={8}>
           <Card className="shadow">
             <Card.Body>
               <div className="mb-3 mt-md-4 mx-4">
@@ -60,7 +60,7 @@ function LobbyHost({
                 </h4>
               </div>
               <header className="fw-bold">Joined users:</header>
-              <Row xs={8} md={6} lg={4} style={{ marginTop: "16px" }}>
+              <Row xs={4} md={4} lg={3} style={{ marginTop: "16px" }}>
                 {users.map((user) => (
                   <Col>
                     <h5>{user.username}</h5>

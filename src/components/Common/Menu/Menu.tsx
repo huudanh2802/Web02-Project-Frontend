@@ -19,6 +19,7 @@ function Menu() {
     localStorage.removeItem("email");
     localStorage.removeItem("token");
     localStorage.removeItem("id");
+    localStorage.removeItem("fullname");
     console.log("Local storage reset");
     navigate("/join");
   };

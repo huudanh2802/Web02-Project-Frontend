@@ -48,8 +48,8 @@ function BaseRouter() {
           element={<Presentation setGame={setGame} socket={socket} />}
         />
       </Route>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login setUsername={setUsername} />} />
+      <Route path="/signup" element={<Signup setUsername={setUsername} />} />
       <Route path="/verification" element={<Verification />} />
       <Route path="/confirm/:token" element={<Confirm />} />
       <Route
@@ -72,28 +72,24 @@ function BaseRouter() {
       )}
       {isLoggedIn && (
         <Route
-          path="/lobby/:presentationId/:id"
+          path="/lobbyhost/:presentationId/:id"
           element={<LobbyHost game={game} socket={socket} />}
         />
       )}
-      {!isLoggedIn && (
-        <Route
-          path="/lobby/:presentationId/:id"
-          element={<Lobby username={username} game={game} socket={socket} />}
-        />
-      )}
+      <Route
+        path="/lobby/:presentationId/:id"
+        element={<Lobby username={username} game={game} socket={socket} />}
+      />
       {isLoggedIn && (
         <Route
-          path="/game/:presentationId/:id"
+          path="/gamehost/:presentationId/:id"
           element={<GameHost socket={socket} game={game} />}
         />
       )}
-      {!isLoggedIn && (
-        <Route
-          path="/game/:presentationId/:id"
-          element={<Game socket={socket} game={game} username={username} />}
-        />
-      )}
+      <Route
+        path="/game/:presentationId/:id"
+        element={<Game socket={socket} game={game} username={username} />}
+      />
     </Routes>
   );
 }

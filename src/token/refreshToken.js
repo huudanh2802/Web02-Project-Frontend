@@ -20,6 +20,7 @@ const refreshTokenFn = async () => {
         localStorage.removeItem("id");
         localStorage.removeItem("email");
         localStorage.removeItem("token");
+        localStorage.removeItem("fullname");
       }
       localStorage.setItem("id", session.id);
       localStorage.setItem("email", session.email);
@@ -33,6 +34,7 @@ const refreshTokenFn = async () => {
     localStorage.removeItem("id");
     localStorage.removeItem("email");
     localStorage.removeItem("token");
+    localStorage.removeItem("fullname");
   }
 };
 

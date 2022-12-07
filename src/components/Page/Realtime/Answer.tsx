@@ -9,6 +9,7 @@ function Answer({
   question,
   game,
   socket,
+  setAnswer,
   setSubmitted
 }: {
   id: string;
@@ -16,10 +17,12 @@ function Answer({
   question: number;
   game: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  setAnswer: React.Dispatch<React.SetStateAction<string>>;
   setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const submitAnswer = () => {
     socket.emit("submit_answer", { question, id, game });
+    setAnswer(id);
     setSubmitted(true);
   };
 

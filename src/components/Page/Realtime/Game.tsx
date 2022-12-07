@@ -21,6 +21,8 @@ function Game({
   const [slide, setSlide] = useState<SlideDTO>();
   const [idx, setIdx] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [answer, setAnswer] = useState("");
+  const [showAnswer, setShowAnswer] = useState(false);
 
   const getPresentation = () => {
     axiosPrivate({
@@ -36,6 +38,16 @@ function Game({
   useEffect(() => {
     getPresentation();
   }, []);
+
+  useEffect(() => {
+    socket.on("show_answer", () => {
+      setShowAnswer(true);
+    });
+
+    return () => {
+      socket.off("show_answer");
+    };
+  });
 
   return (
     <Container fluid>
@@ -56,14 +68,25 @@ function Game({
                 question={idx}
                 game={game}
                 socket={socket}
+                setAnswer={setAnswer}
                 setSubmitted={setSubmitted}
               />
             </Col>
           ))}
       </Row>
-      {submitted && (
+      {submitted && !showAnswer && (
         <div style={{ textAlign: "center" }}>
           <h2>You have submitted your answer</h2>
+        </div>
+      )}
+      {showAnswer && slide && answer !== slide.correct && (
+        <div style={{ textAlign: "center", color: "red" }}>
+          <h2>Your answer is incorrect</h2>
+        </div>
+      )}
+      {showAnswer && slide && answer === slide.correct && (
+        <div style={{ textAlign: "center", color: "green" }}>
+          <h2>Your answer is correct</h2>
         </div>
       )}
     </Container>

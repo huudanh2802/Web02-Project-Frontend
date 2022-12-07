@@ -1,17 +1,28 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
+import AnswerHost from "./AnswerHost";
 import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
 function GameHost({
-  socket
+  socket,
+  game
 }: {
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  game: string;
 }) {
   interface AnswerCounter {
     id: string;
@@ -23,7 +34,9 @@ function GameHost({
   const [slide, setSlide] = useState<SlideDTO>();
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<AnswerCounter[]>([]);
+  const [showAnswer, setShowAnswer] = useState(false);
 
+  // Game handling
   useEffect(() => {
     axiosPrivate({
       method: "get",
@@ -54,14 +67,62 @@ function GameHost({
     };
   }, [answer, socket]);
 
+  // Button handling
+  const handleShowAnswer = () => {
+    setShowAnswer(true);
+    socket.emit("show_answer", { game, slide });
+  };
+
+  const handleNextQuestion = () => {
+    setShowAnswer(false);
+    setIdx(idx + 1);
+    setSlide(presentation?.slides[idx]);
+    setAnswer([]);
+  };
+
   return (
     <Container fluid>
-      <Row className="mt-4 mb-4" style={{ textAlign: "center" }}>
+      <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
         <Col>
           <h1 style={{ fontWeight: "bold" }}>
             {idx + 1}. {slide?.question}
           </h1>
-          <h2>{JSON.stringify(answer)}</h2>
+        </Col>
+      </Row>
+      <Row sm={1} md={2} lg={2}>
+        {slide?.answers.map((a) => (
+          <Col>
+            <AnswerHost
+              id={a.id}
+              answer={a.answer}
+              correct={a.id === slide.correct}
+              show={showAnswer}
+            />
+          </Col>
+        ))}
+      </Row>
+      <Row>
+        <Col style={{ textAlign: "center" }}>
+          <div style={{ height: "95%", marginTop: "80px" }}>
+            <ResponsiveContainer width="80%" height="70%">
+              <BarChart style={{ marginLeft: "12%" }} data={answer}>
+                <XAxis dataKey="id" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="count" fill="#4bb8ad" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          {!showAnswer && (
+            <Button variant="outline-dark" onClick={handleShowAnswer}>
+              Show results
+            </Button>
+          )}
+          {showAnswer && (
+            <Button variant="primary" onClick={handleNextQuestion}>
+              Next question
+            </Button>
+          )}
         </Col>
       </Row>
     </Container>

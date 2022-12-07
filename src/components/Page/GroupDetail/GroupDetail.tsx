@@ -196,7 +196,11 @@ function GroupInfo() {
             <>
               {groupPresentation.map((presentation, idx) => (
                 <Col>
-                  <PresentationKard presentation={presentation} index={idx} />
+                  <PresentationKard
+                    setGroupPresentation={setGroupPresentation}
+                    presentation={presentation}
+                    index={idx}
+                  />
                 </Col>
               ))}
             </>

@@ -61,7 +61,7 @@ export default function NewPresentation() {
 
         data: newPresenation
       }).then((response) => {
-        navigate(`/group/presentation/detail/${response.data}`);
+        navigate(`/group/presentation/${response.data}`);
       });
     }
   }

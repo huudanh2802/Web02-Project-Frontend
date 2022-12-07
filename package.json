@@ -92,7 +92,5 @@
   },
   "engines": {
     "node": "14.x"
-  },
-  "homepage": "https://huudanh2802.github.io/Web02-Project-Frontend"
-
+  }
 }

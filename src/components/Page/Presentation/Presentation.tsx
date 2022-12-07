@@ -31,7 +31,7 @@ export default function Presentation({
       {
         id: "A",
         answer: "Answer A",
-        placeHolder: `Answer A`
+        placeHolder: `Option A`
       }
     ]
   });
@@ -56,6 +56,7 @@ export default function Presentation({
 
   async function sendSlide() {
     const result = await trigger("name");
+    console.log(result);
     if (result) {
       axiosPrivate({
         method: "put",
@@ -75,11 +76,16 @@ export default function Presentation({
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/get/${id}`
-    }).then((response) => {
-      console.log(response.data.slides[0]);
-      setCurrentSlide(response.data.slides[0]);
-      setPresentation(response.data);
-    });
+    })
+      .then((response) => {
+        console.log(response.data.slides[0]);
+        setCurrentSlide(response.data.slides[0]);
+        setPresentation(response.data);
+      })
+      .catch((err) => {
+        alert(err);
+        navigate("/");
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,19 +95,36 @@ export default function Presentation({
   };
 
   const addAnswer = (event: any) => {
+    const newCurrentSlide = structuredClone(currentSlide);
+
     setCurrentSlide((slide) => ({
       ...slide,
       answers: [
         ...slide.answers,
         {
           id: nextChar(slide.answers[slide.answers.length - 1]!.id),
-          answer: "",
-          placeHolder: `Answer ${nextChar(
+          answer: `Answer ${nextChar(
+            slide.answers[slide.answers.length - 1]!.id
+          )}`,
+          placeHolder: `Option ${nextChar(
             slide.answers[slide.answers.length - 1]!.id
           )}`
         }
       ]
     }));
+    newCurrentSlide.answers.push({
+      id: nextChar(
+        newCurrentSlide.answers[newCurrentSlide.answers.length - 1]!.id
+      ),
+      answer: `Answer ${nextChar(
+        newCurrentSlide.answers[newCurrentSlide.answers.length - 1]!.id
+      )}`,
+      placeHolder: `Option ${nextChar(
+        newCurrentSlide.answers[newCurrentSlide.answers.length - 1]!.id
+      )}`
+    });
+    detailPresentation.slides[currentSlide.idx] = newCurrentSlide;
+    setPresentation(detailPresentation);
   };
   const removeAnswer = (event: any) => {
     const updateAnswer = currentSlide.answers;
@@ -110,6 +133,10 @@ export default function Presentation({
       ...slide,
       answers: updateAnswer
     }));
+    const newCurrentSlide = currentSlide;
+    newCurrentSlide.answers = updateAnswer;
+    detailPresentation.slides[currentSlide.idx] = newCurrentSlide;
+    setPresentation(detailPresentation);
   };
 
   const setAnswer = (event: any, idx: number) => {
@@ -119,14 +146,21 @@ export default function Presentation({
       ...slide,
       answers: updateAnswer
     }));
+    const newCurrentSlide = currentSlide;
+    newCurrentSlide.answers = updateAnswer;
+    detailPresentation.slides[currentSlide.idx] = newCurrentSlide;
+    setPresentation(detailPresentation);
   };
-
   const setCorrectAnswer = (event: any) => {
     const correct = event.value;
     setCurrentSlide((slide) => ({
       ...slide,
       correct
     }));
+    const newCurrentSlide = currentSlide;
+    newCurrentSlide.correct = correct;
+    detailPresentation.slides[currentSlide.idx] = newCurrentSlide;
+    setPresentation(detailPresentation);
   };
 
   const setQuestion = (event: any) => {
@@ -134,6 +168,10 @@ export default function Presentation({
       ...slide,
       question: event.target.value
     }));
+    const quesntionSlide = currentSlide;
+    quesntionSlide.question = event.target.value;
+    detailPresentation.slides[currentSlide.idx] = quesntionSlide;
+    setPresentation(detailPresentation);
   };
   const addSlide = (event: any) => {
     const newSlide: SlideDTO = {
@@ -144,7 +182,7 @@ export default function Presentation({
         {
           id: "A",
           answer: "Answer A",
-          placeHolder: `Answer A`
+          placeHolder: `Option A`
         }
       ]
     };
@@ -213,7 +251,7 @@ export default function Presentation({
               onChange={setName}
               placeholder="Enter Presentation Name"
               style={{ width: "inherit", height: "50px", fontSize: "34px" }}
-              value={detailPresentation.name}
+              defaultValue={detailPresentation.name}
             />
           </Col>
           <Col lg={4}>
@@ -280,7 +318,7 @@ export default function Presentation({
                   <input
                     {...register("question", { required: true })}
                     onChange={setQuestion}
-                    value={currentSlide.question}
+                    defaultValue={currentSlide.question}
                   />
                   <Card.Header>Answer</Card.Header>
                   {currentSlide.answers.map((answer, idx) => (
@@ -291,6 +329,7 @@ export default function Presentation({
                           type="text"
                           placeholder={answer.placeHolder}
                           onChange={(e) => setAnswer(e, idx)}
+                          defaultValue={answer.answer}
                         />
                       </Col>
                     </Row>
@@ -318,7 +357,7 @@ export default function Presentation({
                       <Col lg={6}>
                         <Button
                           className="modify-btn"
-                          variant="danger"
+                          variant="warning"
                           onClick={removeAnswer}
                         >
                           Remove answer
@@ -328,13 +367,6 @@ export default function Presentation({
                   </Row>
                 </Card.Body>
               </Card>
-              <Row>
-                <Col lg={12}>
-                  <Button type="submit" style={{ width: "inherit" }}>
-                    Save{" "}
-                  </Button>
-                </Col>
-              </Row>
               {detailPresentation.slides.length > 1 && (
                 <Row>
                   <Col lg={12}>

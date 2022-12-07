@@ -197,13 +197,19 @@ function GroupInfo() {
             Create new Presentation
           </Button>
           <Button onClick={() => navigate(`/join`)}>Join a Game</Button>
-          <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
-            {groupPresentation.map((presentation, idx) => (
-              <Col>
-                <PresentationKard presentation={presentation} index={idx} />
-              </Col>
-            ))}
-          </Row>
+          {groupPresentation.length > 0 && (
+            <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
+              {groupPresentation.map((presentation, idx) => (
+                <Col>
+                  <PresentationKard
+                    setGroupPresentation={setGroupPresentation}
+                    presentation={presentation}
+                    index={idx}
+                  />
+                </Col>
+              ))}
+            </Row>
+          )}
         </Tab>
       </Tabs>
     </Container>

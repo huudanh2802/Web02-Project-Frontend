@@ -25,7 +25,7 @@ export default function NewPresentation() {
       {
         id: "A",
         answer: "Answer A",
-        placeHolder: `Answer A`
+        placeHolder: `Option A`
       }
     ]
   });
@@ -61,7 +61,7 @@ export default function NewPresentation() {
 
         data: newPresenation
       }).then((response) => {
-        navigate(`/group/presentation/detail/${response.data}`);
+        navigate(`/group/presentation/${response.data}`);
       });
     }
   }
@@ -75,19 +75,35 @@ export default function NewPresentation() {
   };
 
   const addAnswer = (event: any) => {
+    const newCurrentSlide = structuredClone(currentSlide);
     setCurrentSlide((slide) => ({
       ...slide,
       answers: [
         ...slide.answers,
         {
           id: nextChar(slide.answers[slide.answers.length - 1]!.id),
-          answer: "",
-          placeHolder: `Answer ${nextChar(
+          answer: `Answer ${nextChar(
+            slide.answers[slide.answers.length - 1]!.id
+          )}`,
+          placeHolder: `Option ${nextChar(
             slide.answers[slide.answers.length - 1]!.id
           )}`
         }
       ]
     }));
+    newCurrentSlide.answers.push({
+      id: nextChar(
+        newCurrentSlide.answers[newCurrentSlide.answers.length - 1]!.id
+      ),
+      answer: `Answer ${nextChar(
+        newCurrentSlide.answers[newCurrentSlide.answers.length - 1]!.id
+      )}`,
+      placeHolder: `Option ${nextChar(
+        newCurrentSlide.answers[newCurrentSlide.answers.length - 1]!.id
+      )}`
+    });
+    newPresenation.slides[currentSlide.idx] = newCurrentSlide;
+    setNewPresentation(newPresenation);
   };
   const removeAnswer = (event: any) => {
     const updateAnswer = currentSlide.answers;
@@ -96,6 +112,10 @@ export default function NewPresentation() {
       ...slide,
       answers: updateAnswer
     }));
+    const newCurrentSlide = currentSlide;
+    newCurrentSlide.answers = updateAnswer;
+    newPresenation.slides[currentSlide.idx] = newCurrentSlide;
+    setNewPresentation(newPresenation);
   };
 
   const setAnswer = (event: any, idx: number) => {
@@ -105,6 +125,10 @@ export default function NewPresentation() {
       ...slide,
       answers: updateAnswer
     }));
+    const newCurrentSlide = currentSlide;
+    newCurrentSlide.answers = updateAnswer;
+    newPresenation.slides[currentSlide.idx] = newCurrentSlide;
+    setNewPresentation(newPresenation);
   };
 
   const setCorrectAnswer = (event: any) => {
@@ -113,6 +137,10 @@ export default function NewPresentation() {
       ...slide,
       correct
     }));
+    const newCurrentSlide = currentSlide;
+    newCurrentSlide.correct = correct;
+    newPresenation.slides[currentSlide.idx] = newCurrentSlide;
+    setNewPresentation(newPresenation);
   };
 
   const setQuestion = (event: any) => {
@@ -120,6 +148,10 @@ export default function NewPresentation() {
       ...slide,
       question: event.target.value
     }));
+    const quesntionSlide = currentSlide;
+    quesntionSlide.question = event.target.value;
+    newPresenation.slides[currentSlide.idx] = quesntionSlide;
+    setNewPresentation(newPresenation);
   };
   const addSlide = (event: any) => {
     const newSlide: SlideDTO = {
@@ -130,7 +162,7 @@ export default function NewPresentation() {
         {
           id: "A",
           answer: "Answer A",
-          placeHolder: `Answer A`
+          placeHolder: `Option A`
         }
       ]
     };
@@ -291,7 +323,7 @@ export default function NewPresentation() {
                       <Col lg={6}>
                         <Button
                           className="modify-btn"
-                          variant="danger"
+                          variant="warning"
                           onClick={removeAnswer}
                         >
                           Remove answer
@@ -301,13 +333,6 @@ export default function NewPresentation() {
                   </Row>
                 </Card.Body>
               </Card>
-              <Row>
-                <Col lg={12}>
-                  <Button type="submit" style={{ width: "inherit" }}>
-                    Save{" "}
-                  </Button>
-                </Col>
-              </Row>
               {newPresenation.slides.length > 1 && (
                 <Row>
                   <Col lg={12}>

@@ -1,0 +1,22 @@
+.p-top-bar {
+  padding: 0 32px 12px;
+  vertical-align: baseline;
+  box-shadow: 0 2px 0 #e2e9eb;
+}
+
+.p-slide-bar {
+  box-shadow: 0 0 2px #e2e9eb;
+}
+
+.p-present-button {
+  margin-right: 8px;
+}
+
+.p-button-icon {
+  margin: "0 8px 4px 0";
+}
+
+.p-title {
+  font-weight: bold;
+  text-align: center;
+}

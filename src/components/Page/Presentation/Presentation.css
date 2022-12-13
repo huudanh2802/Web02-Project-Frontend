@@ -22,7 +22,7 @@
   text-align: left;
 }
 
-.selected-slide{
+.selected-slide {
   background:#318F9B!important;
   color:white!important;
   border-color: #318F9B!important;
@@ -35,7 +35,7 @@
   height:64px;
 }
 
-.slide{
+.slide {
   border-color: #4BB7AD!important;
   border-width:2px!important;
   border-radius: 8px!important;
@@ -47,9 +47,14 @@
   height:64px;
 }
 
-.slide-container{
+.slide-container {
   max-height:544px!important;
   max-width: inherit!important;
   border-radius: 8px!important;
   background: #e6e9eb;
+}
+
+.correct-answer {
+    background:#4BB7AD!important;
+    color:white;
 }

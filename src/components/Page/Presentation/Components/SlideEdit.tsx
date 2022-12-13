@@ -2,7 +2,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useMemo } from "react";
 import { Col, Button, Form, InputGroup } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import {
+  useForm,
+  UseFormRegister,
+  UseFormHandleSubmit,
+  FieldValues
+} from "react-hook-form";
 import Select from "react-select";
 import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
 import { nextChar } from "../../../../helpers/functions";
@@ -11,15 +16,17 @@ function SlideEdit({
   currentSlide,
   detailPresentation,
   setCurrentSlide,
-  setPresentation
+  setPresentation,
+  register,
+  handleSlide
 }: {
   currentSlide: SlideDTO;
   detailPresentation: PresentationDTO;
   setCurrentSlide: (event: any) => void;
   setPresentation: (value: React.SetStateAction<PresentationDTO>) => void;
+  register: UseFormRegister<SlideDTO>;
+  handleSlide: UseFormHandleSubmit<SlideDTO>;
 }) {
-  const { register, handleSubmit: handleSlide } = useForm();
-
   const onSubmit = () => {
     const tempPresentation = detailPresentation;
     tempPresentation.slides[currentSlide.idx] = currentSlide;
@@ -38,9 +45,9 @@ function SlideEdit({
           answer: `Answer ${nextChar(
             slide.answers[slide.answers.length - 1]!.id
           )}`,
-          placeHolder: `Option ${nextChar(
+          placeHolder: `${nextChar(
             slide.answers[slide.answers.length - 1]!.id
-          )}`
+          )}.`
         }
       ]
     }));
@@ -51,9 +58,9 @@ function SlideEdit({
       answer: `Answer ${nextChar(
         newCurrentSlide.answers[newCurrentSlide.answers.length - 1]!.id
       )}`,
-      placeHolder: `Option ${nextChar(
+      placeHolder: `${nextChar(
         newCurrentSlide.answers[newCurrentSlide.answers.length - 1]!.id
-      )}`
+      )}.`
     });
     const tempPresentation = detailPresentation;
     tempPresentation.slides[currentSlide.idx] = newCurrentSlide;
@@ -139,7 +146,7 @@ function SlideEdit({
 
   return (
     <Col lg={3}>
-      <Form onSubmit={handleSlide(onSubmit)}>
+      <Form id="slideEdit" onSubmit={handleSlide(onSubmit)}>
         <Form.Group className="mb-3">
           <Form.Label style={{ fontWeight: "bold" }}>Question</Form.Label>
           <Form.Control
@@ -158,6 +165,7 @@ function SlideEdit({
             <Form.Control
               type="answer"
               onChange={(e) => setAnswer(e, idx)}
+              value={answer.answer}
               placeholder={answer.answer}
             />
           </InputGroup>
@@ -181,6 +189,9 @@ function SlideEdit({
           placeholder={`${currentSlide.correct}. ${
             currentSlide.answers[currentSlide.correct.charCodeAt(0) - 65].answer
           }`}
+          key={`${currentSlide.correct}. ${
+            currentSlide.answers[currentSlide.correct.charCodeAt(0) - 65].answer
+          }`}
           options={currentSlide.answers.map((a) => ({
             value: a.id,
             label: `${a.id}. ${a.answer}`
@@ -188,18 +199,22 @@ function SlideEdit({
           onChange={(correct: any) => setCorrectAnswer(correct)}
         />
 
-        <Form.Label className="mt-3" style={{ fontWeight: "bold" }}>
-          Slide options
-        </Form.Label>
-        <div className="d-grid">
-          <Button
-            className="mb-2"
-            variant="danger"
-            onClick={(e) => removeSlide(e)}
-          >
-            Remove slide
-          </Button>
-        </div>
+        {detailPresentation.slides.length > 1 && (
+          <>
+            <Form.Label className="mt-3" style={{ fontWeight: "bold" }}>
+              Slide options
+            </Form.Label>
+            <div className="d-grid">
+              <Button
+                className="mb-2"
+                variant="danger"
+                onClick={(e) => removeSlide(e)}
+              >
+                Remove slide
+              </Button>
+            </div>
+          </>
+        )}
       </Form>
     </Col>
   );

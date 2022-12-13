@@ -23,7 +23,7 @@ function TopBar({
   handleSubmitName
 }: {
   sendSlide: () => Promise<void>;
-  present: () => void;
+  present: (() => void) | undefined;
   detailPresentation: PresentationDTO;
   setPresentation: React.Dispatch<React.SetStateAction<PresentationDTO>>;
   registerName: UseFormRegister<FieldValues>;
@@ -46,7 +46,10 @@ function TopBar({
       />
       <Row className="p-top-bar">
         <Col lg={1}>
-          <Button variant="outline-dark" onClick={() => navigate(-1)}>
+          <Button
+            variant="outline-dark"
+            onClick={() => navigate("/group/groupList")}
+          >
             <FaArrowLeft style={{ margin: "0 0 4px" }} />
           </Button>
         </Col>
@@ -70,13 +73,15 @@ function TopBar({
               >
                 <FaSave style={{ margin: "0 8px 4px 0" }} /> Save
               </Button>
-              <Button
-                className="p-present-button ml-2"
-                variant="primary"
-                onClick={() => present()}
-              >
-                <FaPlay style={{ margin: "0 8px 4px 0" }} /> Present
-              </Button>
+              {present && (
+                <Button
+                  className="p-present-button ml-2"
+                  variant="primary"
+                  onClick={() => present()}
+                >
+                  <FaPlay style={{ margin: "0 8px 4px 0" }} /> Present
+                </Button>
+              )}
             </Col>
           </Row>
         </Col>

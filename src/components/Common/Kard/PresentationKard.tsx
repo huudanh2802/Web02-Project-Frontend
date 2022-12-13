@@ -33,6 +33,7 @@ function PresentationKard({
     }).then((response) => {
       alert("Presentation has been deleted");
       setGroupPresentation(response.data);
+      window.location.reload();
     });
   }
   return (

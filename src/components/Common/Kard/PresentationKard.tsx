@@ -38,7 +38,12 @@ function PresentationKard({
   }
   return (
     <div className="d-flex flex-column">
-      <Card key={index} className="kard" onClick={viewPresentation}>
+      <Card
+        key={index}
+        className="kard"
+        style={{ marginBottom: "8px" }}
+        onClick={viewPresentation}
+      >
         <div className="kard-header">
           <img
             src={`/assets/card-bg-${Math.floor(Math.random() * 8)}.jpg`}
@@ -58,7 +63,7 @@ function PresentationKard({
         </div>
       </Card>
       <Button
-        style={{ width: "inherit" }}
+        style={{ width: "inherit", marginBottom: "24px" }}
         onClick={() => deletePresentation()}
         variant="danger"
       >

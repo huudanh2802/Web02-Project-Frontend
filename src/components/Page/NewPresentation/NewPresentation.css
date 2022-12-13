@@ -8,7 +8,8 @@
     color:white;
     border-color: #4BB7AD!important;
     border-width:2px!important;
-    border-radius: 20px;
+    border-radius: 8px;
+    font-weight: bold;
     color:black !important;
     width:100%!important;
     height:100px;
@@ -16,7 +17,8 @@
 .slide{
     border-color: #4BB7AD!important;
     border-width:2px!important;
-    border-radius: 20px;
+    border-radius: 8px;
+    font-weight: bold;
     background:white!important;
     color:black !important;
     width:100%!important;

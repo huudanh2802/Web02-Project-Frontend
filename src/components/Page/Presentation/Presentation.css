@@ -5,7 +5,8 @@
 }
 
 .p-slide-bar {
-  box-shadow: 0 0 2px #e2e9eb;
+  box-shadow: 2px 0 0 #e2e9eb;
+  max-height:544px!important;
 }
 
 .p-present-button {
@@ -18,5 +19,37 @@
 
 .p-title {
   font-weight: bold;
-  text-align: center;
+  text-align: left;
+}
+
+.selected-slide{
+  background:#318F9B!important;
+  color:white!important;
+  border-color: #318F9B!important;
+  border-width:2px!important;
+  border-radius: 8px!important;
+  font-weight: bold!important;
+  color:white !important;
+  width:100%!important;
+  margin-top: 8px!important;
+  height:64px;
+}
+
+.slide{
+  border-color: #4BB7AD!important;
+  border-width:2px!important;
+  border-radius: 8px!important;
+  font-weight: bold!important;
+  background:white!important;
+  color:black !important;
+  width:100%!important;
+  margin-top: 8px!important;
+  height:64px;
+}
+
+.slide-container{
+  max-height:544px!important;
+  max-width: inherit!important;
+  border-radius: 8px!important;
+  background: #e6e9eb;
 }

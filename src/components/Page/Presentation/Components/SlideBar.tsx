@@ -7,25 +7,43 @@ import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
 
 import "../Presentation.css";
 
-function SlideBar() {
+function SlideBar({
+  addSlide,
+  detailPresentation,
+  currentSlide,
+  changeSlide
+}: {
+  addSlide: (event: any) => void;
+  detailPresentation: PresentationDTO;
+  currentSlide: SlideDTO;
+  changeSlide: (idx: number) => void;
+}) {
   const settings = {
     vertical: true,
     verticalSwiping: true,
     arrows: false,
     swipeToSlide: true,
     slidesToShow: 5,
-    slideToScroll: 6, // detailPresentation.slides.length,
+    slideToScroll: 1, // detailPresentation.slides.length,
     infinite: false
   };
 
   return (
     <Col className="p-slide-bar" lg={1}>
-      <Button variant="primary" style={{ width: "100%" }}>
+      <Button
+        className="mt-1"
+        variant="outline-dark"
+        style={{ width: "100%" }}
+        onClick={addSlide}
+      >
         New Slide
       </Button>
       <Slider {...settings}>
-        {Array.from({ length: 6 }).map((_, idx) => (
-          <Button className={idx === 1 ? "selected-slide" : "slide"}>
+        {detailPresentation.slides.map((slide, idx) => (
+          <Button
+            className={idx === currentSlide.idx ? "selected-slide" : "slide"}
+            onClick={() => changeSlide(slide.idx)}
+          >
             {idx + 1}
           </Button>
         ))}

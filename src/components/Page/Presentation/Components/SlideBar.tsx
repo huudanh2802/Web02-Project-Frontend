@@ -18,12 +18,13 @@ function SlideBar({
   currentSlide: SlideDTO;
   changeSlide: (idx: number) => void;
 }) {
+  const len = detailPresentation.slides.length;
   const settings = {
     vertical: true,
     verticalSwiping: true,
     arrows: false,
     swipeToSlide: true,
-    slidesToShow: 5,
+    slidesToShow: len < 7 ? len : 7,
     slideToScroll: 1, // detailPresentation.slides.length,
     infinite: false
   };
@@ -40,13 +41,16 @@ function SlideBar({
       </Button>
       <Slider {...settings}>
         {detailPresentation.slides.map((slide, idx) => (
-          <Button
-            className={idx === currentSlide.idx ? "selected-slide" : "slide"}
-            onClick={() => changeSlide(slide.idx)}
-          >
-            {idx + 1}
-          </Button>
+          <div>
+            <Button
+              className={idx === currentSlide.idx ? "selected-slide" : "slide"}
+              onClick={() => changeSlide(slide.idx)}
+            >
+              {idx + 1}
+            </Button>
+          </div>
         ))}
+        <div />
       </Slider>
     </Col>
   );

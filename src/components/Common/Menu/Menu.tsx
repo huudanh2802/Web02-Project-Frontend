@@ -41,7 +41,12 @@ function Menu() {
               <Image
                 src="/assets/avatar.svg"
                 alt="Avatar"
-                style={{ width: 32, height: 32, marginRight: "16px" }}
+                style={{
+                  width: 32,
+                  height: 32,
+                  marginRight: "16px",
+                  cursor: "pointer"
+                }}
                 onClick={() => navigate("/group/myprofile")}
               />
               <Button variant="light" onClick={() => logout()}>

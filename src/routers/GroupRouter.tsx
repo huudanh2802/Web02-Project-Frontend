@@ -12,7 +12,7 @@ import GroupDetail from "../components/Page/GroupDetail/GroupDetail";
 import AutoJoin from "../components/Page/AutoJoin/AutoJoin";
 import MyProfile from "../components/Page/ManageUser/MyProfile";
 import OtherProfile from "../components/Page/ManageUser/OtherProfile";
-import NewPresentation from "../components/Page/NewPresentation/NewPresentation";
+import NewPresentation from "../components/Page/Presentation/NewPresentation/NewPresentation";
 import Presentation from "../components/Page/Presentation/Presentation";
 
 export default function GroupRouter({

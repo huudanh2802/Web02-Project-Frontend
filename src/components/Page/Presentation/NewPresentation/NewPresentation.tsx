@@ -5,27 +5,19 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useParams, useNavigate } from "react-router";
-import { Socket } from "socket.io-client";
-import { DefaultEventsMap } from "@socket.io/component-emitter";
-import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
-import { nextChar } from "../../../helpers/functions";
-import { axiosPrivate } from "../../../token/axiosPrivate";
+import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
+import { nextChar } from "../../../../helpers/functions";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
 
-import TopBar from "./Components/TopBar";
-import SlideBar from "./Components/SlideBar";
-import Body from "./Components/Body";
-import SlideEdit from "./Components/SlideEdit";
+import TopBar from "../Components/TopBar";
+import SlideBar from "../Components/SlideBar";
+import Body from "../Components/Body";
+import SlideEdit from "../Components/SlideEdit";
 
-import "./Presentation.css";
+import "../Presentation.css";
 
-function NewPresentation({
-  setGame,
-  socket
-}: {
-  setGame: React.Dispatch<React.SetStateAction<string>>;
-  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-}) {
-  const { id } = useParams();
+function Presentation() {
+  const { groupId } = useParams();
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
     question: "",
@@ -40,9 +32,9 @@ function NewPresentation({
     ]
   });
 
-  const [detailPresentation, setPresentation] = useState<PresentationDTO>({
-    name: "",
-    groupId: "",
+  const [newPresentation, setNewPresentation] = useState<PresentationDTO>({
+    name: "Presentation Name",
+    groupId: groupId!,
     slides: [currentSlide]
   });
 
@@ -67,41 +59,29 @@ function NewPresentation({
     console.log(result);
     if (result) {
       axiosPrivate({
-        method: "put",
-        url: `${process.env.REACT_APP_API_SERVER}/presentation/update/${id}`,
+        method: "post",
+        url: `${process.env.REACT_APP_API_SERVER}/presentation/newpresentation`,
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json"
         },
 
-        data: detailPresentation
+        data: newPresentation
       }).then((response) => {
-        alert("Presentation has been updated");
+        navigate(`/group/presentation/${response.data}`);
       });
     }
   }
+
   useEffect(() => {
-    axiosPrivate({
-      method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/presentation/get/${id}`
-    })
-      .then((response) => {
-        console.log(response.data.slides[0]);
-        setCurrentSlide(response.data.slides[0]);
-        setPresentation(response.data);
-      })
-      .catch((err) => {
-        alert(err);
-        navigate("/");
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    reset(currentSlide);
+  }, [currentSlide, newPresentation, reset]);
 
   const addSlide = (event: any) => {
     const newSlide: SlideDTO = {
       question: "",
       correct: "A",
-      idx: detailPresentation.slides.length,
+      idx: newPresentation.slides.length,
       answers: [
         {
           id: "A",
@@ -110,7 +90,7 @@ function NewPresentation({
         }
       ]
     };
-    setPresentation((presentation) => ({
+    setNewPresentation((presentation) => ({
       ...presentation,
       slides: [...presentation.slides, newSlide]
     }));
@@ -119,41 +99,33 @@ function NewPresentation({
   };
 
   const changeSlide = (idx: number) => {
-    const slideChange = detailPresentation.slides[idx];
+    const slideChange = newPresentation.slides[idx];
     setCurrentSlide(slideChange);
-  };
-
-  const present = () => {
-    const game = Math.floor(Math.random() * 10000);
-    console.log(game);
-    setGame(game.toString());
-    socket.emit("create_game", { game: game.toString(), presentation: id });
-    navigate(`/lobbyhost/${id}/${game}`);
   };
 
   return (
     <Container fluid>
       <TopBar
         sendSlide={() => sendSlide()}
-        present={present}
-        detailPresentation={detailPresentation}
-        setPresentation={setPresentation}
+        present={undefined}
+        detailPresentation={newPresentation}
+        setPresentation={setNewPresentation}
         registerName={registerName}
         handleSubmitName={handleSubmitName}
       />
       <Row className="mt-2">
         <SlideBar
           addSlide={addSlide}
-          detailPresentation={detailPresentation}
+          detailPresentation={newPresentation}
           currentSlide={currentSlide}
           changeSlide={changeSlide}
         />
         <Body currentSlide={currentSlide} />
         <SlideEdit
           currentSlide={currentSlide}
-          detailPresentation={detailPresentation}
+          detailPresentation={newPresentation}
           setCurrentSlide={setCurrentSlide}
-          setPresentation={setPresentation}
+          setPresentation={setNewPresentation}
           register={register}
           handleSlide={handleSlide}
         />
@@ -162,4 +134,4 @@ function NewPresentation({
   );
 }
 
-export default NewPresentation;
+export default Presentation;

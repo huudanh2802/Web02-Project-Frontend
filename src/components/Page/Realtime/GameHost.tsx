@@ -13,7 +13,7 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
-import AnswerHost from "./AnswerHost";
+import AnswerHost from "./Components/AnswerHost";
 import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 

@@ -41,7 +41,7 @@ function Game({
           socket={socket}
           presentation={presentation}
         />
-        <ChatBox />
+        <ChatBox username={username} game={game} socket={socket} />
       </Row>
     </Container>
   );

@@ -126,9 +126,17 @@ function NewPresentation({
   const present = () => {
     const game = Math.floor(Math.random() * 10000);
     console.log(game);
-    setGame(game.toString());
-    socket.emit("create_game", { game: game.toString(), presentation: id });
-    navigate(`/lobbyhost/${id}/${game}`);
+    // Backend
+    axiosPrivate({
+      method: "post",
+      url: `${process.env.REACT_APP_API_SERVER}/game/newgame/`,
+      data: { game, presentationId: id }
+    }).then((response) => {
+      console.log(`Game ${game} created successfully.`);
+      setGame(game.toString());
+      socket.emit("create_game", { game: game.toString(), presentation: id });
+      navigate(`/lobbyhost/${id}/${game}`);
+    });
   };
 
   return (

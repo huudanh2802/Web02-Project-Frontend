@@ -33,7 +33,7 @@ function Game({
   }, [presentationId]);
 
   return (
-    <Container fluid>
+    <Container className="game-container" fluid>
       <Row>
         <Body
           username={username}

@@ -1,0 +1,25 @@
+.game-container {
+  height: 100vh;
+  background-color: #4bb8ad;
+}
+
+.game-question {
+  background-color: white;
+  margin: 0 12px;
+  padding-top: 16px;
+  padding-bottom: 8px;
+  border-radius: 8px;
+}
+
+.game-chatbox {
+  background-color: white;
+  border-radius: 16px 0 0 16px;
+  height: 100vh;
+  padding: 32px 24px;
+}
+
+.game-chat {
+  background-color: red;
+  height: 85%;
+  margin: 0 0px;
+}

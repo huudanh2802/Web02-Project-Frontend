@@ -29,7 +29,7 @@ function Answer({
   return (
     <Col className="pt-3" style={{ height: "100%" }}>
       <Button
-        variant="outline-dark"
+        variant="light"
         style={{ width: "100%", height: "100%" }}
         onClick={() => submitAnswer()}
       >

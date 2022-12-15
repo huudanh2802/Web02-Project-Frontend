@@ -29,11 +29,30 @@ function GameHost({
     count: number;
   }
 
+  const answerTemplate = [
+    {
+      id: "A",
+      count: 0
+    },
+    {
+      id: "B",
+      count: 0
+    },
+    {
+      id: "C",
+      count: 0
+    },
+    {
+      id: "D",
+      count: 0
+    }
+  ];
+
   const { presentationId } = useParams();
   const [presentation, setPresentation] = useState<PresentationDTO>();
   const [slide, setSlide] = useState<SlideDTO>();
   const [idx, setIdx] = useState(0);
-  const [answer, setAnswer] = useState<AnswerCounter[]>([]);
+  const [answer, setAnswer] = useState<AnswerCounter[]>(answerTemplate);
   const [showAnswer, setShowAnswer] = useState(false);
   const navigate = useNavigate();
 
@@ -52,15 +71,10 @@ function GameHost({
   useEffect(() => {
     socket.on("submit_answer", (data: { id: string }) => {
       const { id } = data;
-      const checkArray = answer.filter((a) => a.id === id);
-      if (checkArray.length === 0) {
-        setAnswer((oldAnswer) => [...oldAnswer, { id, count: 1 }]);
-      } else {
-        const cloneAnswer = [...answer];
-        const answerIdx = cloneAnswer.findIndex((a) => a.id === id);
-        cloneAnswer[answerIdx].count += 1;
-        setAnswer(cloneAnswer);
-      }
+      const cloneAnswer = [...answer];
+      const answerIdx = cloneAnswer.findIndex((a) => a.id === id);
+      cloneAnswer[answerIdx].count += 1;
+      setAnswer(cloneAnswer);
     });
 
     return () => {
@@ -76,7 +90,7 @@ function GameHost({
 
   const handleNextQuestion = () => {
     setShowAnswer(false);
-    setAnswer([]);
+    setAnswer(answerTemplate);
     setIdx(idx + 1);
     setSlide(presentation?.slides[idx]);
     socket.emit("next_question", { game, slide });

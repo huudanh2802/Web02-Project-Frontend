@@ -8,6 +8,8 @@ import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
 
 import Answer from "./Answer";
 
+import "../Realtime.css";
+
 function Body({
   username,
   game,
@@ -73,9 +75,9 @@ function Body({
   }, [idx, presentation?.slides, socket, username, game, navigate]);
 
   return (
-    <Col>
+    <Col className="game-body">
       <Row className="mt-4 mb-4" style={{ textAlign: "center" }}>
-        <Col>
+        <Col className="game-question">
           <h1 style={{ fontWeight: "bold" }}>
             {idx + 1}. {slide?.question}
           </h1>
@@ -114,7 +116,7 @@ function Body({
         </div>
       )}
       {showAnswer && slide && answer === slide.correct && (
-        <div style={{ textAlign: "center", color: "green" }}>
+        <div style={{ textAlign: "center", color: "white" }}>
           <h2>Your answer is correct</h2>
         </div>
       )}

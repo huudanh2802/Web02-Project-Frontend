@@ -33,7 +33,7 @@ export default function GroupRouter({
         <Route path="myprofile" element={<MyProfile />} />
         <Route path="autojoin/:groupId" element={<AutoJoin />} />
         <Route path="profile/:id" element={<OtherProfile />} />
-        <Route path="newpresentation/:groupId" element={<NewPresentation />} />
+        <Route path="newpresentation" element={<NewPresentation />} />
         <Route
           path="presentation/:id"
           element={<Presentation setGame={setGame} socket={socket} />}

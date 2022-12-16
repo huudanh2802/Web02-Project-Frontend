@@ -24,7 +24,7 @@ import SlideEdit from "../Components/SlideEdit";
 import "../Presentation.css";
 
 function NewPresentation() {
-  const { groupId } = useParams();
+  const localId = localStorage.getItem("id");
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState<Slide>({
     type: 1,
@@ -41,7 +41,7 @@ function NewPresentation() {
   });
   const [newPresentation, setNewPresentation] = useState<PresentationDTOV2>({
     name: "Presentation Name",
-    groupId: groupId!,
+    creator: localId!,
     slides: [currentSlide]
   });
 

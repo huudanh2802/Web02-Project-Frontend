@@ -3,11 +3,13 @@ import { Button, Container, Row, Col, Tab, Tabs } from "react-bootstrap";
 import GroupKard from "../../Common/Kard/GroupKard";
 import GroupDTO from "../../../dtos/GroupDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
+import PresentationTab from "../GroupDetail/Components/PresentationTab";
+import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 
 function GroupList() {
   const [ownGroup, setOwnGroup] = useState<GroupDTO[]>([]);
   const [memberGroup, setMemberGroup] = useState<GroupDTO[]>([]);
-
+  const [presentations, setPresentations] = useState<ViewPresentationDTO[]>([]);
   function getOwnGroup() {
     const id = localStorage.getItem("id");
 
@@ -32,9 +34,20 @@ function GroupList() {
     });
   }
 
+  function getPresentation() {
+    const id = localStorage.getItem("id");
+
+    axiosPrivate({
+      method: "get",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/getview/${id}`
+    }).then((response) => {
+      setPresentations(response.data);
+    });
+  }
   useEffect(() => {
     getOwnGroup();
     getMemberGroup();
+    getPresentation();
   }, []);
 
   return (
@@ -61,6 +74,13 @@ function GroupList() {
               </Col>
             ))}
           </Row>
+        </Tab>
+
+        <Tab eventKey="presentation" title="Prensentation">
+          <PresentationTab
+            presentations={presentations}
+            setPresentations={setPresentations}
+          />
         </Tab>
       </Tabs>
     </Container>

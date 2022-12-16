@@ -43,6 +43,6 @@ export default interface PresentationDTO {
 }
 export interface PresentationDTOV2 {
   name: string;
-  groupId: string;
+  creator: string;
   slides: Slide[];
 }

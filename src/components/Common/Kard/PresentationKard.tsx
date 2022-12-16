@@ -11,13 +11,11 @@ import { axiosPrivate } from "../../../token/axiosPrivate";
 function PresentationKard({
   presentation,
   index,
-  setGroupPresentation
+  setPresentation
 }: {
   presentation: ViewPresentationDTO;
   index: Key;
-  setGroupPresentation: React.Dispatch<
-    React.SetStateAction<ViewPresentationDTO[]>
-  >;
+  setPresentation: React.Dispatch<React.SetStateAction<ViewPresentationDTO[]>>;
 }) {
   const navigate = useNavigate();
 
@@ -32,8 +30,7 @@ function PresentationKard({
       url: `${process.env.REACT_APP_API_SERVER}/presentation/${presentation.id}`
     }).then((response) => {
       alert("Presentation has been deleted");
-      setGroupPresentation(response.data);
-      window.location.reload();
+      setPresentation(response.data);
     });
   }
   return (

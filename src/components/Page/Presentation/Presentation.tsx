@@ -48,7 +48,7 @@ function Presentation({
 
   const [detailPresentation, setPresentation] = useState<PresentationDTOV2>({
     name: "",
-    groupId: "",
+    creator: "",
     slides: [currentSlide]
   });
 

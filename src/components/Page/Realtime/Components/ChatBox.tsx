@@ -24,6 +24,7 @@ function ChatBox({
   const [chatHistory, setChatHistory] = useState<ChatItemDTO[]>([]);
   const { handleSubmit } = useForm();
   const onSubmit = () => {
+    if (chatText.length <= 0) return;
     // Local handling
     const date = new Date();
     const role = localStorage.getItem("email") !== null ? 2 : 3;

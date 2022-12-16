@@ -3,8 +3,17 @@ import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
 
 import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
+import { AnswerCounterDTO } from "../../../../dtos/GameDTO";
 
 import Answer from "./Answer";
 
@@ -14,17 +23,37 @@ function Body({
   username,
   game,
   socket,
-  presentation
+  presentation,
+  setBg
 }: {
   username: string;
   game: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   presentation: PresentationDTO | undefined;
+  setBg: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [slide, setSlide] = useState<SlideDTO>();
   const [idx, setIdx] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [answer, setAnswer] = useState("");
+  const [gameAnswer, setGameAnswer] = useState<AnswerCounterDTO[]>([
+    {
+      id: "A",
+      count: 0
+    },
+    {
+      id: "B",
+      count: 0
+    },
+    {
+      id: "C",
+      count: 0
+    },
+    {
+      id: "D",
+      count: 0
+    }
+  ]);
   const [showAnswer, setShowAnswer] = useState(false);
 
   const navigate = useNavigate();
@@ -33,17 +62,42 @@ function Body({
     setSlide(presentation?.slides[idx]);
   }, [presentation?.slides, idx]);
 
+  // Game-handling
   useEffect(() => {
     socket.on("show_answer", () => {
       setShowAnswer(true);
+      if (slide && answer === slide.correct) {
+        setBg("success");
+      } else {
+        setBg("failed");
+      }
     });
 
     socket.on("next_question", () => {
       setIdx(idx + 1);
       setSlide(presentation?.slides[idx]);
       setShowAnswer(false);
+      setGameAnswer([
+        {
+          id: "A",
+          count: 0
+        },
+        {
+          id: "B",
+          count: 0
+        },
+        {
+          id: "C",
+          count: 0
+        },
+        {
+          id: "D",
+          count: 0
+        }
+      ]);
       setAnswer("");
       setSubmitted(false);
+      setBg("primary");
     });
 
     socket.on("end_game", () => {
@@ -66,13 +120,33 @@ function Body({
       }
     });
 
+    socket.on("submit_answer", (data: { id: string }) => {
+      const { id } = data;
+      const cloneAnswer = [...gameAnswer];
+      const answerIdx = cloneAnswer.findIndex((a) => a.id === id);
+      cloneAnswer[answerIdx].count += 1;
+      setGameAnswer(cloneAnswer);
+    });
+
     return () => {
       socket.off("show_answer");
       socket.off("next_question");
       socket.off("end_game");
       socket.off("finish_game");
+      socket.off("submit_answer");
     };
-  }, [idx, presentation?.slides, socket, username, game, navigate]);
+  }, [
+    idx,
+    presentation?.slides,
+    socket,
+    username,
+    game,
+    answer,
+    setBg,
+    slide,
+    gameAnswer,
+    navigate
+  ]);
 
   return (
     <Col className="game-body">
@@ -91,34 +165,62 @@ function Body({
               <Answer
                 id={a.id}
                 answer={a.answer}
+                gameAnswer={gameAnswer}
                 question={idx}
                 game={game}
                 socket={socket}
                 setAnswer={setAnswer}
+                setGameAnswer={setGameAnswer}
                 setSubmitted={setSubmitted}
               />
             </Col>
           ))}
       </Row>
-      {submitted && !showAnswer && (
-        <div style={{ textAlign: "center" }}>
-          <h2>You have submitted your answer</h2>
-        </div>
-      )}
-      {showAnswer && slide && answer !== slide.correct && answer !== "" && (
-        <div style={{ textAlign: "center", color: "red" }}>
-          <h2>Your answer is incorrect</h2>
-        </div>
-      )}
-      {showAnswer && slide && answer !== slide.correct && answer === "" && (
-        <div style={{ textAlign: "center", color: "red" }}>
-          <h2>It is too late to answer</h2>
-        </div>
-      )}
-      {showAnswer && slide && answer === slide.correct && (
-        <div style={{ textAlign: "center", color: "white" }}>
-          <h2>Your answer is correct</h2>
-        </div>
+      <Row>
+        {submitted && !showAnswer && (
+          <div style={{ textAlign: "center" }}>
+            <h2>You have submitted your answer</h2>
+          </div>
+        )}
+        {showAnswer && slide && answer !== slide.correct && answer !== "" && (
+          <div style={{ textAlign: "center", color: "white" }}>
+            <h2>Your answer is incorrect</h2>
+          </div>
+        )}
+        {showAnswer && slide && answer !== slide.correct && answer === "" && (
+          <div style={{ textAlign: "center", color: "white" }}>
+            <h2>It is too late to answer</h2>
+          </div>
+        )}
+        {showAnswer && slide && answer === slide.correct && (
+          <div style={{ textAlign: "center", color: "white" }}>
+            <h2>Your answer is correct</h2>
+          </div>
+        )}
+      </Row>
+      {(submitted || showAnswer) && (
+        <Row>
+          <Col style={{ textAlign: "center" }}>
+            <div style={{ height: "95%", marginTop: "80px" }}>
+              <ResponsiveContainer width="80%" height="80%">
+                <BarChart style={{ marginLeft: "12%" }} data={gameAnswer}>
+                  {gameAnswer.length > 0 && (
+                    <XAxis dataKey="id" stroke="white" />
+                  )}
+                  {gameAnswer.length > 0 && (
+                    <YAxis allowDecimals={false} stroke="white" />
+                  )}
+                  {gameAnswer.length > 0 && (
+                    <Bar dataKey="count" fill="white" />
+                  )}
+                  {gameAnswer.length > 0 && (
+                    <Tooltip itemStyle={{ color: "black" }} />
+                  )}
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Col>
+        </Row>
       )}
     </Col>
   );

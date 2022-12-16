@@ -24,11 +24,6 @@ function GameHost({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   game: string;
 }) {
-  interface AnswerCounter {
-    id: string;
-    count: number;
-  }
-
   const answerTemplate = [
     {
       id: "A",
@@ -52,7 +47,7 @@ function GameHost({
   const [presentation, setPresentation] = useState<PresentationDTO>();
   const [slide, setSlide] = useState<SlideDTO>();
   const [idx, setIdx] = useState(0);
-  const [answer, setAnswer] = useState<AnswerCounter[]>(answerTemplate);
+  const [answer, setAnswer] = useState(answerTemplate);
   const [showAnswer, setShowAnswer] = useState(false);
   const navigate = useNavigate();
 

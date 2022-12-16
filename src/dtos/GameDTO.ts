@@ -4,6 +4,11 @@ export interface ChatDTO {
   createdAt: Date;
 }
 
+export interface AnswerCounterDTO {
+  id: string;
+  count: number;
+}
+
 export interface GameDTO {
   game: string;
   groupId: string;

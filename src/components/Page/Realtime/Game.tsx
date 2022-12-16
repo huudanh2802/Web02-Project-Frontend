@@ -21,6 +21,7 @@ function Game({
 }) {
   const { presentationId, id } = useParams();
   const [presentation, setPresentation] = useState<PresentationDTO>();
+  const [bg, setBg] = useState("primary");
 
   useEffect(() => {
     axiosPrivate({
@@ -33,13 +34,14 @@ function Game({
   }, [presentationId]);
 
   return (
-    <Container className="game-container" fluid>
+    <Container className={`game-container game-container-${bg}`} fluid>
       <Row>
         <Body
           username={username}
           game={game}
           socket={socket}
           presentation={presentation}
+          setBg={setBg}
         />
         <ChatBox username={username} game={game} socket={socket} />
       </Row>

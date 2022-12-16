@@ -1,6 +1,17 @@
 .game-container {
   height: 100vh;
+}
+
+.game-container-primary {
   background-color: #4bb8ad;
+}
+
+.game-container-success {
+  background-color: yellowgreen;
+}
+
+.game-container-failed {
+  background-color: crimson;
 }
 
 .game-question {

@@ -6,7 +6,6 @@ import { Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useParams, useNavigate } from "react-router";
 import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
-import { nextChar } from "../../../../helpers/functions";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 
 import TopBar from "../Components/TopBar";
@@ -16,7 +15,7 @@ import SlideEdit from "../Components/SlideEdit";
 
 import "../Presentation.css";
 
-function Presentation() {
+function NewPresentation() {
   const { groupId } = useParams();
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
@@ -134,4 +133,4 @@ function Presentation() {
   );
 }
 
-export default Presentation;
+export default NewPresentation;

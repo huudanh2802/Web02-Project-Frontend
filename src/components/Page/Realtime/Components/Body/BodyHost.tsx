@@ -11,9 +11,9 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
-import AnswerHost from "./AnswerHost";
-import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
-import { axiosPrivate } from "../../../../token/axiosPrivate";
+import AnswerHost from "../Answer/AnswerHost";
+import PresentationDTO, { SlideDTO } from "../../../../../dtos/PresentationDTO";
+import { axiosPrivate } from "../../../../../token/axiosPrivate";
 
 function BodyHost({
   socket,

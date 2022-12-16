@@ -4,10 +4,9 @@ import React, { useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import { FaComment } from "react-icons/fa";
 
-import BodyHost from "./Components/BodyHost";
-import ChatBox from "./Components/ChatBox";
+import ChatBox from "./Components/Chat/ChatBox";
+import BodyHost from "./Components/Body/BodyHost";
 
 function GameHost({
   socket,
@@ -17,10 +16,14 @@ function GameHost({
   game: string;
 }) {
   const username = localStorage.getItem("fullname");
+  const [newChatCount, setNewChatCount] = useState(0);
 
   // Chat box handling
   const [showChat, setShowChat] = useState(false);
-  const handleShowChat = () => setShowChat(true);
+  const handleShowChat = () => {
+    setShowChat(true);
+    setNewChatCount(0);
+  };
   const handleCloseChat = () => setShowChat(false);
 
   return (
@@ -33,12 +36,12 @@ function GameHost({
           game={game}
           socket={socket}
           showChat={showChat}
+          handleShowChat={handleShowChat}
           handleCloseChat={handleCloseChat}
+          newChatCount={newChatCount}
+          setNewChatCount={setNewChatCount}
         />
       </Row>
-      <Button className="fab" variant="dark" onClick={handleShowChat}>
-        <FaComment className="mb-2" />
-      </Button>
     </Container>
   );
 }

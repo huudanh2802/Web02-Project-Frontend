@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Col, Offcanvas, Row, Form } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
-import { ChatItemDTO } from "../../../../dtos/RealtimeDTO";
+import { ChatItemDTO } from "../../../../../dtos/RealtimeDTO";
 
-import ChatItem from "./ChatItem";
+import ChatFAB from "./ChatFAB";
+import ChatBody from "./ChatBody";
 
-import "../Realtime.css";
+import "../../Realtime.css";
 
 function ChatBox({
   username,
@@ -16,14 +17,20 @@ function ChatBox({
   game,
   socket,
   showChat,
-  handleCloseChat
+  handleShowChat,
+  handleCloseChat,
+  newChatCount,
+  setNewChatCount
 }: {
   username: string;
   userRole: number;
   game: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   showChat: boolean;
+  handleShowChat: () => void;
   handleCloseChat: () => void;
+  newChatCount: number;
+  setNewChatCount: React.Dispatch<React.SetStateAction<number>>;
 }) {
   // Chat textfield handling
   const [chatText, setChatText] = useState("");
@@ -74,51 +81,46 @@ function ChatBox({
           }
         ];
         setChatHistory(tempChatHistory);
+        if (!showChat) setNewChatCount(newChatCount + 1);
       }
     );
+
+    return () => {
+      socket.off("receive_chat_msg");
+    };
   });
 
-  // Scroll to bottom
-  const bottomRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView();
-  }, [chatHistory]);
-
   return (
-    <Offcanvas show={showChat} onHide={handleCloseChat} placement="end">
-      <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Chat</Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body style={{ height: "100vh" }}>
-        <Col className="game-chatbox">
-          <Row className="game-chat">
-            <Col className="game-chat-list">
-              {chatHistory.map((chat) => (
-                <Row>
-                  <ChatItem chat={chat} />
-                </Row>
-              ))}
-              <div ref={bottomRef} />
-            </Col>
-          </Row>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Row style={{ marginTop: "16px" }}>
-              <Col lg={9}>
-                <Form.Control
-                  onChange={(e) => setChatText(e.target.value)}
-                  value={chatText}
-                />
-              </Col>
-              <Col>
-                <div className="d-grid">
-                  <Button type="submit">Send</Button>
-                </div>
-              </Col>
+    <>
+      <Offcanvas show={showChat} onHide={handleCloseChat} placement="end">
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Chat</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body style={{ height: "100vh" }}>
+          <Col className="game-chatbox">
+            <Row className="game-chat">
+              <ChatBody chatHistory={chatHistory} />
             </Row>
-          </Form>
-        </Col>
-      </Offcanvas.Body>
-    </Offcanvas>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Row style={{ marginTop: "16px" }}>
+                <Col lg={9}>
+                  <Form.Control
+                    onChange={(e) => setChatText(e.target.value)}
+                    value={chatText}
+                  />
+                </Col>
+                <Col>
+                  <div className="d-grid">
+                    <Button type="submit">Send</Button>
+                  </div>
+                </Col>
+              </Row>
+            </Form>
+          </Col>
+        </Offcanvas.Body>
+      </Offcanvas>
+      <ChatFAB handleShowChat={handleShowChat} newChatCount={newChatCount} />
+    </>
   );
 }
 

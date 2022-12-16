@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Button } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import { AnswerCounterDTO } from "../../../../dtos/GameDTO";
+import { AnswerCounterDTO } from "../../../../../dtos/GameDTO";
 
 function Answer({
   id,

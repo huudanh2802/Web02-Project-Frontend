@@ -33,6 +33,22 @@
   font-size: 32px;
 }
 
+.fab-noti {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  bottom: 88px;
+  right: 28px;
+	text-align:center;
+  font-size: 12px;
+  block-size: fit-content;
+  background-color: crimson;
+  color: white;
+  font-weight: bold;
+  padding: 4px 8px;
+}
+
 .game-chatbox {
   background-color: white;
   height: 100%;

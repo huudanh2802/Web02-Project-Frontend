@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import moment from "moment";
 
-import { ChatItemDTO } from "../../../../dtos/RealtimeDTO";
+import { ChatItemDTO } from "../../../../../dtos/RealtimeDTO";
 
 function ChatItem({ chat }: { chat: ChatItemDTO }) {
   // Role handling

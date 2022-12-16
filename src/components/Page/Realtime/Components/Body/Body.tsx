@@ -12,12 +12,12 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
-import { AnswerCounterDTO } from "../../../../dtos/GameDTO";
+import Answer from "../Answer/Answer";
 
-import Answer from "./Answer";
+import PresentationDTO, { SlideDTO } from "../../../../../dtos/PresentationDTO";
+import { AnswerCounterDTO } from "../../../../../dtos/GameDTO";
 
-import "../Realtime.css";
+import "../../Realtime.css";
 
 function Body({
   username,

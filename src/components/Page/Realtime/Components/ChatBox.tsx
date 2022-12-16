@@ -26,28 +26,36 @@ function ChatBox({
   const onSubmit = () => {
     // Local handling
     const date = new Date();
+    const role = localStorage.getItem("email") !== null ? 2 : 3;
     const tempChatHistory = [
       ...chatHistory,
       {
         username,
         chat: chatText,
         createdAt: date,
-        own: true
+        own: true,
+        role
       }
     ];
     setChatHistory(tempChatHistory);
     setChatText("");
 
     // Socket
-    socket.emit("send_chat_msg", { username, chat: chatText, date, game });
+    socket.emit("send_chat_msg", {
+      username,
+      chat: chatText,
+      date,
+      role,
+      game
+    });
   };
 
   // Receiving messages from others
   useEffect(() => {
     socket.on(
       "receive_chat_msg",
-      (data: { username: string; chat: string; date: Date }) => {
-        const { chat, date } = data;
+      (data: { username: string; chat: string; role: number; date: Date }) => {
+        const { chat, date, role } = data;
         const otherUsername = data.username;
         const tempChatHistory = [
           ...chatHistory,
@@ -55,7 +63,8 @@ function ChatBox({
             username: otherUsername,
             chat,
             createdAt: date,
-            own: false
+            own: false,
+            role
           }
         ];
         setChatHistory(tempChatHistory);

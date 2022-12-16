@@ -9,4 +9,5 @@ export interface ChatItemDTO {
   chat: string;
   createdAt: Date;
   own: boolean;
+  role: number;
 }

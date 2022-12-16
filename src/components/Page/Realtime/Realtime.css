@@ -27,3 +27,31 @@
   height: 100%;
   overflow-y: auto;
 }
+
+.tag {
+  background: #cccccc;
+  border-radius: 50px;
+  font-size: 12px;
+  margin: 0;
+  color: #fff;
+  padding: 2px 10px;
+  margin-top: 8px;
+}
+
+.tag-gray {
+  background-color: #92a6a9;
+}
+.tag-teal {
+  background-color: #318F9B;
+}
+
+.tag-gold {
+  background-color: #f6c961;
+  font-weight: bold;
+  color: black;
+}
+
+.tag-own {
+  background-color: white;
+  color: black;
+}

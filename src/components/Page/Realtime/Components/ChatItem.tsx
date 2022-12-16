@@ -36,11 +36,23 @@ function ChatItem({ chat }: { chat: ChatItemDTO }) {
     <Card style={style}>
       <header
         className="mt-2 fw-bold"
-        style={{ color: chat.own ? "white" : "black" }}
+        style={{
+          color: chat.own ? "white" : "black",
+          width: "fit-content",
+          blockSize: "fit-content"
+        }}
       >
-        {chat.username}
+        {chat.username}{" "}
+        <span
+          className={`tag tag-${tag}`}
+          style={{
+            width: "fit-content",
+            blockSize: "fit-content"
+          }}
+        >
+          {role}
+        </span>
       </header>
-      <div className={`tag tag-${tag} mb-2`}>{role}</div>
       <small style={{ color: chat.own ? "#dfe6f2" : "gray" }}>
         {moment(chat.createdAt.toString()).format("DD/MM/YYYY • hh:mm:ss")}
       </small>

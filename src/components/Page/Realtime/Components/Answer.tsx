@@ -42,9 +42,9 @@ function Answer({
         style={{ width: "100%", height: "100%" }}
         onClick={() => submitAnswer()}
       >
-        <h3 className="mt-2" style={{ fontWeight: "bold" }}>
+        <h5 className="mt-2" style={{ fontWeight: "bold" }}>
           {id}. {answer}
-        </h3>
+        </h5>
       </Button>
     </Col>
   );

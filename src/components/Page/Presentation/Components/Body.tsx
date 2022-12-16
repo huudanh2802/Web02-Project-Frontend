@@ -7,7 +7,7 @@ import "../Presentation.css";
 
 function Body({ currentSlide }: { currentSlide: SlideDTO }) {
   return (
-    <Col lg={8}>
+    <Col>
       <Container className="slide-container" style={{ padding: "16px" }}>
         <Card>
           <Card.Body style={{ fontSize: "30px", margin: "8px" }}>

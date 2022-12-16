@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Col, Row, Form } from "react-bootstrap";
+import { Button, Col, Offcanvas, Row, Form } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
@@ -14,12 +14,16 @@ function ChatBox({
   username,
   userRole,
   game,
-  socket
+  socket,
+  showChat,
+  handleCloseChat
 }: {
   username: string;
   userRole: number;
   game: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  showChat: boolean;
+  handleCloseChat: () => void;
 }) {
   // Chat textfield handling
   const [chatText, setChatText] = useState("");
@@ -81,36 +85,40 @@ function ChatBox({
   }, [chatHistory]);
 
   return (
-    <Col className="game-chatbox" lg={3}>
-      <Row>
-        <h3 style={{ textAlign: "center", fontWeight: "bold" }}>Chat</h3>
-      </Row>
-      <Row className="game-chat">
-        <Col className="game-chat-list">
-          {chatHistory.map((chat) => (
-            <Row>
-              <ChatItem chat={chat} />
+    <Offcanvas show={showChat} onHide={handleCloseChat} placement="end">
+      <Offcanvas.Header closeButton>
+        <Offcanvas.Title>Chat</Offcanvas.Title>
+      </Offcanvas.Header>
+      <Offcanvas.Body style={{ height: "100vh" }}>
+        <Col className="game-chatbox">
+          <Row className="game-chat">
+            <Col className="game-chat-list">
+              {chatHistory.map((chat) => (
+                <Row>
+                  <ChatItem chat={chat} />
+                </Row>
+              ))}
+              <div ref={bottomRef} />
+            </Col>
+          </Row>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Row style={{ marginTop: "16px" }}>
+              <Col lg={9}>
+                <Form.Control
+                  onChange={(e) => setChatText(e.target.value)}
+                  value={chatText}
+                />
+              </Col>
+              <Col>
+                <div className="d-grid">
+                  <Button type="submit">Send</Button>
+                </div>
+              </Col>
             </Row>
-          ))}
-          <div ref={bottomRef} />
+          </Form>
         </Col>
-      </Row>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Row style={{ marginTop: "16px" }}>
-          <Col lg={9}>
-            <Form.Control
-              onChange={(e) => setChatText(e.target.value)}
-              value={chatText}
-            />
-          </Col>
-          <Col>
-            <div className="d-grid">
-              <Button type="submit">Send</Button>
-            </div>
-          </Col>
-        </Row>
-      </Form>
-    </Col>
+      </Offcanvas.Body>
+    </Offcanvas>
   );
 }
 

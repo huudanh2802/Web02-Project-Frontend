@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Button, Container, Row } from "react-bootstrap";
+import { FaComment } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
@@ -9,6 +10,8 @@ import { axiosPrivate } from "../../../token/axiosPrivate";
 
 import ChatBox from "./Components/ChatBox";
 import Body from "./Components/Body";
+
+import "./Realtime.css";
 
 function Game({
   username,
@@ -23,6 +26,11 @@ function Game({
   const [presentation, setPresentation] = useState<PresentationDTO>();
   const [bg, setBg] = useState("primary");
   const loggedIn = localStorage.getItem("email") !== null;
+
+  // Chat box handling
+  const [showChat, setShowChat] = useState(false);
+  const handleShowChat = () => setShowChat(true);
+  const handleCloseChat = () => setShowChat(false);
 
   useEffect(() => {
     axiosPrivate({
@@ -49,8 +57,13 @@ function Game({
           userRole={loggedIn ? 1 : 2}
           game={game}
           socket={socket}
+          showChat={showChat}
+          handleCloseChat={handleCloseChat}
         />
       </Row>
+      <Button className="fab" variant="dark" onClick={handleShowChat}>
+        <FaComment className="mb-2" />
+      </Button>
     </Container>
   );
 }

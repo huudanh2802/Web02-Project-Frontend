@@ -152,9 +152,9 @@ function Body({
     <Col className="game-body">
       <Row className="mt-4 mb-4" style={{ textAlign: "center" }}>
         <Col className="game-question">
-          <h1 style={{ fontWeight: "bold" }}>
+          <h3 style={{ fontWeight: "bold" }}>
             {idx + 1}. {slide?.question}
-          </h1>
+          </h3>
         </Col>
       </Row>
       <Row sm={1} md={2} lg={2}>
@@ -178,7 +178,7 @@ function Body({
       </Row>
       <Row>
         {submitted && !showAnswer && (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", color: "white" }}>
             <h2>You have submitted your answer</h2>
           </div>
         )}

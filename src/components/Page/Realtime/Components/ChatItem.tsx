@@ -11,11 +11,11 @@ function ChatItem({ chat }: { chat: ChatItemDTO }) {
 
   useEffect(() => {
     switch (chat.role) {
-      case 2:
+      case 1:
         setRole("Member");
         setTag("teal");
         break;
-      case 3:
+      case 2:
         setRole("Guest");
         setTag("gray");
         break;

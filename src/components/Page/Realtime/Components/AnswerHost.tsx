@@ -15,12 +15,8 @@ function AnswerHost({
 }) {
   return (
     <Col className="pt-2" style={{ height: "100%" }}>
-      {(!show || (show && !correct)) && (
-        <Button
-          variant="outline-dark"
-          style={{ width: "100%", height: "100%" }}
-          disabled
-        >
+      {!show && (
+        <Button variant="light" style={{ width: "100%", height: "100%" }}>
           <h5 className="mt-2" style={{ fontWeight: "bold" }}>
             {id}. {answer}
           </h5>
@@ -31,6 +27,17 @@ function AnswerHost({
           variant="outline-success"
           style={{ width: "100%", height: "100%" }}
           active
+        >
+          <h5 className="mt-2" style={{ fontWeight: "bold" }}>
+            {id}. {answer}
+          </h5>
+        </Button>
+      )}
+      {show && !correct && (
+        <Button
+          variant="outline-light"
+          style={{ width: "100%", height: "100%" }}
+          disabled
         >
           <h5 className="mt-2" style={{ fontWeight: "bold" }}>
             {id}. {answer}

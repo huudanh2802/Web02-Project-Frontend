@@ -22,6 +22,7 @@ function Game({
   const { presentationId, id } = useParams();
   const [presentation, setPresentation] = useState<PresentationDTO>();
   const [bg, setBg] = useState("primary");
+  const loggedIn = localStorage.getItem("email") !== null;
 
   useEffect(() => {
     axiosPrivate({
@@ -43,7 +44,12 @@ function Game({
           presentation={presentation}
           setBg={setBg}
         />
-        <ChatBox username={username} game={game} socket={socket} />
+        <ChatBox
+          username={username}
+          userRole={loggedIn ? 1 : 2}
+          game={game}
+          socket={socket}
+        />
       </Row>
     </Container>
   );

@@ -12,10 +12,12 @@ import "../Realtime.css";
 
 function ChatBox({
   username,
+  userRole,
   game,
   socket
 }: {
   username: string;
+  userRole: number;
   game: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
@@ -27,7 +29,6 @@ function ChatBox({
     if (chatText.length <= 0) return;
     // Local handling
     const date = new Date();
-    const role = localStorage.getItem("email") !== null ? 2 : 3;
     const tempChatHistory = [
       ...chatHistory,
       {
@@ -35,7 +36,7 @@ function ChatBox({
         chat: chatText,
         createdAt: date,
         own: true,
-        role
+        role: userRole
       }
     ];
     setChatHistory(tempChatHistory);
@@ -46,7 +47,7 @@ function ChatBox({
       username,
       chat: chatText,
       date,
-      role,
+      role: userRole,
       game
     });
   };
@@ -96,7 +97,7 @@ function ChatBox({
       </Row>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row style={{ marginTop: "16px" }}>
-          <Col lg={8}>
+          <Col lg={9}>
             <Form.Control
               onChange={(e) => setChatText(e.target.value)}
               value={chatText}

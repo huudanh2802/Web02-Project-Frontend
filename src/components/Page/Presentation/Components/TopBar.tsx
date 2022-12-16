@@ -8,7 +8,9 @@ import {
   FieldValues
 } from "react-hook-form";
 import { FaPlay, FaArrowLeft, FaSave, FaEdit } from "react-icons/fa";
-import PresentationDTO from "../../../../dtos/PresentationDTO";
+import PresentationDTO, {
+  PresentationDTOV2
+} from "../../../../dtos/PresentationDTO";
 
 import NameModal from "./NameModal";
 
@@ -24,8 +26,8 @@ function TopBar({
 }: {
   sendSlide: () => Promise<void>;
   present: (() => void) | undefined;
-  detailPresentation: PresentationDTO;
-  setPresentation: React.Dispatch<React.SetStateAction<PresentationDTO>>;
+  detailPresentation: PresentationDTOV2;
+  setPresentation: React.Dispatch<React.SetStateAction<PresentationDTOV2>>;
   registerName: UseFormRegister<FieldValues>;
   handleSubmitName: UseFormHandleSubmit<FieldValues>;
 }) {

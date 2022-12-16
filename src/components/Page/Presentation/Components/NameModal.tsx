@@ -6,7 +6,7 @@ import {
   UseFormHandleSubmit,
   FieldValues
 } from "react-hook-form";
-import PresentationDTO from "../../../../dtos/PresentationDTO";
+import { PresentationDTOV2 } from "../../../../dtos/PresentationDTO";
 
 function NameModal({
   show,
@@ -18,8 +18,8 @@ function NameModal({
 }: {
   show: boolean;
   handleClose: () => void;
-  detailPresentation: PresentationDTO;
-  setPresentation: React.Dispatch<React.SetStateAction<PresentationDTO>>;
+  detailPresentation: PresentationDTOV2;
+  setPresentation: React.Dispatch<React.SetStateAction<PresentationDTOV2>>;
   registerName: UseFormRegister<FieldValues>;
   handleSubmitName: UseFormHandleSubmit<FieldValues>;
 }) {

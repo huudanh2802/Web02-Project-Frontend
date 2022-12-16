@@ -1,21 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col } from "react-bootstrap";
 import Slider from "react-slick";
-import PresentationDTO, { SlideDTO } from "../../../../dtos/PresentationDTO";
+import { PresentationDTOV2, Slide } from "../../../../dtos/PresentationDTO";
 
 import "../Presentation.css";
+import SlideTypeModal from "./SlideTypeModal";
 
 function SlideBar({
-  addSlide,
+  addMutipleChoice,
+  addHeading,
+  addParagraph,
   detailPresentation,
   currentSlide,
   changeSlide
 }: {
-  addSlide: (event: any) => void;
-  detailPresentation: PresentationDTO;
-  currentSlide: SlideDTO;
+  addMutipleChoice: (event: any) => void;
+  addHeading: (event: any) => void;
+  addParagraph: (event: any) => void;
+  detailPresentation: PresentationDTOV2;
+  currentSlide: Slide;
   changeSlide: (idx: number) => void;
 }) {
   const len = detailPresentation.slides.length;
@@ -28,31 +33,45 @@ function SlideBar({
     slideToScroll: 1, // detailPresentation.slides.length,
     infinite: false
   };
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(true);
 
   return (
-    <Col className="p-slide-bar" lg={1}>
-      <Button
-        className="mt-1"
-        variant="outline-dark"
-        style={{ width: "100%" }}
-        onClick={addSlide}
-      >
-        New Slide
-      </Button>
-      <Slider {...settings}>
-        {detailPresentation.slides.map((slide, idx) => (
-          <div>
-            <Button
-              className={idx === currentSlide.idx ? "selected-slide" : "slide"}
-              onClick={() => changeSlide(slide.idx)}
-            >
-              {idx + 1}
-            </Button>
-          </div>
-        ))}
-        <div />
-      </Slider>
-    </Col>
+    <>
+      <Col className="p-slide-bar" lg={1}>
+        <Button
+          className="mt-1"
+          variant="outline-dark"
+          style={{ width: "100%" }}
+          // onClick={addSlide}
+          onClick={handleShow}
+        >
+          New Slide
+        </Button>
+        <Slider {...settings}>
+          {detailPresentation.slides.map((slide, idx) => (
+            <div>
+              <Button
+                className={
+                  idx === currentSlide.idx ? "selected-slide" : "slide"
+                }
+                onClick={() => changeSlide(slide.idx)}
+              >
+                {idx + 1}
+              </Button>
+            </div>
+          ))}
+          <div />
+        </Slider>
+      </Col>
+      <SlideTypeModal
+        show={show}
+        setShow={setShow}
+        addMutipleChoice={addMutipleChoice}
+        addHeading={addHeading}
+        addParagraph={addParagraph}
+      />
+    </>
   );
 }
 

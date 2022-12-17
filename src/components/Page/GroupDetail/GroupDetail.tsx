@@ -1,18 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from "react";
-import { Container, Tabs, Tab } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Tab, Tabs } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import CheckOwnerDTO from "../../../dtos/CheckOwnerDTO";
 import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
 import "./GroupDetail.css";
-import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 
-import MemberTab from "./Components/MemberTab";
-import PresentationTab from "./Components/PresentationTab";
 import InviteModal from "./Components/InviteModal";
+import MemberTab from "./Components/MemberTab";
 
 function GroupInfo() {
   const { groupId } = useParams();
@@ -32,18 +30,7 @@ function GroupInfo() {
     coowner: [],
     member: []
   });
-  const [groupPresentation, setGroupPresentation] = useState<
-    ViewPresentationDTO[]
-  >([]);
 
-  function getPresentation() {
-    axiosPrivate({
-      method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/presentation/groupget/${groupId}`
-    }).then((response) => {
-      setGroupPresentation(response.data);
-    });
-  }
   function checkOwner(ownerId: string) {
     const checkOwnerDTO: CheckOwnerDTO = {
       ownerId,
@@ -74,8 +61,6 @@ function GroupInfo() {
       checkOwner(ownerId);
     }
     getGroupMember();
-    getPresentation();
-    console.log(owner);
   }, []);
 
   return (
@@ -90,24 +75,13 @@ function GroupInfo() {
         <h1 className="page-title" style={{ marginBottom: "32px" }}>
           {groupMember.name}
         </h1>
-        <Tabs
-          defaultActiveKey="presentation"
-          id="group-list-tab"
-          className="mb-3"
-        >
+        <Tabs defaultActiveKey="members" id="group-list-tab" className="mb-3">
           <Tab eventKey="members" title="Members">
             <MemberTab
               groupMember={groupMember}
               setGroupMember={setGroupMember}
               owner={owner}
               handleShow={handleShow}
-            />
-          </Tab>
-          <Tab eventKey="presentation" title="Prensentation">
-            <PresentationTab
-              groupId={groupId}
-              groupPresentation={groupPresentation}
-              setGroupPresentation={setGroupPresentation}
             />
           </Tab>
         </Tabs>

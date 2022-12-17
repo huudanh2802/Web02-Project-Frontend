@@ -14,11 +14,11 @@ import MyProfile from "../components/Page/ManageUser/MyProfile";
 import OtherProfile from "../components/Page/ManageUser/OtherProfile";
 import NewPresentation from "../components/Page/Presentation/NewPresentation/NewPresentation";
 import Presentation from "../components/Page/Presentation/Presentation";
-import Join from "../components/Page/Realtime/Join";
-import Lobby from "../components/Page/Realtime/Lobby";
-import LobbyHost from "../components/Page/Realtime/LobbyHost";
-import Game from "../components/Page/Realtime/Game";
-import GameHost from "../components/Page/Realtime/GameHost";
+import Join from "../components/Page/Realtime/Viewer/Join";
+import Lobby from "../components/Page/Realtime/Viewer/Lobby";
+import LobbyHost from "../components/Page/Realtime/Host/LobbyHost";
+import Game from "../components/Page/Realtime/Viewer/Game";
+import GameHost from "../components/Page/Realtime/Host/GameHost";
 
 // Socket IO
 const socket = io(`${process.env.REACT_APP_API_SERVER}`);
@@ -42,7 +42,7 @@ function BaseRouter() {
         <Route path="myprofile" element={<MyProfile />} />
         <Route path="autojoin/:groupId" element={<AutoJoin />} />
         <Route path="profile/:id" element={<OtherProfile />} />
-        <Route path="newpresentation/:groupId" element={<NewPresentation />} />
+        <Route path="newpresentation" element={<NewPresentation />} />
         <Route
           path="presentation/:id"
           element={<Presentation setGame={setGame} socket={socket} />}

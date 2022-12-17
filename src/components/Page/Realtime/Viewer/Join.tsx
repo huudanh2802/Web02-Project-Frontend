@@ -10,7 +10,7 @@ import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
 import { FaExclamationTriangle } from "react-icons/fa";
-import "../../../index.css";
+import "../../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Join({

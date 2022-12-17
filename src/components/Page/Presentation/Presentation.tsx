@@ -1,24 +1,31 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo, useEffect } from "react";
-import { Container, Row } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import { useParams, useNavigate } from "react-router";
-import { Socket } from "socket.io-client";
+/* eslint-disable no-alert */
+
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
-import { nextChar } from "../../../helpers/functions";
+import React, { useEffect, useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
+import { Socket } from "socket.io-client";
+import {
+  HeadingDTO,
+  MutipleChoiceDTO,
+  ParagraphDTO,
+  PresentationDTO,
+  SlideDTO
+} from "../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
-import TopBar from "./Components/TopBar";
-import SlideBar from "./Components/SlideBar";
 import Body from "./Components/Body";
+import SlideBar from "./Components/SlideBar";
 import SlideEdit from "./Components/SlideEdit";
+import TopBar from "./Components/TopBar";
 
 import "./Presentation.css";
 
-function NewPresentation({
+function Presentation({
   setGame,
   socket
 }: {
@@ -28,6 +35,7 @@ function NewPresentation({
   const { id } = useParams();
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
+    type: 1,
     question: "",
     idx: 0,
     correct: "A",
@@ -42,17 +50,8 @@ function NewPresentation({
 
   const [detailPresentation, setPresentation] = useState<PresentationDTO>({
     name: "",
-    groupId: "",
+    creator: "",
     slides: [currentSlide]
-  });
-
-  const {
-    register,
-    handleSubmit: handleSlide,
-    reset,
-    formState: { errors }
-  } = useForm({
-    defaultValues: useMemo(() => currentSlide, [currentSlide])
   });
 
   const {
@@ -63,22 +62,18 @@ function NewPresentation({
   } = useForm();
 
   async function sendSlide() {
-    const result = await trigger("name");
-    console.log(result);
-    if (result) {
-      axiosPrivate({
-        method: "put",
-        url: `${process.env.REACT_APP_API_SERVER}/presentation/update/${id}`,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json"
-        },
+    axiosPrivate({
+      method: "put",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/update/${id}`,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      },
 
-        data: detailPresentation
-      }).then((response) => {
-        alert("Presentation has been updated");
-      });
-    }
+      data: detailPresentation
+    }).then((response) => {
+      alert("Presentation has been updated");
+    });
   }
   useEffect(() => {
     axiosPrivate({
@@ -86,7 +81,6 @@ function NewPresentation({
       url: `${process.env.REACT_APP_API_SERVER}/presentation/get/${id}`
     })
       .then((response) => {
-        console.log(response.data.slides[0]);
         setCurrentSlide(response.data.slides[0]);
         setPresentation(response.data);
       })
@@ -97,8 +91,9 @@ function NewPresentation({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const addSlide = (event: any) => {
-    const newSlide: SlideDTO = {
+  const addMutipleChoice = (event: any) => {
+    const newSlide: MutipleChoiceDTO = {
+      type: 1,
       question: "",
       correct: "A",
       idx: detailPresentation.slides.length,
@@ -115,7 +110,34 @@ function NewPresentation({
       slides: [...presentation.slides, newSlide]
     }));
     setCurrentSlide(newSlide);
-    console.log(currentSlide);
+  };
+
+  const addHeading = (event: any) => {
+    const newSlide: HeadingDTO = {
+      idx: detailPresentation.slides.length,
+      type: 2,
+      heading: ""
+    };
+    setPresentation((presentation) => ({
+      ...presentation,
+      slides: [...presentation.slides, newSlide]
+    }));
+    setCurrentSlide(newSlide);
+  };
+
+  const addParagraph = (event: any) => {
+    const newSlide: ParagraphDTO = {
+      type: 3,
+      idx: detailPresentation.slides.length,
+
+      heading: "",
+      paragraph: ""
+    };
+    setPresentation((presentation) => ({
+      ...presentation,
+      slides: [...presentation.slides, newSlide]
+    }));
+    setCurrentSlide(newSlide);
   };
 
   const changeSlide = (idx: number) => {
@@ -125,7 +147,6 @@ function NewPresentation({
 
   const present = () => {
     const game = Math.floor(Math.random() * 10000);
-    console.log(game);
     // Backend
     axiosPrivate({
       method: "post",
@@ -151,23 +172,25 @@ function NewPresentation({
       />
       <Row className="mt-2">
         <SlideBar
-          addSlide={addSlide}
+          addMutipleChoice={addMutipleChoice}
+          addHeading={addHeading}
+          addParagraph={addParagraph}
           detailPresentation={detailPresentation}
           currentSlide={currentSlide}
           changeSlide={changeSlide}
         />
         <Body currentSlide={currentSlide} />
-        <SlideEdit
-          currentSlide={currentSlide}
-          detailPresentation={detailPresentation}
-          setCurrentSlide={setCurrentSlide}
-          setPresentation={setPresentation}
-          register={register}
-          handleSlide={handleSlide}
-        />
+        <Col lg={3}>
+          <SlideEdit
+            currentSlide={currentSlide}
+            detailPresentation={detailPresentation}
+            setCurrentSlide={setCurrentSlide}
+            setPresentation={setPresentation}
+          />
+        </Col>
       </Row>
     </Container>
   );
 }
 
-export default NewPresentation;
+export default Presentation;

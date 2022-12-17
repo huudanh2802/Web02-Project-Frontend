@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
-import "../../../index.css";
+import "../../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Lobby({

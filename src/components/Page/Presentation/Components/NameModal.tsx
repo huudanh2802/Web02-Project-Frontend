@@ -6,7 +6,7 @@ import {
   UseFormHandleSubmit,
   FieldValues
 } from "react-hook-form";
-import PresentationDTO from "../../../../dtos/PresentationDTO";
+import { PresentationDTO } from "../../../../dtos/PresentationDTO";
 
 function NameModal({
   show,

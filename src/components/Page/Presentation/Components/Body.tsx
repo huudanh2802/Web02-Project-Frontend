@@ -27,7 +27,7 @@ function Body({ currentSlide }: { currentSlide: Slide }) {
   };
 
   return (
-    <Col lg={8}>
+    <Col>
       <Container className="slide-container" style={{ padding: "16px" }}>
         {setCurrentSlideType()}
       </Container>

@@ -1,0 +1,93 @@
+.game-container {
+  height: 100vh;
+}
+
+.game-container-primary {
+  background-color: #4bb8ad;
+}
+
+.game-container-success {
+  background-color: yellowgreen;
+}
+
+.game-container-failed {
+  background-color: crimson;
+}
+
+.game-question {
+  background-color: white;
+  margin: 0 12px;
+  padding-top: 16px;
+  padding-bottom: 8px;
+  border-radius: 8px;
+}
+
+.fab {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+	text-align:center;
+  font-size: 32px;
+}
+
+.fab-noti {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  bottom: 88px;
+  right: 28px;
+	text-align:center;
+  font-size: 12px;
+  block-size: fit-content;
+  background-color: crimson;
+  color: white;
+  font-weight: bold;
+  padding: 4px 8px;
+}
+
+.game-chatbox {
+  background-color: white;
+  height: 100%;
+}
+
+.game-chat {
+  height: 90%;
+  margin: 0 0px;
+}
+
+.game-chat-list {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.tag {
+  background: #cccccc;
+  border-radius: 50px;
+  font-size: 12px;
+  margin: 0;
+  color: #fff;
+  padding: 2px 10px;
+  margin-top: 8px;
+}
+
+.tag-gray {
+  background-color: #92a6a9;
+}
+.tag-teal {
+  background-color: #318F9B;
+}
+
+.tag-gold {
+  background-color: #f6c961;
+  font-weight: bold;
+  color: black;
+}
+
+.tag-own {
+  background-color: white;
+  color: black;
+}

@@ -1,16 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { Button, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Button, Col, Row } from "react-bootstrap";
 import {
-  UseFormRegister,
+  FieldValues,
   UseFormHandleSubmit,
-  FieldValues
+  UseFormRegister
 } from "react-hook-form";
-import { FaPlay, FaArrowLeft, FaSave, FaEdit } from "react-icons/fa";
-import PresentationDTO, {
-  PresentationDTOV2
-} from "../../../../dtos/PresentationDTO";
+import { FaArrowLeft, FaEdit, FaPlay, FaSave } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { PresentationDTOV2 } from "../../../../dtos/PresentationDTO";
 
 import NameModal from "./NameModal";
 

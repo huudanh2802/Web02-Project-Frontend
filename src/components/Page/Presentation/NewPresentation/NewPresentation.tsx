@@ -1,25 +1,23 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo, useEffect } from "react";
+import { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useParams, useNavigate } from "react-router";
-import PresentationDTO, {
+import { useNavigate } from "react-router";
+import {
   HeadingDTO,
   MutipleChoiceDTO,
   ParagraphDTO,
   PresentationDTOV2,
-  Slide,
-  SlideDTO
+  Slide
 } from "../../../../dtos/PresentationDTO";
-import { nextChar } from "../../../../helpers/functions";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 
-import TopBar from "../Components/TopBar";
-import SlideBar from "../Components/SlideBar";
 import Body from "../Components/Body";
+import SlideBar from "../Components/SlideBar";
 import SlideEdit from "../Components/SlideEdit";
+import TopBar from "../Components/TopBar";
 
 import "../Presentation.css";
 

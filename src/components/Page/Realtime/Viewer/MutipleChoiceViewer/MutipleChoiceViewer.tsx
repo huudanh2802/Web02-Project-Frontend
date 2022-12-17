@@ -1,43 +1,35 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
-import { Socket } from "socket.io-client";
+import React, { useEffect, useState } from "react";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import Answer from "./Answer";
-import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
-import { axiosPrivate } from "../../../token/axiosPrivate";
 
-function Game({
-  username,
+import { Row, Col } from "react-bootstrap";
+import { Socket } from "socket.io-client";
+import {
+  MutipleChoiceDTO,
+  PresentationDTOV2,
+  Slide
+} from "../../../../../dtos/PresentationDTO";
+import Answer from "./Answer";
+
+export default function MutipleChoiceAnswer({
+  slide,
+  idx,
+  socket,
+  presentation,
   game,
-  socket
+  setIdx,
+  setSlide
 }: {
-  username: string;
-  game: string;
+  slide: MutipleChoiceDTO;
+  idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  presentation: PresentationDTOV2;
+  game: string;
+  setIdx: React.Dispatch<React.SetStateAction<number>>;
+  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
 }) {
-  const { presentationId, id } = useParams();
-  const [presentation, setPresentation] = useState<PresentationDTO>();
-  const [slide, setSlide] = useState<SlideDTO>();
-  const [idx, setIdx] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [answer, setAnswer] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    axiosPrivate({
-      method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/game/get/${presentationId}`
-    }).then((response) => {
-      setPresentation(response.data);
-      setSlide(response.data.slides[idx]);
-      console.log(response.data);
-    });
-  }, [idx, presentationId]);
-
   useEffect(() => {
     socket.on("show_answer", () => {
       setShowAnswer(true);
@@ -50,37 +42,14 @@ function Game({
       setAnswer("");
       setSubmitted(false);
     });
-
-    socket.on("end_game", () => {
-      alert("Host has ended the game");
-      socket.emit("leave_game", { username, game });
-      if (localStorage.getItem("fullname") === null) {
-        navigate("/join");
-      } else {
-        navigate("/group/grouplist");
-      }
-    });
-
-    socket.on("finish_game", () => {
-      alert("Game has ended");
-      socket.emit("leave_game", { username, game });
-      if (localStorage.getItem("fullname") === null) {
-        navigate("/join");
-      } else {
-        navigate("/group/grouplist");
-      }
-    });
-
     return () => {
       socket.off("show_answer");
       socket.off("next_question");
-      socket.off("end_game");
-      socket.off("finish_game");
     };
-  }, [idx, presentation?.slides, socket, username, game, navigate]);
+  }, [idx, presentation?.slides, setIdx, setSlide, socket]);
 
   return (
-    <Container fluid>
+    <>
       <Row className="mt-4 mb-4" style={{ textAlign: "center" }}>
         <Col>
           <h1 style={{ fontWeight: "bold" }}>
@@ -125,8 +94,6 @@ function Game({
           <h2>Your answer is correct</h2>
         </div>
       )}
-    </Container>
+    </>
   );
 }
-
-export default Game;

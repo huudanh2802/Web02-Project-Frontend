@@ -4,13 +4,6 @@ export interface AnswerDTO {
   placeHolder: string;
 }
 
-export interface SlideDTO {
-  idx: number;
-  question: string;
-  correct: string;
-  answers: AnswerDTO[];
-}
-
 export type SlideDTOV2 = {
   idx: number;
 };
@@ -36,11 +29,6 @@ export type ParagraphDTO = SlideDTOV2 & {
 
 export type Slide = MutipleChoiceDTO | HeadingDTO | ParagraphDTO;
 
-export default interface PresentationDTO {
-  name: string;
-  groupId: string;
-  slides: SlideDTO[];
-}
 export interface PresentationDTOV2 {
   name: string;
   creator: string;

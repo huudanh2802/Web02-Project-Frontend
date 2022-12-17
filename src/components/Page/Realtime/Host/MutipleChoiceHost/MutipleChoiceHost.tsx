@@ -1,53 +1,64 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
-import { Socket } from "socket.io-client";
+
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Row, Tooltip } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Socket } from "socket.io-client";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer
-} from "recharts";
+  MutipleChoiceDTO,
+  PresentationDTOV2,
+  Slide
+} from "../../../../../dtos/PresentationDTO";
 import AnswerHost from "./AnswerHost";
-import PresentationDTO, { SlideDTO } from "../../../dtos/PresentationDTO";
-import { axiosPrivate } from "../../../token/axiosPrivate";
 
-function GameHost({
+interface AnswerCounter {
+  id: string;
+  count: number;
+}
+export default function MutipleChoiceHost({
+  slide,
+  idx,
   socket,
-  game
+  presentation,
+  game,
+  setIdx,
+  setSlide
 }: {
+  slide: MutipleChoiceDTO;
+  idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  presentation: PresentationDTOV2;
   game: string;
+  setIdx: React.Dispatch<React.SetStateAction<number>>;
+  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
 }) {
-  interface AnswerCounter {
-    id: string;
-    count: number;
-  }
-
   const { presentationId } = useParams();
-  const [presentation, setPresentation] = useState<PresentationDTO>();
-  const [slide, setSlide] = useState<SlideDTO>();
-  const [idx, setIdx] = useState(0);
+
   const [answer, setAnswer] = useState<AnswerCounter[]>([]);
   const [showAnswer, setShowAnswer] = useState(false);
+  // Button handling
+  const handleShowAnswer = () => {
+    setShowAnswer(true);
+    socket.emit("show_answer", { game, slide });
+  };
   const navigate = useNavigate();
 
-  // Game handling
-  useEffect(() => {
-    axiosPrivate({
-      method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/game/get/${presentationId}`
-    }).then((response) => {
-      setPresentation(response.data);
-      setSlide(response.data.slides[idx]);
-      console.log(response.data);
-    });
-  }, [idx, presentationId]);
+  const handleNextQuestion = () => {
+    setShowAnswer(false);
+    setAnswer([]);
+    setIdx(idx + 1);
+    setSlide(presentation?.slides[idx]);
+    socket.emit("next_question", { game, slide });
+  };
+
+  const handleFinishGame = () => {
+    alert("End of presentation");
+    socket.emit("finish_game", { game });
+    navigate(`/group/presentation/${presentationId}`);
+  };
 
   useEffect(() => {
     socket.on("submit_answer", (data: { id: string }) => {
@@ -67,29 +78,8 @@ function GameHost({
       socket.off("submit_answer");
     };
   }, [answer, socket]);
-
-  // Button handling
-  const handleShowAnswer = () => {
-    setShowAnswer(true);
-    socket.emit("show_answer", { game, slide });
-  };
-
-  const handleNextQuestion = () => {
-    setShowAnswer(false);
-    setAnswer([]);
-    setIdx(idx + 1);
-    setSlide(presentation?.slides[idx]);
-    socket.emit("next_question", { game, slide });
-  };
-
-  const handleFinishGame = () => {
-    alert("End of presentation");
-    socket.emit("finish_game", { game });
-    navigate(`/group/presentation/${presentationId}`);
-  };
-
   return (
-    <Container fluid>
+    <>
       <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
         <Col>
           <h1 style={{ fontWeight: "bold" }}>
@@ -130,7 +120,7 @@ function GameHost({
             presentation &&
             idx + 1 < presentation.slides.length && (
               <Button variant="primary" onClick={handleNextQuestion}>
-                Next question
+                Next slide
               </Button>
             )}
           {showAnswer &&
@@ -142,8 +132,6 @@ function GameHost({
             )}
         </Col>
       </Row>
-    </Container>
+    </>
   );
 }
-
-export default GameHost;

@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 import { axiosPrivate } from "../../../token/axiosPrivate";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AutoJoin() {
   const navigate = useNavigate();
@@ -15,14 +17,39 @@ export default function AutoJoin() {
       }
     }).then((response) => {
       if (response.status === 200) {
-        alert("Join Successfully");
-        navigate(`/group/detail/${response.data}`);
+        toast.success("Join Successfully!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+        setTimeout(() => {
+          navigate(`/group/detail/${response.data}`);
+        });
       } else {
-        alert("Join failed");
-        navigate("/");
+        toast.error("Join failed!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2500);
       }
     });
   }, [groupId, navigate, userId]);
 
-  return <div />;
+  return (
+    <>
+      <ToastContainer />
+      <div />
+    </>
+  );
 }

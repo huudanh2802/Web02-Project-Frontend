@@ -6,6 +6,8 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "../../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -41,7 +43,15 @@ function Lobby({
 
   useEffect(() => {
     socket.on("end_game", () => {
-      alert("Host has ended the game");
+      toast("Host has ended the game", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"
+      });
       socket.emit("leave_game", { username, game });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");
@@ -56,30 +66,33 @@ function Lobby({
   }, []);
 
   return (
-    <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
-      <Row className="vh-100 d-flex justify-content-center align-items-center">
-        <Col md={6} lg={4} xs={8}>
-          <Card className="shadow">
-            <Card.Body>
-              <div className="mb-3 mt-md-4 mx-4">
-                <h4 className="fw-bold" style={{ textAlign: "center" }}>
-                  You&apos;re in! Check for your name!
-                </h4>
-                <p style={{ textAlign: "center" }}>
-                  Also, please wait until the host starts the game
-                </p>
-              </div>
+    <>
+      <ToastContainer />
+      <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
+        <Row className="vh-100 d-flex justify-content-center align-items-center">
+          <Col md={6} lg={4} xs={8}>
+            <Card className="shadow">
+              <Card.Body>
+                <div className="mb-3 mt-md-4 mx-4">
+                  <h4 className="fw-bold" style={{ textAlign: "center" }}>
+                    You&apos;re in! Check for your name!
+                  </h4>
+                  <p style={{ textAlign: "center" }}>
+                    Also, please wait until the host starts the game
+                  </p>
+                </div>
 
-              <div className="d-grid mt-4">
-                <Button variant="danger" onClick={leaveGame}>
-                  Leave game
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+                <div className="d-grid mt-4">
+                  <Button variant="danger" onClick={leaveGame}>
+                    Leave game
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 

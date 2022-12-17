@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Card, Accordion, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { removeItem } from "../../../helpers/functions";
 import MemberDTO from "../../../dtos/MemberDTO";
 import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
 import ModifyGroupDTO from "../../../dtos/ModifyGroupDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
+import "react-toastify/dist/ReactToastify.css";
 
 function UserKard({
   groupMember,
@@ -48,11 +50,26 @@ function UserKard({
           removeItem(groupMember.member, info);
           groupMember.coowner.push(info);
         }
-        alert("User's role has been changed.");
+        toast.success("User's role has been changed.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
         setGroupMember(response.data);
       } else {
-        // eslint-disable-next-line no-alert
-        alert(response);
+        toast(`${response}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
       }
     });
   };
@@ -71,11 +88,26 @@ function UserKard({
       if (response.status === 200) {
         if (roleId === 1) removeItem(groupMember.coowner, info);
         else removeItem(groupMember.member, info);
-        alert("User has been deleted");
+        toast.success("User has been deleted.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
         setGroupMember(response.data);
       } else {
-        // eslint-disable-next-line no-alert
-        alert(response);
+        toast(`${response}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
       }
     });
   };
@@ -91,50 +123,53 @@ function UserKard({
   }, [roleId]);
 
   return (
-    <Card className="user-kard">
-      <div className="kard-body">
-        <img
-          src="/assets/avatar_alt.svg"
-          style={{ width: 48, height: 48, margin: "0 auto 16px auto" }}
-          alt="avatar"
-        />
-        <header className="kard-center">{info.fullname}</header>
-        <span className={`tag tag-${tag}`} style={{ margin: "4px auto" }}>
-          {role}
-        </span>
-      </div>
-      {owner && role !== "Owner" && (
-        <Accordion>
-          <Accordion.Item eventKey="0">
-            <Accordion.Header />
-            <Accordion.Body>
-              <div className="d-grid gap-2">
-                <Button variant="primary" onClick={redirectProfile}>
-                  Info
-                </Button>
-                {owner && role !== "Owner" && (
-                  <Button variant="outline-dark" onClick={setRoleMember}>
-                    Set to {role === "Member" ? "Co-owner" : "Member"}
-                  </Button>
-                )}
-                {owner && role !== "Owner" && (
-                  <Button variant="danger" onClick={kick}>
-                    Kick
-                  </Button>
-                )}
-              </div>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-      )}
-      {(!owner || (owner && role === "Owner")) && (
-        <div className="d-grid" style={{ margin: "0 16px 16px" }}>
-          <Button variant="primary" onClick={redirectProfile}>
-            Info
-          </Button>
+    <>
+      <ToastContainer />
+      <Card className="user-kard">
+        <div className="kard-body">
+          <img
+            src="/assets/avatar_alt.svg"
+            style={{ width: 48, height: 48, margin: "0 auto 16px auto" }}
+            alt="avatar"
+          />
+          <header className="kard-center">{info.fullname}</header>
+          <span className={`tag tag-${tag}`} style={{ margin: "4px auto" }}>
+            {role}
+          </span>
         </div>
-      )}
-    </Card>
+        {owner && role !== "Owner" && (
+          <Accordion>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header />
+              <Accordion.Body>
+                <div className="d-grid gap-2">
+                  <Button variant="primary" onClick={redirectProfile}>
+                    Info
+                  </Button>
+                  {owner && role !== "Owner" && (
+                    <Button variant="outline-dark" onClick={setRoleMember}>
+                      Set to {role === "Member" ? "Co-owner" : "Member"}
+                    </Button>
+                  )}
+                  {owner && role !== "Owner" && (
+                    <Button variant="danger" onClick={kick}>
+                      Kick
+                    </Button>
+                  )}
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+        )}
+        {(!owner || (owner && role === "Owner")) && (
+          <div className="d-grid" style={{ margin: "0 16px 16px" }}>
+            <Button variant="primary" onClick={redirectProfile}>
+              Info
+            </Button>
+          </div>
+        )}
+      </Card>
+    </>
   );
 }
 

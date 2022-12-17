@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
 import { axiosPrivate } from "../../../token/axiosPrivate";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function MyProfile() {
   const [user, setUser] = useState({
@@ -33,7 +35,15 @@ export default function MyProfile() {
     }).then((response) => {
       console.log(response.data);
       setUser(response.data);
-      alert("Name has been updated");
+      toast.success("Name has been updated", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"
+      });
     });
   }
   useEffect(() => {
@@ -42,57 +52,60 @@ export default function MyProfile() {
   }, []);
 
   return (
-    <Container
-      style={{
-        background: "#318F9B",
-        width: "1100px",
-        height: "300px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column"
-      }}
-    >
+    <>
+      <ToastContainer />
       <Container
         style={{
-          background: "white",
-          width: "800px",
-          height: "227px",
-          borderRadius: "32px"
+          background: "#318F9B",
+          width: "1100px",
+          height: "300px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column"
         }}
       >
-        <Row>
-          <Col xs={4}>
-            <img src="/assets/profilePicture.svg" />
-          </Col>
-          <Col>
-            <Row style={{ marginTop: "50px" }}>
-              <span style={{ fontWeight: "bold", fontSize: "22px" }}>
-                {user.email}
-              </span>
-            </Row>
-            <Row>
-              <span>Created At: {user.date}</span>
-            </Row>
-            <Row>
-              <span>Fullname: {user.fullname}</span>
-            </Row>
-            <Row>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <input
-                  placeholder="Update name"
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...register("updatedName", { required: true })}
-                  style={{ width: "200px", marginRight: "20px" }}
-                />
-                <Button variant="secondary" type="submit">
-                  Submit
-                </Button>
-              </form>
-            </Row>
-          </Col>
-        </Row>
+        <Container
+          style={{
+            background: "white",
+            width: "800px",
+            height: "227px",
+            borderRadius: "32px"
+          }}
+        >
+          <Row>
+            <Col xs={4}>
+              <img src="/assets/profilePicture.svg" />
+            </Col>
+            <Col>
+              <Row style={{ marginTop: "50px" }}>
+                <span style={{ fontWeight: "bold", fontSize: "22px" }}>
+                  {user.email}
+                </span>
+              </Row>
+              <Row>
+                <span>Created At: {user.date}</span>
+              </Row>
+              <Row>
+                <span>Fullname: {user.fullname}</span>
+              </Row>
+              <Row>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <input
+                    placeholder="Update name"
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...register("updatedName", { required: true })}
+                    style={{ width: "200px", marginRight: "20px" }}
+                  />
+                  <Button variant="secondary" type="submit">
+                    Submit
+                  </Button>
+                </form>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </Container>
-    </Container>
+    </>
   );
 }

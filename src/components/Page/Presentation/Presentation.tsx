@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-alert */
 
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React, { useEffect, useState } from "react";
@@ -9,6 +8,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { Socket } from "socket.io-client";
+import { ToastContainer, toast } from "react-toastify";
 import {
   HeadingDTO,
   MutipleChoiceDTO,
@@ -16,6 +16,7 @@ import {
   PresentationDTO,
   SlideDTO
 } from "../../../dtos/PresentationDTO";
+import "react-toastify/dist/ReactToastify.css";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
 import Body from "./Components/Body";
@@ -72,7 +73,15 @@ function Presentation({
 
       data: detailPresentation
     }).then((response) => {
-      alert("Presentation has been updated");
+      toast.success("Presentation has been updated", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"
+      });
     });
   }
   useEffect(() => {
@@ -85,8 +94,18 @@ function Presentation({
         setPresentation(response.data);
       })
       .catch((err) => {
-        alert(err);
-        navigate("/");
+        toast.error(err, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2500);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -161,35 +180,38 @@ function Presentation({
   };
 
   return (
-    <Container fluid>
-      <TopBar
-        sendSlide={() => sendSlide()}
-        present={present}
-        detailPresentation={detailPresentation}
-        setPresentation={setPresentation}
-        registerName={registerName}
-        handleSubmitName={handleSubmitName}
-      />
-      <Row className="mt-2">
-        <SlideBar
-          addMutipleChoice={addMutipleChoice}
-          addHeading={addHeading}
-          addParagraph={addParagraph}
+    <>
+      <ToastContainer />
+      <Container fluid>
+        <TopBar
+          sendSlide={() => sendSlide()}
+          present={present}
           detailPresentation={detailPresentation}
-          currentSlide={currentSlide}
-          changeSlide={changeSlide}
+          setPresentation={setPresentation}
+          registerName={registerName}
+          handleSubmitName={handleSubmitName}
         />
-        <Body currentSlide={currentSlide} />
-        <Col lg={3}>
-          <SlideEdit
-            currentSlide={currentSlide}
+        <Row className="mt-2">
+          <SlideBar
+            addMutipleChoice={addMutipleChoice}
+            addHeading={addHeading}
+            addParagraph={addParagraph}
             detailPresentation={detailPresentation}
-            setCurrentSlide={setCurrentSlide}
-            setPresentation={setPresentation}
+            currentSlide={currentSlide}
+            changeSlide={changeSlide}
           />
-        </Col>
-      </Row>
-    </Container>
+          <Body currentSlide={currentSlide} />
+          <Col lg={3}>
+            <SlideEdit
+              currentSlide={currentSlide}
+              detailPresentation={detailPresentation}
+              setCurrentSlide={setCurrentSlide}
+              setPresentation={setPresentation}
+            />
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 

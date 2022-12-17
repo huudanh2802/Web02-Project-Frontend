@@ -1,22 +1,16 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
-import React from "react";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
-import {
-  MutipleChoiceDTO,
-  PresentationDTOV2,
-  Slide
-} from "../../../../dtos/PresentationDTO";
+import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 
-import MutipleChoiceHost from "./MutipleChoiceHost/MutipleChoiceHost";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
-import HeadingHost from "./HeadingHost/HeadingHost";
-import ParagraphHost from "./ParaphaphHost/Paragraph.Host";
-import SlideHost from "./SlideHost";
+import ChatBox from "../Components/Chat/ChatBox";
+import "../Realtime.css";
+import BodyHost from "./BodyHost";
 
 function GameHost({
   socket,
@@ -26,8 +20,18 @@ function GameHost({
   game: string;
 }) {
   const { presentationId } = useParams();
-  const [presentation, setPresentation] = useState<PresentationDTOV2>();
-  const [slide, setSlide] = useState<Slide>({
+  const username = localStorage.getItem("fullname");
+  const [newChatCount, setNewChatCount] = useState(0);
+
+  // Chat box handling
+  const [showChat, setShowChat] = useState(false);
+  const handleShowChat = () => {
+    setShowChat(true);
+    setNewChatCount(0);
+  };
+  const handleCloseChat = () => setShowChat(false);
+  const [presentation, setPresentation] = useState<PresentationDTO>();
+  const [slide, setSlide] = useState<SlideDTO>({
     type: 1,
     question: "",
     idx: 0,
@@ -55,8 +59,8 @@ function GameHost({
   }, [idx, presentationId]);
 
   return (
-    <Container fluid>
-      <SlideHost
+    <Container className="game-container game-container-primary" fluid>
+      <BodyHost
         slide={slide}
         idx={idx}
         socket={socket}
@@ -64,6 +68,17 @@ function GameHost({
         game={game}
         setIdx={setIdx}
         setSlide={setSlide}
+      />
+      <ChatBox
+        username={username!}
+        userRole={0}
+        game={game}
+        socket={socket}
+        showChat={showChat}
+        handleShowChat={handleShowChat}
+        handleCloseChat={handleCloseChat}
+        newChatCount={newChatCount}
+        setNewChatCount={setNewChatCount}
       />
     </Container>
   );

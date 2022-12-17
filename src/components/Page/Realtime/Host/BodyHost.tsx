@@ -1,12 +1,12 @@
 import React from "react";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Socket } from "socket.io-client";
-import { Slide, PresentationDTOV2 } from "../../../../dtos/PresentationDTO";
+import { SlideDTO, PresentationDTO } from "../../../../dtos/PresentationDTO";
 import HeadingHost from "./HeadingHost/HeadingHost";
 import MutipleChoiceHost from "./MutipleChoiceHost/MutipleChoiceHost";
-import ParagraphHost from "./ParaphaphHost/Paragraph.Host";
+import ParagraphHost from "./ParaphaphHost/ParagraphHost";
 
-export default function SlideHost({
+export default function BodyHost({
   slide,
   idx,
   socket,
@@ -15,13 +15,13 @@ export default function SlideHost({
   setIdx,
   setSlide
 }: {
-  slide: Slide;
+  slide: SlideDTO;
   idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-  presentation: PresentationDTOV2;
+  presentation: PresentationDTO;
   game: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
-  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
+  setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
 }) {
   switch (slide.type) {
     case 1: {

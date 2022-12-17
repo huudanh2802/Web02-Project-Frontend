@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React from "react";
 import { Button, Col, Row } from "react-bootstrap";
@@ -5,9 +6,10 @@ import { useNavigate, useParams } from "react-router";
 import { Socket } from "socket.io-client";
 import {
   ParagraphDTO,
-  PresentationDTOV2,
-  Slide
+  PresentationDTO,
+  SlideDTO
 } from "../../../../../dtos/PresentationDTO";
+import "../../Realtime.css";
 
 export default function ParagraphHost({
   slide,
@@ -21,10 +23,10 @@ export default function ParagraphHost({
   slide: ParagraphDTO;
   idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-  presentation: PresentationDTOV2;
+  presentation: PresentationDTO;
   game: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
-  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
+  setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
 }) {
   const { presentationId } = useParams();
 
@@ -46,20 +48,20 @@ export default function ParagraphHost({
 
   return (
     <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
-      <Col>
-        <h1 style={{ fontWeight: "bold" }}>{slide?.heading}</h1>
-        <h2>{slide?.paragraph}</h2>
-        {presentation && idx + 1 < presentation.slides.length && (
-          <Button variant="primary" onClick={handleNextSlide}>
-            Next slide
-          </Button>
-        )}
-        {presentation && idx + 1 >= presentation.slides.length && (
-          <Button variant="dark" onClick={handleFinishGame}>
-            Finish game
-          </Button>
-        )}
+      <Col className="game-question">
+        <h2 style={{ fontWeight: "bold" }}>{slide?.heading}</h2>
+        <h3>{slide?.paragraph}</h3>
       </Col>
+      {presentation && idx + 1 < presentation.slides.length && (
+        <Button variant="primary" onClick={handleNextSlide}>
+          Next slide
+        </Button>
+      )}
+      {presentation && idx + 1 >= presentation.slides.length && (
+        <Button variant="dark" onClick={handleFinishGame}>
+          Finish game
+        </Button>
+      )}
     </Row>
   );
 }

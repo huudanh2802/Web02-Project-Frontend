@@ -5,9 +5,9 @@ import { Form, InputGroup, Button } from "react-bootstrap";
 import { UseFormRegister, UseFormHandleSubmit, useForm } from "react-hook-form";
 import Select from "react-select";
 import {
-  PresentationDTOV2,
+  PresentationDTO,
   MutipleChoiceDTO,
-  Slide
+  SlideDTO
 } from "../../../../dtos/PresentationDTO";
 import { nextChar } from "../../../../helpers/functions";
 
@@ -18,9 +18,9 @@ export default function EditMutipleChoice({
   setPresentation
 }: {
   currentSlide: MutipleChoiceDTO;
-  detailPresentation: PresentationDTOV2;
+  detailPresentation: PresentationDTO;
   setCurrentSlide: (event: any) => void;
-  setPresentation: (value: React.SetStateAction<PresentationDTOV2>) => void;
+  setPresentation: (value: React.SetStateAction<PresentationDTO>) => void;
 }) {
   const {
     register,

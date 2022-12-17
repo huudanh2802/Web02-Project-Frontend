@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button, Col } from "react-bootstrap";
 import Slider from "react-slick";
-import { PresentationDTOV2, Slide } from "../../../../dtos/PresentationDTO";
+import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 
 import "../Presentation.css";
 import SlideTypeModal from "./SlideTypeModal";
@@ -19,8 +19,8 @@ function SlideBar({
   addMutipleChoice: (event: any) => void;
   addHeading: (event: any) => void;
   addParagraph: (event: any) => void;
-  detailPresentation: PresentationDTOV2;
-  currentSlide: Slide;
+  detailPresentation: PresentationDTO;
+  currentSlide: SlideDTO;
   changeSlide: (idx: number) => void;
 }) {
   const len = detailPresentation.slides.length;

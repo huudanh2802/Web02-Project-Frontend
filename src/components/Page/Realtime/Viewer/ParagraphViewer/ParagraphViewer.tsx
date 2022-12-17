@@ -4,8 +4,8 @@ import { Col, Row } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import {
   ParagraphDTO,
-  PresentationDTOV2,
-  Slide
+  PresentationDTO,
+  SlideDTO
 } from "../../../../../dtos/PresentationDTO";
 
 export default function ParagraphViewer({
@@ -19,9 +19,9 @@ export default function ParagraphViewer({
   slide: ParagraphDTO;
   idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-  presentation: PresentationDTOV2;
+  presentation: PresentationDTO;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
-  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
+  setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
 }) {
   // Button handling
 
@@ -37,9 +37,9 @@ export default function ParagraphViewer({
 
   return (
     <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
-      <Col>
-        <h1 style={{ fontWeight: "bold" }}>{slide?.heading}</h1>
-        <h2>{slide?.paragraph}</h2>
+      <Col className="game-question">
+        <h2 style={{ fontWeight: "bold" }}>{slide?.heading}</h2>
+        <h3>{slide?.paragraph}</h3>
       </Col>
     </Row>
   );

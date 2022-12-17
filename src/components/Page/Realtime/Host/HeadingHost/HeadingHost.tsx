@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React from "react";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Button, Col, Row } from "react-bootstrap";
@@ -5,8 +6,8 @@ import { useNavigate, useParams } from "react-router";
 import { Socket } from "socket.io-client";
 import {
   HeadingDTO,
-  PresentationDTOV2,
-  Slide
+  PresentationDTO,
+  SlideDTO
 } from "../../../../../dtos/PresentationDTO";
 
 export default function HeadingHost({
@@ -21,10 +22,10 @@ export default function HeadingHost({
   slide: HeadingDTO;
   idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-  presentation: PresentationDTOV2;
+  presentation: PresentationDTO;
   game: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
-  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
+  setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
 }) {
   const { presentationId } = useParams();
 
@@ -47,7 +48,9 @@ export default function HeadingHost({
   return (
     <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
       <Col>
-        <h1 style={{ fontWeight: "bold" }}>{slide?.heading}</h1>
+        <Col className="game-question">
+          <h3 style={{ fontWeight: "bold" }}>{slide?.heading}</h3>
+        </Col>{" "}
         {presentation && idx + 1 < presentation.slides.length && (
           <Button variant="primary" onClick={handleNextSlide}>
             Next slide

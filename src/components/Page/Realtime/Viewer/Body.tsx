@@ -1,27 +1,29 @@
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React from "react";
 import { Socket } from "socket.io-client";
-import { PresentationDTOV2, Slide } from "../../../../dtos/PresentationDTO";
+import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 import HeadingViewer from "./HeadingViewer/HeadingViewer";
 import MutipleChoiceViewer from "./MutipleChoiceViewer/MutipleChoiceViewer";
 import ParagraphViewer from "./ParagraphViewer/ParagraphViewer";
 
-export default function SlideViewer({
+export default function Body({
   slide,
   idx,
   socket,
   presentation,
   game,
   setIdx,
-  setSlide
+  setSlide,
+  setBg
 }: {
-  slide: Slide;
+  slide: SlideDTO;
   idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-  presentation: PresentationDTOV2;
+  presentation: PresentationDTO;
   game: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
-  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
+  setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
+  setBg: React.Dispatch<React.SetStateAction<string>>;
 }) {
   switch (slide.type) {
     case 1: {
@@ -34,6 +36,7 @@ export default function SlideViewer({
           game={game}
           setIdx={setIdx}
           setSlide={setSlide}
+          setBg={setBg}
         />
       );
     }

@@ -4,9 +4,10 @@ import { Col, Row } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import {
   HeadingDTO,
-  PresentationDTOV2,
-  Slide
+  PresentationDTO,
+  SlideDTO
 } from "../../../../../dtos/PresentationDTO";
+import "../../Realtime.css";
 
 export default function HeadingViewer({
   slide,
@@ -19,9 +20,9 @@ export default function HeadingViewer({
   slide: HeadingDTO;
   idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-  presentation: PresentationDTOV2;
+  presentation: PresentationDTO;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
-  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
+  setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
 }) {
   // Button handling
 
@@ -37,9 +38,9 @@ export default function HeadingViewer({
 
   return (
     <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
-      <Col>
-        <h1 style={{ fontWeight: "bold" }}>{slide?.heading}</h1>
-      </Col>
+      <Col className="game-question">
+        <h3 style={{ fontWeight: "bold" }}>{slide?.heading}</h3>
+      </Col>{" "}
     </Row>
   );
 }

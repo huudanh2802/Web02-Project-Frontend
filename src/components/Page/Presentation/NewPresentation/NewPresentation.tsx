@@ -9,8 +9,8 @@ import {
   HeadingDTO,
   MutipleChoiceDTO,
   ParagraphDTO,
-  PresentationDTOV2,
-  Slide
+  PresentationDTO,
+  SlideDTO
 } from "../../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 
@@ -24,7 +24,7 @@ import "../Presentation.css";
 function NewPresentation() {
   const localId = localStorage.getItem("id");
   const navigate = useNavigate();
-  const [currentSlide, setCurrentSlide] = useState<Slide>({
+  const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
     type: 1,
     question: "",
     idx: 0,
@@ -37,7 +37,7 @@ function NewPresentation() {
       }
     ]
   });
-  const [newPresentation, setNewPresentation] = useState<PresentationDTOV2>({
+  const [newPresentation, setNewPresentation] = useState<PresentationDTO>({
     name: "Presentation Name",
     creator: localId!,
     slides: [currentSlide]

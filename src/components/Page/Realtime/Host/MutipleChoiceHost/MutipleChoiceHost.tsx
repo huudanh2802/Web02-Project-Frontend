@@ -1,17 +1,26 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
+/* eslint-disable no-alert */
 
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row, Tooltip } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip
+} from "recharts";
 import { Socket } from "socket.io-client";
 import {
   MutipleChoiceDTO,
-  PresentationDTOV2,
-  Slide
+  PresentationDTO,
+  SlideDTO
 } from "../../../../../dtos/PresentationDTO";
+import "../../Realtime.css";
 import AnswerHost from "./AnswerHost";
 
 interface AnswerCounter {
@@ -30,14 +39,32 @@ export default function MutipleChoiceHost({
   slide: MutipleChoiceDTO;
   idx: number;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-  presentation: PresentationDTOV2;
+  presentation: PresentationDTO;
   game: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
-  setSlide: React.Dispatch<React.SetStateAction<Slide>>;
+  setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
 }) {
+  const answerTemplate = [
+    {
+      id: "A",
+      count: 0
+    },
+    {
+      id: "B",
+      count: 0
+    },
+    {
+      id: "C",
+      count: 0
+    },
+    {
+      id: "D",
+      count: 0
+    }
+  ];
   const { presentationId } = useParams();
 
-  const [answer, setAnswer] = useState<AnswerCounter[]>([]);
+  const [answer, setAnswer] = useState<AnswerCounter[]>(answerTemplate);
   const [showAnswer, setShowAnswer] = useState(false);
   // Button handling
   const handleShowAnswer = () => {
@@ -78,13 +105,14 @@ export default function MutipleChoiceHost({
       socket.off("submit_answer");
     };
   }, [answer, socket]);
+
   return (
-    <>
-      <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
-        <Col>
-          <h1 style={{ fontWeight: "bold" }}>
+    <Col>
+      <Row className="mt-4 mb-4" style={{ textAlign: "center" }}>
+        <Col className="game-question">
+          <h3 style={{ fontWeight: "bold" }}>
             {idx + 1}. {slide?.question}
-          </h1>
+          </h3>
         </Col>
       </Row>
       <Row sm={1} md={2} lg={2}>
@@ -104,34 +132,38 @@ export default function MutipleChoiceHost({
           <div style={{ height: "95%", marginTop: "80px" }}>
             <ResponsiveContainer width="80%" height="70%">
               <BarChart style={{ marginLeft: "12%" }} data={answer}>
-                {answer.length > 0 && <XAxis dataKey="id" />}
-                {answer.length > 0 && <YAxis allowDecimals={false} />}
-                {answer.length > 0 && <Tooltip />}
-                {answer.length > 0 && <Bar dataKey="count" fill="#4bb8ad" />}
+                {answer.length > 0 && <XAxis dataKey="id" stroke="white" />}
+                {answer.length > 0 && (
+                  <YAxis allowDecimals={false} stroke="white" />
+                )}
+                {answer.length > 0 && <Bar dataKey="count" fill="white" />}
+                {answer.length > 0 && (
+                  <Tooltip itemStyle={{ color: "black" }} />
+                )}
               </BarChart>
             </ResponsiveContainer>
           </div>
           {!showAnswer && (
-            <Button variant="outline-dark" onClick={handleShowAnswer}>
+            <Button variant="light" onClick={handleShowAnswer}>
               Show results
             </Button>
           )}
           {showAnswer &&
             presentation &&
             idx + 1 < presentation.slides.length && (
-              <Button variant="primary" onClick={handleNextQuestion}>
-                Next slide
+              <Button variant="light" onClick={handleNextQuestion}>
+                Next question
               </Button>
             )}
           {showAnswer &&
             presentation &&
             idx + 1 >= presentation.slides.length && (
-              <Button variant="dark" onClick={handleFinishGame}>
+              <Button variant="light" onClick={handleFinishGame}>
                 Finish game
               </Button>
             )}
         </Col>
       </Row>
-    </>
+    </Col>
   );
 }

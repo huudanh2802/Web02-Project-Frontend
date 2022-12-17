@@ -10,8 +10,8 @@ import {
 } from "react-hook-form";
 import {
   MutipleChoiceDTO,
-  PresentationDTOV2,
-  Slide
+  PresentationDTO,
+  SlideDTO
 } from "../../../../dtos/PresentationDTO";
 import { nextChar } from "../../../../helpers/functions";
 import EditMutipleChoice from "../EditSlideType/EditMutipleChoice";
@@ -24,10 +24,10 @@ function SlideEdit({
   setCurrentSlide,
   setPresentation
 }: {
-  currentSlide: Slide;
-  detailPresentation: PresentationDTOV2;
+  currentSlide: SlideDTO;
+  detailPresentation: PresentationDTO;
   setCurrentSlide: (event: any) => void;
-  setPresentation: (value: React.SetStateAction<PresentationDTOV2>) => void;
+  setPresentation: (value: React.SetStateAction<PresentationDTO>) => void;
 }) {
   const setCurrentSlideType = () => {
     switch (currentSlide.type) {

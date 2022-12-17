@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-alert */
+
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
@@ -11,8 +13,8 @@ import {
   HeadingDTO,
   MutipleChoiceDTO,
   ParagraphDTO,
-  PresentationDTOV2,
-  Slide
+  PresentationDTO,
+  SlideDTO
 } from "../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
@@ -32,7 +34,7 @@ function Presentation({
 }) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [currentSlide, setCurrentSlide] = useState<Slide>({
+  const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
     type: 1,
     question: "",
     idx: 0,
@@ -46,7 +48,7 @@ function Presentation({
     ]
   });
 
-  const [detailPresentation, setPresentation] = useState<PresentationDTOV2>({
+  const [detailPresentation, setPresentation] = useState<PresentationDTO>({
     name: "",
     creator: "",
     slides: [currentSlide]

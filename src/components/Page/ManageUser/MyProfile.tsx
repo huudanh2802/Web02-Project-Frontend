@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import { axiosPrivate } from "../../../token/axiosPrivate";
@@ -12,6 +12,7 @@ export default function MyProfile() {
     date: "",
     fullname: ""
   });
+
   const { register, handleSubmit } = useForm();
   const localId = localStorage.getItem("id");
 
@@ -24,6 +25,7 @@ export default function MyProfile() {
       console.log(user);
     });
   }
+
   function onSubmit(data: any) {
     axiosPrivate({
       method: "put",
@@ -36,6 +38,27 @@ export default function MyProfile() {
       console.log(response.data);
       setUser(response.data);
       toast.success("Name has been updated", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"
+      });
+    });
+  }
+
+  function OnChangePass(data: any) {
+    axiosPrivate({
+      method: "put",
+      url: `${process.env.REACT_APP_API_SERVER}/user/updatepassword`,
+      data: {
+        id: localId,
+        newPassword: data.updatedPassword
+      }
+    }).then(() => {
+      toast.success("Password has been updated", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -94,13 +117,26 @@ export default function MyProfile() {
                   <input
                     placeholder="Update name"
                     // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...register("updatedName", { required: true })}
+                    {...register("updatedName")}
                     style={{ width: "200px", marginRight: "20px" }}
                   />
                   <Button variant="secondary" type="submit">
                     Submit
                   </Button>
                 </form>
+              </Row>
+              <Row>
+                <Form onSubmit={handleSubmit(OnChangePass)}>
+                  <input
+                    placeholder="Update password"
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...register("updatedPassword")}
+                    style={{ width: "200px", marginRight: "20px" }}
+                  />
+                  <Button variant="secondary" type="submit">
+                    Submit
+                  </Button>
+                </Form>
               </Row>
             </Col>
           </Row>

@@ -31,7 +31,7 @@ function PresentationKard({
       method: "delete",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/${presentation.id}`
     }).then((response) => {
-      toast.success("User's role has been changed.", {
+      toast.success("Presentation has been deleted.", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

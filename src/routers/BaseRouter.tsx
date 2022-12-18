@@ -19,6 +19,7 @@ import Lobby from "../components/Page/Realtime/Viewer/Lobby";
 import LobbyHost from "../components/Page/Realtime/Host/LobbyHost";
 import Game from "../components/Page/Realtime/Viewer/Game";
 import GameHost from "../components/Page/Realtime/Host/GameHost";
+import ForgotPassword from "../components/Page/Authentication/ForgotPassword";
 
 // Socket IO
 const socket = io(`${process.env.REACT_APP_API_SERVER}`);
@@ -50,6 +51,7 @@ function BaseRouter() {
       </Route>
       <Route path="/login" element={<Login setUsername={setUsername} />} />
       <Route path="/signup" element={<Signup setUsername={setUsername} />} />
+      <Route path="/forget" element={<ForgotPassword />} />
       <Route path="/verification" element={<Verification />} />
       <Route path="/confirm/:token" element={<Confirm />} />
       <Route

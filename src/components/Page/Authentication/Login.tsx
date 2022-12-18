@@ -205,6 +205,14 @@ function Login({
                         </a>
                       </p>
                     </div>
+                    <div className="mt-3">
+                      <p className="mt-3 text-center">
+                        Forgot your password?{" "}
+                        <a href="/forget" className="text-primary fw-bold">
+                          Click here
+                        </a>
+                      </p>
+                    </div>
                     <hr />
                     <div className="d-grid mt-3">
                       <Button

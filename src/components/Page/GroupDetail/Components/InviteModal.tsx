@@ -26,17 +26,29 @@ function InviteModal({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/invitebyemail/${groupId}`,
       data: email
-    }).then((response: any) => {
-      toast(response.data, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light"
+    })
+      .then((response: any) => {
+        toast(response.data, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
       });
-    });
   };
 
   return (

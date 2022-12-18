@@ -15,9 +15,38 @@ export default function AutoJoin() {
       data: {
         userId
       }
-    }).then((response) => {
-      if (response.status === 200) {
-        toast.success("Join Successfully!", {
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success("Join Successfully!", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
+          setTimeout(() => {
+            navigate(`/group/detail/${response.data}`);
+          });
+        } else {
+          toast.error("Join failed!", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
+          setTimeout(() => {
+            navigate("/");
+          }, 2500);
+        }
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -26,24 +55,7 @@ export default function AutoJoin() {
           progress: undefined,
           theme: "light"
         });
-        setTimeout(() => {
-          navigate(`/group/detail/${response.data}`);
-        });
-      } else {
-        toast.error("Join failed!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
-        });
-        setTimeout(() => {
-          navigate("/");
-        }, 2500);
-      }
-    });
+      });
   }, [groupId, navigate, userId]);
 
   return (

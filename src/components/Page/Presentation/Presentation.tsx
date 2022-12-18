@@ -72,17 +72,29 @@ function Presentation({
       },
 
       data: detailPresentation
-    }).then((response) => {
-      toast.success("Presentation has been updated", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light"
+    })
+      .then((response) => {
+        toast.success("Presentation has been updated", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
       });
-    });
   }
   useEffect(() => {
     axiosPrivate({
@@ -171,12 +183,24 @@ function Presentation({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/game/newgame/`,
       data: { game, presentationId: id }
-    }).then((response) => {
-      console.log(`Game ${game} created successfully.`);
-      setGame(game.toString());
-      socket.emit("create_game", { game: game.toString(), presentation: id });
-      navigate(`/lobbyhost/${id}/${game}`);
-    });
+    })
+      .then((response) => {
+        console.log(`Game ${game} created successfully.`);
+        setGame(game.toString());
+        socket.emit("create_game", { game: game.toString(), presentation: id });
+        navigate(`/lobbyhost/${id}/${game}`);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   };
 
   return (

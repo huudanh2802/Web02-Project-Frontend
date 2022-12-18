@@ -30,18 +30,30 @@ function PresentationKard({
     axiosPrivate({
       method: "delete",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/${presentation.id}`
-    }).then((response) => {
-      toast.success("Presentation has been deleted.", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light"
+    })
+      .then((response) => {
+        toast.success("Presentation has been deleted.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+        setPresentation(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
       });
-      setPresentation(response.data);
-    });
   }
   return (
     <>

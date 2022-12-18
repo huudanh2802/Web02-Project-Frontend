@@ -39,9 +39,21 @@ function GroupList() {
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/group/membergroup/${id}`
-    }).then((response: any) => {
-      setMemberGroup(response.data);
-    });
+    })
+      .then((response: any) => {
+        setMemberGroup(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }
 
   function getPresentation() {
@@ -50,9 +62,21 @@ function GroupList() {
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/getview/${id}`
-    }).then((response) => {
-      setPresentations(response.data);
-    });
+    })
+      .then((response) => {
+        setPresentations(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }
   useEffect(() => {
     getOwnGroup();

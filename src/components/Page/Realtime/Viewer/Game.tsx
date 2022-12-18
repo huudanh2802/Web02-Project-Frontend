@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
+import { ToastContainer, toast } from "react-toastify";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import ChatBox from "../Components/Chat/ChatBox";
 import "../Realtime.css";
 import Body from "./Body";
+import "react-toastify/dist/ReactToastify.css";
 
 function Game({
   username,
@@ -43,11 +45,23 @@ function Game({
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/game/get/${presentationId}`
-    }).then((response) => {
-      setPresentation(response.data);
-      setSlide(response.data.slides[idx]);
-      console.log(response.data);
-    });
+    })
+      .then((response) => {
+        setPresentation(response.data);
+        setSlide(response.data.slides[idx]);
+        console.log(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }, [idx, presentationId]);
 
   useEffect(() => {
@@ -86,29 +100,32 @@ function Game({
 
   const handleCloseChat = () => setShowChat(false);
   return (
-    <Container className={`game-container game-container-${bg}`} fluid>
-      <Body
-        slide={slide}
-        idx={idx}
-        socket={socket}
-        presentation={presentation!}
-        game={game}
-        setIdx={setIdx}
-        setSlide={setSlide}
-        setBg={setBg}
-      />
-      <ChatBox
-        username={username}
-        userRole={loggedIn ? 1 : 2}
-        game={game}
-        socket={socket}
-        showChat={showChat}
-        handleShowChat={handleShowChat}
-        handleCloseChat={handleCloseChat}
-        newChatCount={newChatCount}
-        setNewChatCount={setNewChatCount}
-      />
-    </Container>
+    <>
+      <ToastContainer />
+      <Container className={`game-container game-container-${bg}`} fluid>
+        <Body
+          slide={slide}
+          idx={idx}
+          socket={socket}
+          presentation={presentation!}
+          game={game}
+          setIdx={setIdx}
+          setSlide={setSlide}
+          setBg={setBg}
+        />
+        <ChatBox
+          username={username}
+          userRole={loggedIn ? 1 : 2}
+          game={game}
+          socket={socket}
+          showChat={showChat}
+          handleShowChat={handleShowChat}
+          handleCloseChat={handleCloseChat}
+          newChatCount={newChatCount}
+          setNewChatCount={setNewChatCount}
+        />
+      </Container>
+    </>
   );
 }
 

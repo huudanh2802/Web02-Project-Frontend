@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 import {
   HeadingDTO,
   MutipleChoiceDTO,
@@ -20,6 +21,7 @@ import SlideEdit from "../Components/SlideEdit";
 import TopBar from "../Components/TopBar";
 
 import "../Presentation.css";
+import "react-toastify/dist/ReactToastify.css";
 
 function NewPresentation() {
   const localId = localStorage.getItem("id");
@@ -58,9 +60,21 @@ function NewPresentation() {
         "Content-Type": "application/json"
       },
       data: newPresentation
-    }).then((response) => {
-      navigate(`/group/presentation/${response.data}`);
-    });
+    })
+      .then((response) => {
+        navigate(`/group/presentation/${response.data}`);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }
 
   const addMutipleChoice = (event: any) => {
@@ -117,35 +131,38 @@ function NewPresentation() {
     setCurrentSlide(slideChange);
   };
   return (
-    <Container fluid>
-      <TopBar
-        sendSlide={() => sendSlide()}
-        present={undefined}
-        detailPresentation={newPresentation}
-        setPresentation={setNewPresentation}
-        registerName={registerName}
-        handleSubmitName={handleSubmitName}
-      />
-      <Row className="mt-2">
-        <SlideBar
-          addMutipleChoice={addMutipleChoice}
-          addHeading={addHeading}
-          addParagraph={addParagraph}
+    <>
+      <ToastContainer />
+      <Container fluid>
+        <TopBar
+          sendSlide={() => sendSlide()}
+          present={undefined}
           detailPresentation={newPresentation}
-          currentSlide={currentSlide}
-          changeSlide={changeSlide}
+          setPresentation={setNewPresentation}
+          registerName={registerName}
+          handleSubmitName={handleSubmitName}
         />
-        <Body currentSlide={currentSlide} />
-        <Col lg={3}>
-          <SlideEdit
-            currentSlide={currentSlide}
+        <Row className="mt-2">
+          <SlideBar
+            addMutipleChoice={addMutipleChoice}
+            addHeading={addHeading}
+            addParagraph={addParagraph}
             detailPresentation={newPresentation}
-            setCurrentSlide={setCurrentSlide}
-            setPresentation={setNewPresentation}
+            currentSlide={currentSlide}
+            changeSlide={changeSlide}
           />
-        </Col>
-      </Row>
-    </Container>
+          <Body currentSlide={currentSlide} />
+          <Col lg={3}>
+            <SlideEdit
+              currentSlide={currentSlide}
+              detailPresentation={newPresentation}
+              setCurrentSlide={setCurrentSlide}
+              setPresentation={setNewPresentation}
+            />
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 

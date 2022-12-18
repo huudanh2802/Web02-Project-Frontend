@@ -4,15 +4,30 @@ import "../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import axiosPublic from "../../../token/axiosPublic";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Confirm() {
   const { token } = useParams();
   function confirmToken() {
-    axiosPublic.get(`/user/verify/${token}`).then((response) => {
-      // eslint-disable-next-line no-console
-      console.log(response);
-    });
+    axiosPublic
+      .get(`/user/verify/${token}`)
+      .then((response) => {
+        // eslint-disable-next-line no-console
+        console.log(response);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }
   useEffect(() => {
     confirmToken();
@@ -20,29 +35,32 @@ export default function Confirm() {
   }, []);
 
   return (
-    <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
-      <Row className="vh-100 d-flex justify-content-center align-items-center">
-        <Col md={6} lg={4} xs={8}>
-          <Card className="shadow">
-            <Card.Body>
-              <div className="mt-md-4 mx-4">
-                <h2 className="fw-bold mb-4" style={{ textAlign: "center" }}>
-                  Your Email has been confirmed
-                </h2>
-                <div className="mt-2" style={{ textAlign: "center" }}>
-                  <p>
-                    Click this
-                    <span>
-                      <Link to="/">&nbsp;Link&nbsp;</Link>
-                    </span>
-                    to went back to login page
-                  </p>
+    <>
+      <ToastContainer />
+      <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
+        <Row className="vh-100 d-flex justify-content-center align-items-center">
+          <Col md={6} lg={4} xs={8}>
+            <Card className="shadow">
+              <Card.Body>
+                <div className="mt-md-4 mx-4">
+                  <h2 className="fw-bold mb-4" style={{ textAlign: "center" }}>
+                    Your Email has been confirmed
+                  </h2>
+                  <div className="mt-2" style={{ textAlign: "center" }}>
+                    <p>
+                      Click this
+                      <span>
+                        <Link to="/">&nbsp;Link&nbsp;</Link>
+                      </span>
+                      to went back to login page
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }

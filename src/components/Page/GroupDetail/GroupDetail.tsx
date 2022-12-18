@@ -11,6 +11,9 @@ import "./GroupDetail.css";
 
 import InviteModal from "./Components/InviteModal";
 import MemberTab from "./Components/MemberTab";
+// eslint-disable-next-line import/order
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function GroupInfo() {
   const { groupId } = useParams();
@@ -40,19 +43,43 @@ function GroupInfo() {
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/checkowner/`,
       data: checkOwnerDTO
-    }).then((response) => {
-      setOwner(response.data);
-    });
+    })
+      .then((response) => {
+        setOwner(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }
 
   function getGroupMember() {
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/group/get/${groupId}`
-    }).then((response) => {
-      setGroupMember(response.data);
-      console.log(response.data);
-    });
+    })
+      .then((response) => {
+        setGroupMember(response.data);
+        console.log(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }
 
   useEffect(() => {
@@ -65,6 +92,7 @@ function GroupInfo() {
 
   return (
     <>
+      <ToastContainer />
       <InviteModal
         show={show}
         handleClose={handleClose}

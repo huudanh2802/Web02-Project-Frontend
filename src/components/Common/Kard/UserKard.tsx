@@ -41,16 +41,40 @@ function UserKard({
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
       data: updateReq
-    }).then((response) => {
-      if (response.status === 200) {
-        if (roleId === 1) {
-          removeItem(groupMember.coowner, info);
-          groupMember.member.push(info);
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          if (roleId === 1) {
+            removeItem(groupMember.coowner, info);
+            groupMember.member.push(info);
+          } else {
+            removeItem(groupMember.member, info);
+            groupMember.coowner.push(info);
+          }
+          toast.success("User's role has been changed.", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
+          setGroupMember(response.data);
         } else {
-          removeItem(groupMember.member, info);
-          groupMember.coowner.push(info);
+          toast(`${response}`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
         }
-        toast.success("User's role has been changed.", {
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -59,19 +83,7 @@ function UserKard({
           progress: undefined,
           theme: "light"
         });
-        setGroupMember(response.data);
-      } else {
-        toast(`${response}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
-        });
-      }
-    });
+      });
   };
 
   const kick = () => {
@@ -84,11 +96,35 @@ function UserKard({
       method: "delete",
       url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
       data: kickReq
-    }).then((response) => {
-      if (response.status === 200) {
-        if (roleId === 1) removeItem(groupMember.coowner, info);
-        else removeItem(groupMember.member, info);
-        toast.success("User has been deleted.", {
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          if (roleId === 1) removeItem(groupMember.coowner, info);
+          else removeItem(groupMember.member, info);
+          toast.success("User has been deleted.", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
+          setGroupMember(response.data);
+        } else {
+          toast(`${response}`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
+        }
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -97,19 +133,7 @@ function UserKard({
           progress: undefined,
           theme: "light"
         });
-        setGroupMember(response.data);
-      } else {
-        toast(`${response}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
-        });
-      }
-    });
+      });
   };
 
   useEffect(() => {

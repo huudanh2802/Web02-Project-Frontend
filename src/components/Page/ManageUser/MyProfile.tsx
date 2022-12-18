@@ -20,10 +20,22 @@ export default function MyProfile() {
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/user/get/${localId}`
-    }).then((response) => {
-      setUser(response.data);
-      console.log(user);
-    });
+    })
+      .then((response) => {
+        setUser(response.data);
+        console.log(user);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }
 
   function onSubmit(data: any) {
@@ -34,19 +46,31 @@ export default function MyProfile() {
         id: localId,
         updatedName: data.updatedName
       }
-    }).then((response) => {
-      console.log(response.data);
-      setUser(response.data);
-      toast.success("Name has been updated", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light"
+    })
+      .then((response) => {
+        console.log(response.data);
+        setUser(response.data);
+        toast.success("Name has been updated", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
       });
-    });
   }
 
   function OnChangePass(data: any) {
@@ -57,17 +81,29 @@ export default function MyProfile() {
         id: localId,
         newPassword: data.updatedPassword
       }
-    }).then(() => {
-      toast.success("Password has been updated", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light"
+    })
+      .then(() => {
+        toast.success("Password has been updated", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
       });
-    });
   }
   useEffect(() => {
     setData();

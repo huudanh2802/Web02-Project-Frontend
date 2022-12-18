@@ -13,6 +13,9 @@ import "./NewGroup.css";
 import NewGroupDTO from "../../../../dtos/NewGroupDTO";
 import MemberRole from "../MemberRole/MemberRole";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
+// eslint-disable-next-line import/order
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // const defaultImgPath = "assets/group1.png";
 
@@ -47,9 +50,21 @@ export default function NewGroup() {
       },
 
       data: newGroup
-    }).then((response) => {
-      navigate(`/group/detail/${response.data}`);
-    });
+    })
+      .then((response) => {
+        navigate(`/group/detail/${response.data}`);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      });
   }
 
   const onSubmit = handleSubmit((data) => {
@@ -67,51 +82,59 @@ export default function NewGroup() {
   }, [localData, setValue]);
 
   return (
-    <form onSubmit={onSubmit}>
-      <Container className="mt-3">
-        <Row className="m-4">
-          {/* <Col lg={4}>
+    <>
+      <ToastContainer />
+      <form onSubmit={onSubmit}>
+        <Container className="mt-3">
+          <Row className="m-4">
+            {/* <Col lg={4}>
           <Form.Group controlId="formFile" className="mb-3 ">
             <Image src={defaultImgPath} fluid className="mb-3 image-box " />
             <Form.Control type="file" />
           </Form.Group>
         </Col> */}
-          <Col>
-            <Row className="m-3">
-              <h2 className="title">Group Name</h2>
-              <InputGroup>
-                <Form.Control
-                  placeholder="Group Name"
-                  aria-label="GroupName"
-                  aria-describedby="basic-addon1"
-                  className="input-box"
-                  {...register("name", { required: "This field is required" })}
+            <Col>
+              <Row className="m-3">
+                <h2 className="title">Group Name</h2>
+                <InputGroup>
+                  <Form.Control
+                    placeholder="Group Name"
+                    aria-label="GroupName"
+                    aria-describedby="basic-addon1"
+                    className="input-box"
+                    {...register("name", {
+                      required: "This field is required"
+                    })}
+                  />
+                </InputGroup>
+              </Row>
+              <Row className="m-3">
+                <h2 className="title">Owner</h2>
+                <MemberRole
+                  memberData={localData}
+                  add={false}
+                  newGroup={null}
+                  setNewGroup={null}
                 />
-              </InputGroup>
-            </Row>
-            <Row className="m-3">
-              <h2 className="title">Owner</h2>
-              <MemberRole
-                memberData={localData}
-                add={false}
-                newGroup={null}
-                setNewGroup={null}
-              />
-            </Row>
-            <Row className="m-3">
-              <h2 className="title">Set Roles</h2>
-              <MemberSelection newGroup={newGroup} setNewGroup={setNewGroup} />
-            </Row>
-            <Row className="m-4 ">
-              <Col lg={12} className="d-flex justify-content-center">
-                <Button type="submit" className="createBtn" variant="primary">
-                  Create
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
-    </form>
+              </Row>
+              <Row className="m-3">
+                <h2 className="title">Set Roles</h2>
+                <MemberSelection
+                  newGroup={newGroup}
+                  setNewGroup={setNewGroup}
+                />
+              </Row>
+              <Row className="m-4 ">
+                <Col lg={12} className="d-flex justify-content-center">
+                  <Button type="submit" className="createBtn" variant="primary">
+                    Create
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </form>
+    </>
   );
 }

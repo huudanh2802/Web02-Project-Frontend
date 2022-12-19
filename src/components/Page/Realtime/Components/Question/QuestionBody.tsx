@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { Col, Row } from "react-bootstrap";
 
-import { ChatItemDTO } from "../../../../../dtos/GameDTO";
+import { QuestionItemDTO } from "../../../../../dtos/GameDTO";
 
-import ChatItem from "./ChatItem";
+import QuestionItem from "./QuestionItem";
 
-function ChatBody({ chatLog }: { chatLog: ChatItemDTO[] }) {
+function QuestionBody({ questionLog }: { questionLog: QuestionItemDTO[] }) {
   // Scroll to bottom
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -13,13 +13,13 @@ function ChatBody({ chatLog }: { chatLog: ChatItemDTO[] }) {
   });
   useEffect(() => {
     bottomRef.current?.scrollIntoView();
-  }, [chatLog]);
+  }, [questionLog]);
 
   return (
     <Col className="game-chat-list">
-      {chatLog.map((chat) => (
+      {questionLog.map((question) => (
         <Row>
-          <ChatItem chat={chat} />
+          <QuestionItem question={question} />
         </Row>
       ))}
       <div ref={bottomRef} />
@@ -27,4 +27,4 @@ function ChatBody({ chatLog }: { chatLog: ChatItemDTO[] }) {
   );
 }
 
-export default ChatBody;
+export default QuestionBody;

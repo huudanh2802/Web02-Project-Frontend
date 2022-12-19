@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import moment from "moment";
 
-import { ChatItemDTO } from "../../../../../dtos/GameDTO";
+import { QuestionItemDTO } from "../../../../../dtos/GameDTO";
 
-function ChatItem({ chat }: { chat: ChatItemDTO }) {
+function QuestionItem({ question }: { question: QuestionItemDTO }) {
   // Role handling
   const [role, setRole] = useState("Host");
   const [tag, setTag] = useState("gold");
 
   useEffect(() => {
-    switch (chat.role) {
+    switch (question.role) {
       case 1:
         setRole("Member");
         setTag("teal");
@@ -23,13 +23,13 @@ function ChatItem({ chat }: { chat: ChatItemDTO }) {
         setRole("Host");
         setTag("gold");
     }
-    if (chat.own) setTag("own");
-  }, [chat.role, chat.own]);
+    if (question.own) setTag("own");
+  }, [question.role, question.own]);
 
   const style = {
     marginBottom: "8px",
-    borderColor: chat.own ? "#4bb8ad" : "black",
-    backgroundColor: chat.own ? "#4bb8ad" : "white"
+    borderColor: question.own ? "#4bb8ad" : "black",
+    backgroundColor: question.own ? "#4bb8ad" : "white"
   };
 
   return (
@@ -37,12 +37,12 @@ function ChatItem({ chat }: { chat: ChatItemDTO }) {
       <header
         className="mt-2 fw-bold"
         style={{
-          color: chat.own ? "white" : "black",
+          color: question.own ? "white" : "black",
           width: "fit-content",
           blockSize: "fit-content"
         }}
       >
-        {chat.username}{" "}
+        {question.username}{" "}
         <span
           className={`tag tag-${tag}`}
           style={{
@@ -53,14 +53,14 @@ function ChatItem({ chat }: { chat: ChatItemDTO }) {
           {role}
         </span>
       </header>
-      <small style={{ color: chat.own ? "#dfe6f2" : "gray" }}>
-        {moment(chat.createdAt.toString()).format("DD/MM/YYYY • hh:mm:ss")}
+      <small style={{ color: question.own ? "#dfe6f2" : "gray" }}>
+        {moment(question.createdAt.toString()).format("DD/MM/YYYY • hh:mm:ss")}
       </small>
-      <p className="mb-2" style={{ color: chat.own ? "white" : "black" }}>
-        {chat.chat}
+      <p className="mb-2" style={{ color: question.own ? "white" : "black" }}>
+        {question.question}
       </p>
     </Card>
   );
 }
 
-export default ChatItem;
+export default QuestionItem;

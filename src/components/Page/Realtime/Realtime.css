@@ -27,7 +27,6 @@
   width: 80px;
   height: 80px;
   position: fixed;
-  bottom: 32px;
   right: 32px;
 	text-align:center;
   font-size: 32px;
@@ -38,7 +37,6 @@
   width: 32px;
   height: 32px;
   position: fixed;
-  bottom: 88px;
   right: 28px;
 	text-align:center;
   font-size: 12px;
@@ -47,6 +45,22 @@
   color: white;
   font-weight: bold;
   padding: 4px 8px;
+}
+
+.fab-chat {
+  bottom: 32px;
+}
+
+.fab-chat-noti {
+  bottom: 88px;
+}
+
+.fab-question {
+  bottom: 128px;
+}
+
+.fab-question-noti {
+  bottom: 184px;
 }
 
 .game-chatbox {

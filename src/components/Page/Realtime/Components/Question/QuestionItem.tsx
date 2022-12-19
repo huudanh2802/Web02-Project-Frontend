@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Card } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  OverlayTrigger,
+  Row,
+  Tooltip
+} from "react-bootstrap";
 import moment from "moment";
+import { FaArrowAltCircleUp } from "react-icons/fa";
 
 import { QuestionItemDTO } from "../../../../../dtos/GameDTO";
 
@@ -34,31 +42,54 @@ function QuestionItem({ question }: { question: QuestionItemDTO }) {
 
   return (
     <Card style={style}>
-      <header
-        className="mt-2 fw-bold"
-        style={{
-          color: question.own ? "white" : "black",
-          width: "fit-content",
-          blockSize: "fit-content"
-        }}
-      >
-        {question.username}{" "}
-        <span
-          className={`tag tag-${tag}`}
-          style={{
-            width: "fit-content",
-            blockSize: "fit-content"
-          }}
-        >
-          {role}
-        </span>
-      </header>
-      <small style={{ color: question.own ? "#dfe6f2" : "gray" }}>
-        {moment(question.createdAt.toString()).format("DD/MM/YYYY • hh:mm:ss")}
-      </small>
-      <p className="mb-2" style={{ color: question.own ? "white" : "black" }}>
-        {question.question}
-      </p>
+      <Row className="align-items-center">
+        <Col>
+          <header
+            className="mt-2 fw-bold"
+            style={{
+              color: question.own ? "white" : "black",
+              width: "fit-content",
+              blockSize: "fit-content"
+            }}
+          >
+            {question.username}{" "}
+            <span
+              className={`tag tag-${tag}`}
+              style={{
+                width: "fit-content",
+                blockSize: "fit-content"
+              }}
+            >
+              {role}
+            </span>
+          </header>
+          <small style={{ color: question.own ? "#dfe6f2" : "gray" }}>
+            {moment(question.createdAt.toString()).format(
+              "DD/MM/YYYY • hh:mm:ss"
+            )}
+          </small>
+        </Col>
+        {!question.own && (
+          <Col lg={3}>
+            <div className="d-grid">
+              <OverlayTrigger
+                key="upvote"
+                placement="top"
+                overlay={<Tooltip>Upvote</Tooltip>}
+              >
+                <Button variant="outline-dark">
+                  {question.vote} <FaArrowAltCircleUp className="mb-1" />
+                </Button>
+              </OverlayTrigger>
+            </div>
+          </Col>
+        )}
+      </Row>
+      <Row>
+        <p className="mb-2" style={{ color: question.own ? "white" : "black" }}>
+          {question.question}
+        </p>
+      </Row>
     </Card>
   );
 }

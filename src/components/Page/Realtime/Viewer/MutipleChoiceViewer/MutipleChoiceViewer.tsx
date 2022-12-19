@@ -113,7 +113,7 @@ export default function MutipleChoiceAnswer({
 
   return (
     <>
-      <Row className="mt-4 mb-4" style={{ textAlign: "center" }}>
+      <Row className="mb-4" style={{ textAlign: "center" }}>
         <Col className="game-question">
           <h3 style={{ fontWeight: "bold" }}>
             {idx + 1}. {slide?.question}

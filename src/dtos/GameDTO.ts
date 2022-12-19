@@ -7,12 +7,14 @@ export interface ChatItemDTO {
 }
 
 export interface QuestionItemDTO {
+  idx: number;
   username: string;
   question: string;
   createdAt: Date;
   own: boolean;
   role: number;
   answered: boolean;
+  voted: boolean;
   vote: number;
 }
 

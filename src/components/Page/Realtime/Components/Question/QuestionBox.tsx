@@ -40,15 +40,18 @@ function QuestionBox({
     if (questionText.length <= 0) return;
     // Local handling
     const date = new Date();
+    const idx = questionLog.length;
     const tempQuestionLog = [
       ...questionLog,
       {
+        idx,
         username,
         question: questionText,
         createdAt: date,
         own: true,
         role: userRole,
         answered: false,
+        voted: false,
         vote: 0
       }
     ];
@@ -57,6 +60,7 @@ function QuestionBox({
 
     // Socket
     socket.emit("send_question_msg", {
+      idx,
       username,
       question: questionText,
       date,
@@ -70,22 +74,25 @@ function QuestionBox({
     socket.on(
       "receive_question_msg",
       (data: {
+        idx: number;
         username: string;
         question: string;
         role: number;
         date: Date;
       }) => {
-        const { question, date, role } = data;
+        const { idx, question, date, role } = data;
         const otherUsername = data.username;
         const tempQuestionLog = [
           ...questionLog,
           {
+            idx,
             username: otherUsername,
             question,
             createdAt: date,
             own: false,
             role,
             answered: false,
+            voted: false,
             vote: 0
           }
         ];
@@ -96,6 +103,51 @@ function QuestionBox({
 
     return () => {
       socket.off("receive_question_msg");
+    };
+  });
+
+  // Vote handling
+  const handleVote = (idx: number) => {
+    socket.emit(`send_${questionLog[idx].voted ? "un" : ""}vote`, {
+      idx,
+      game
+    });
+
+    const updatedQuestion = questionLog[idx];
+    updatedQuestion.vote += updatedQuestion.voted ? -1 : 1;
+    updatedQuestion.voted = !updatedQuestion.voted;
+    setQuestionLog([
+      ...questionLog.slice(0, updatedQuestion.idx),
+      updatedQuestion,
+      ...questionLog.slice(updatedQuestion.idx + 1)
+    ]);
+  };
+
+  useEffect(() => {
+    socket.on(`receive_vote`, (data: { idx: number }) => {
+      const { idx } = data;
+      const updatedQuestion = questionLog[idx];
+      updatedQuestion.vote += 1;
+      setQuestionLog([
+        ...questionLog.slice(0, updatedQuestion.idx),
+        updatedQuestion,
+        ...questionLog.slice(updatedQuestion.idx + 1)
+      ]);
+    });
+    socket.on(`receive_unvote`, (data: { idx: number }) => {
+      const { idx } = data;
+      const updatedQuestion = questionLog[idx];
+      updatedQuestion.vote -= 1;
+      setQuestionLog([
+        ...questionLog.slice(0, updatedQuestion.idx),
+        updatedQuestion,
+        ...questionLog.slice(updatedQuestion.idx + 1)
+      ]);
+    });
+
+    return () => {
+      socket.off("receive_vote");
+      socket.off("receive_unvote");
     };
   });
 
@@ -112,7 +164,7 @@ function QuestionBox({
         <Offcanvas.Body style={{ height: "100vh" }}>
           <Col className="game-chatbox">
             <Row className="game-chat">
-              <QuestionBody questionLog={questionLog} />
+              <QuestionBody questionLog={questionLog} handleVote={handleVote} />
             </Row>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Row style={{ marginTop: "16px" }}>

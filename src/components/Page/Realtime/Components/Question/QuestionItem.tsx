@@ -15,10 +15,14 @@ import { QuestionItemDTO } from "../../../../../dtos/GameDTO";
 
 function QuestionItem({
   question,
-  handleVote
+  handleVote,
+  handleAnswered,
+  userRole
 }: {
   question: QuestionItemDTO;
   handleVote: (idx: number) => void;
+  handleAnswered: (idx: number) => void;
+  userRole: number;
 }) {
   // Role handling
   const [role, setRole] = useState("Host");
@@ -47,21 +51,40 @@ function QuestionItem({
     backgroundColor: question.own ? "#4bb8ad" : "white"
   };
 
+  const answeredStyle = {
+    marginBottom: "8px",
+    borderColor: question.own ? "#4bb8ad" : "gray",
+    backgroundColor: "white"
+  };
+
+  let headerColor = question.own ? "#4bb8ad" : "gray";
+  if (!question.answered) headerColor = question.own ? "white" : "black";
+  const headerStyle = {
+    color: headerColor,
+    width: "fit-content",
+    blockSize: "fit-content"
+  };
+
+  let dateColor = "gray";
+  if (!question.answered) dateColor = question.own ? "#dfe6f2" : "gray";
+  const dateStyle = {
+    color: dateColor
+  };
+
+  let questionColor = "gray";
+  if (!question.answered) questionColor = question.own ? "white" : "black";
+  const questionStyle = {
+    color: questionColor
+  };
+
   return (
-    <Card style={style}>
+    <Card style={question.answered ? answeredStyle : style}>
       <Row className="align-items-center">
         <Col>
-          <header
-            className="mt-2 fw-bold"
-            style={{
-              color: question.own ? "white" : "black",
-              width: "fit-content",
-              blockSize: "fit-content"
-            }}
-          >
+          <header className="mt-2 fw-bold" style={headerStyle}>
             {question.username}{" "}
             <span
-              className={`tag tag-${tag}`}
+              className={`tag tag-${question.answered ? "gray" : tag}`}
               style={{
                 width: "fit-content",
                 blockSize: "fit-content"
@@ -70,7 +93,7 @@ function QuestionItem({
               {role}
             </span>
           </header>
-          <small style={{ color: question.own ? "#dfe6f2" : "gray" }}>
+          <small style={dateStyle}>
             {moment(question.createdAt.toString()).format(
               "DD/MM/YYYY • hh:mm:ss"
             )}
@@ -84,7 +107,16 @@ function QuestionItem({
               overlay={<Tooltip>Upvote</Tooltip>}
             >
               <>
-                {!question.own && (
+                {userRole === 0 && (
+                  <Button
+                    variant="outline-light"
+                    style={{ cursor: "default" }}
+                    active
+                  >
+                    {question.vote} <FaArrowAltCircleUp className="mb-1" />
+                  </Button>
+                )}
+                {userRole !== 0 && !question.own && !question.answered && (
                   <Button
                     variant={`${question.voted ? "" : "outline-"}dark`}
                     onClick={() => handleVote(question.idx)}
@@ -92,11 +124,25 @@ function QuestionItem({
                     {question.vote} <FaArrowAltCircleUp className="mb-1" />
                   </Button>
                 )}
-                {question.own && (
+                {userRole !== 0 && !question.own && question.answered && (
+                  <Button variant="secondary" disabled>
+                    {question.vote} <FaArrowAltCircleUp className="mb-1" />
+                  </Button>
+                )}
+                {userRole !== 0 && question.own && !question.answered && (
                   <Button
                     variant="outline-light"
                     style={{ cursor: "default" }}
                     active
+                  >
+                    {question.vote} <FaArrowAltCircleUp className="mb-1" />
+                  </Button>
+                )}
+                {userRole !== 0 && question.own && question.answered && (
+                  <Button
+                    variant="primary"
+                    style={{ cursor: "default" }}
+                    disabled
                   >
                     {question.vote} <FaArrowAltCircleUp className="mb-1" />
                   </Button>
@@ -107,10 +153,33 @@ function QuestionItem({
         </Col>
       </Row>
       <Row>
-        <p className="mb-2" style={{ color: question.own ? "white" : "black" }}>
+        <p className="mb-2" style={questionStyle}>
           {question.question}
         </p>
       </Row>
+      {userRole === 0 && (
+        <Row className="mb-2">
+          <div className="d-grid">
+            {!question.answered && (
+              <Button
+                variant="primary"
+                onClick={() => handleAnswered(question.idx)}
+              >
+                Mark as answered
+              </Button>
+            )}
+            {question.answered && (
+              <Button
+                variant="outline-secondary"
+                style={{ cursor: "default" }}
+                active
+              >
+                Answered
+              </Button>
+            )}
+          </div>
+        </Row>
+      )}
     </Card>
   );
 }

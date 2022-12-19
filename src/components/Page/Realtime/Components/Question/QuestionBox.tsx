@@ -123,8 +123,20 @@ function QuestionBox({
     ]);
   };
 
+  const handleAnswered = (idx: number) => {
+    socket.emit("send_answered", { idx, game });
+
+    const updatedQuestion = questionLog[idx];
+    updatedQuestion.answered = true;
+    setQuestionLog([
+      ...questionLog.slice(0, updatedQuestion.idx),
+      updatedQuestion,
+      ...questionLog.slice(updatedQuestion.idx + 1)
+    ]);
+  };
+
   useEffect(() => {
-    socket.on(`receive_vote`, (data: { idx: number }) => {
+    socket.on("receive_vote", (data: { idx: number }) => {
       const { idx } = data;
       const updatedQuestion = questionLog[idx];
       updatedQuestion.vote += 1;
@@ -134,10 +146,20 @@ function QuestionBox({
         ...questionLog.slice(updatedQuestion.idx + 1)
       ]);
     });
-    socket.on(`receive_unvote`, (data: { idx: number }) => {
+    socket.on("receive_unvote", (data: { idx: number }) => {
       const { idx } = data;
       const updatedQuestion = questionLog[idx];
       updatedQuestion.vote -= 1;
+      setQuestionLog([
+        ...questionLog.slice(0, updatedQuestion.idx),
+        updatedQuestion,
+        ...questionLog.slice(updatedQuestion.idx + 1)
+      ]);
+    });
+    socket.on("receive_answered", (data: { idx: number }) => {
+      const { idx } = data;
+      const updatedQuestion = questionLog[idx];
+      updatedQuestion.answered = true;
       setQuestionLog([
         ...questionLog.slice(0, updatedQuestion.idx),
         updatedQuestion,
@@ -148,6 +170,7 @@ function QuestionBox({
     return () => {
       socket.off("receive_vote");
       socket.off("receive_unvote");
+      socket.off("receive_answered");
     };
   });
 
@@ -164,7 +187,12 @@ function QuestionBox({
         <Offcanvas.Body style={{ height: "100vh" }}>
           <Col className="game-chatbox">
             <Row className="game-chat">
-              <QuestionBody questionLog={questionLog} handleVote={handleVote} />
+              <QuestionBody
+                questionLog={questionLog}
+                handleVote={handleVote}
+                handleAnswered={handleAnswered}
+                userRole={userRole}
+              />
             </Row>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Row style={{ marginTop: "16px" }}>

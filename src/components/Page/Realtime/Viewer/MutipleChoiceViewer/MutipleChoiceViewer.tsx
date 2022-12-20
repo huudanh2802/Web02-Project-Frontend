@@ -131,6 +131,7 @@ export default function MutipleChoiceAnswer({
                 id={a.id}
                 answer={a.answer}
                 question={idx}
+                correct={slide.correct}
                 game={game}
                 username={username}
                 socket={socket}

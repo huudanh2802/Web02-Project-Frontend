@@ -105,6 +105,7 @@ function Game({
         socket={socket}
         presentation={presentation!}
         game={game}
+        username={username}
         setIdx={setIdx}
         setSlide={setSlide}
         setBg={setBg}

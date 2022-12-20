@@ -57,7 +57,7 @@ export default function HeadingHost({
       <Row>
         <Col style={{ textAlign: "center" }}>
           {presentation && idx + 1 < presentation.slides.length && (
-            <Button variant="primary" onClick={handleNextSlide}>
+            <Button variant="light" onClick={handleNextSlide}>
               Next slide
             </Button>
           )}

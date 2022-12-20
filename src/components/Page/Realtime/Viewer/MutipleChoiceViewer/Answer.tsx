@@ -10,6 +10,7 @@ function Answer({
   question,
   gameAnswer,
   game,
+  username,
   socket,
   setAnswer,
   setGameAnswer,
@@ -20,13 +21,14 @@ function Answer({
   gameAnswer: AnswerCounterDTO[];
   question: number;
   game: string;
+  username: string;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   setAnswer: React.Dispatch<React.SetStateAction<string>>;
   setGameAnswer: React.Dispatch<React.SetStateAction<AnswerCounterDTO[]>>;
   setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const submitAnswer = () => {
-    socket.emit("submit_answer", { question, id, game });
+    socket.emit("submit_answer", { question, username, id, game });
     setAnswer(id);
     setSubmitted(true);
     const cloneAnswer = [...gameAnswer];

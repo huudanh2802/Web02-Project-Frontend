@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import { axiosPrivate } from "../../../token/axiosPrivate";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { axiosPrivate } from "../../../token/axiosPrivate";
+import "../../Common/Toast/ToastStyle.css";
 
 export default function MyProfile() {
   const [user, setUser] = useState({
@@ -27,13 +28,7 @@ export default function MyProfile() {
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -51,24 +46,12 @@ export default function MyProfile() {
         console.log(response.data);
         setUser(response.data);
         toast.success("Name has been updated", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -84,24 +67,12 @@ export default function MyProfile() {
     })
       .then(() => {
         toast.success("Password has been updated", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -111,73 +82,70 @@ export default function MyProfile() {
   }, []);
 
   return (
-    <>
-      <ToastContainer />
+    <Container
+      style={{
+        background: "#318F9B",
+        width: "1100px",
+        height: "300px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column"
+      }}
+    >
       <Container
         style={{
-          background: "#318F9B",
-          width: "1100px",
-          height: "300px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column"
+          background: "white",
+          width: "800px",
+          height: "227px",
+          borderRadius: "32px"
         }}
       >
-        <Container
-          style={{
-            background: "white",
-            width: "800px",
-            height: "227px",
-            borderRadius: "32px"
-          }}
-        >
-          <Row>
-            <Col xs={4}>
-              <img src="/assets/profilePicture.svg" />
-            </Col>
-            <Col>
-              <Row style={{ marginTop: "50px" }}>
-                <span style={{ fontWeight: "bold", fontSize: "22px" }}>
-                  {user.email}
-                </span>
-              </Row>
-              <Row>
-                <span>Created At: {user.date}</span>
-              </Row>
-              <Row>
-                <span>Fullname: {user.fullname}</span>
-              </Row>
-              <Row>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <input
-                    placeholder="Update name"
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...register("updatedName")}
-                    style={{ width: "200px", marginRight: "20px" }}
-                  />
-                  <Button variant="secondary" type="submit">
-                    Submit
-                  </Button>
-                </form>
-              </Row>
-              <Row>
-                <Form onSubmit={handleSubmit(OnChangePass)}>
-                  <input
-                    placeholder="Update password"
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...register("updatedPassword")}
-                    style={{ width: "200px", marginRight: "20px" }}
-                  />
-                  <Button variant="secondary" type="submit">
-                    Submit
-                  </Button>
-                </Form>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+        <Row>
+          <Col xs={4}>
+            <img src="/assets/profilePicture.svg" />
+          </Col>
+          <Col>
+            <Row style={{ marginTop: "50px" }}>
+              <span style={{ fontWeight: "bold", fontSize: "22px" }}>
+                {user.email}
+              </span>
+            </Row>
+            <Row>
+              <span>Created At: {user.date}</span>
+            </Row>
+            <Row>
+              <span>Fullname: {user.fullname}</span>
+            </Row>
+            <Row>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <input
+                  placeholder="Update name"
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...register("updatedName")}
+                  style={{ width: "200px", marginRight: "20px" }}
+                />
+                <Button variant="secondary" type="submit">
+                  Submit
+                </Button>
+              </form>
+            </Row>
+            <Row>
+              <Form onSubmit={handleSubmit(OnChangePass)}>
+                <input
+                  placeholder="Update password"
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...register("updatedPassword")}
+                  style={{ width: "200px", marginRight: "20px" }}
+                />
+                <Button variant="secondary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </Row>
+          </Col>
+        </Row>
       </Container>
-    </>
+    </Container>
   );
 }

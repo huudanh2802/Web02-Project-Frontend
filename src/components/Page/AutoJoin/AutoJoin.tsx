@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import "react-toastify/dist/ReactToastify.css";
+import "../../Common/Toast/ToastStyle.css";
 
 export default function AutoJoin() {
   const navigate = useNavigate();
@@ -19,26 +20,14 @@ export default function AutoJoin() {
       .then((response) => {
         if (response.status === 200) {
           toast.success("Join Successfully!", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light"
+            className: "toast_container"
           });
           setTimeout(() => {
             navigate(`/group/detail/${response.data}`);
           });
         } else {
           toast.error("Join failed!", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light"
+            className: "toast_container"
           });
           setTimeout(() => {
             navigate("/");
@@ -47,21 +36,10 @@ export default function AutoJoin() {
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }, [groupId, navigate, userId]);
 
-  return (
-    <>
-      <ToastContainer />
-      <div />
-    </>
-  );
+  return <div />;
 }

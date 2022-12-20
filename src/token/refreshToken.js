@@ -1,7 +1,8 @@
 import mem from "mem";
-import { ToastContainer, toast } from "react-toastify";
-import axiosPublic from "./axiosPublic";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axiosPublic from "./axiosPublic";
+import "../components/Common/Toast/ToastStyle.css";
 
 // eslint-disable-next-line consistent-return
 const refreshTokenFn = async () => {
@@ -33,13 +34,7 @@ const refreshTokenFn = async () => {
     }
   } catch (error) {
     toast.error("Please login to continue", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light"
+      className: "toast_container"
     });
     window.location = `${process.env.REACT_APP_BASE_URL}/login`;
     localStorage.removeItem("id");
@@ -47,12 +42,6 @@ const refreshTokenFn = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("fullname");
   }
-  return (
-    <>
-      <ToastContainer />
-      <div />
-    </>
-  );
 };
 
 const maxAge = 1000;

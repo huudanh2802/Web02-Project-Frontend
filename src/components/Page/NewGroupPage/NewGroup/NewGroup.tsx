@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Row, Col, Form, InputGroup, Button, Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
@@ -11,11 +11,12 @@ import MemberSelection from "../MemberSelection/MemberSelection";
 import "./NewGroup.css";
 
 import NewGroupDTO from "../../../../dtos/NewGroupDTO";
-import MemberRole from "../MemberRole/MemberRole";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
+import MemberRole from "../MemberRole/MemberRole";
 // eslint-disable-next-line import/order
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../../../Common/Toast/ToastStyle.css";
 
 // const defaultImgPath = "assets/group1.png";
 
@@ -56,13 +57,7 @@ export default function NewGroup() {
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -82,59 +77,53 @@ export default function NewGroup() {
   }, [localData, setValue]);
 
   return (
-    <>
-      <ToastContainer />
-      <form onSubmit={onSubmit}>
-        <Container className="mt-3">
-          <Row className="m-4">
-            {/* <Col lg={4}>
+    <form onSubmit={onSubmit}>
+      <Container className="mt-3">
+        <Row className="m-4">
+          {/* <Col lg={4}>
           <Form.Group controlId="formFile" className="mb-3 ">
             <Image src={defaultImgPath} fluid className="mb-3 image-box " />
             <Form.Control type="file" />
           </Form.Group>
         </Col> */}
-            <Col>
-              <Row className="m-3">
-                <h2 className="title">Group Name</h2>
-                <InputGroup>
-                  <Form.Control
-                    placeholder="Group Name"
-                    aria-label="GroupName"
-                    aria-describedby="basic-addon1"
-                    className="input-box"
-                    {...register("name", {
-                      required: "This field is required"
-                    })}
-                  />
-                </InputGroup>
-              </Row>
-              <Row className="m-3">
-                <h2 className="title">Owner</h2>
-                <MemberRole
-                  memberData={localData}
-                  add={false}
-                  newGroup={null}
-                  setNewGroup={null}
+          <Col>
+            <Row className="m-3">
+              <h2 className="title">Group Name</h2>
+              <InputGroup>
+                <Form.Control
+                  placeholder="Group Name"
+                  aria-label="GroupName"
+                  aria-describedby="basic-addon1"
+                  className="input-box"
+                  {...register("name", {
+                    required: "This field is required"
+                  })}
                 />
-              </Row>
-              <Row className="m-3">
-                <h2 className="title">Set Roles</h2>
-                <MemberSelection
-                  newGroup={newGroup}
-                  setNewGroup={setNewGroup}
-                />
-              </Row>
-              <Row className="m-4 ">
-                <Col lg={12} className="d-flex justify-content-center">
-                  <Button type="submit" className="createBtn" variant="primary">
-                    Create
-                  </Button>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
-      </form>
-    </>
+              </InputGroup>
+            </Row>
+            <Row className="m-3">
+              <h2 className="title">Owner</h2>
+              <MemberRole
+                memberData={localData}
+                add={false}
+                newGroup={null}
+                setNewGroup={null}
+              />
+            </Row>
+            <Row className="m-3">
+              <h2 className="title">Set Roles</h2>
+              <MemberSelection newGroup={newGroup} setNewGroup={setNewGroup} />
+            </Row>
+            <Row className="m-4 ">
+              <Col lg={12} className="d-flex justify-content-center">
+                <Button type="submit" className="createBtn" variant="primary">
+                  Create
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </form>
   );
 }

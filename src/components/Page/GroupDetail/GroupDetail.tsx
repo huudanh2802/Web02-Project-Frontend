@@ -12,8 +12,9 @@ import "./GroupDetail.css";
 import InviteModal from "./Components/InviteModal";
 import MemberTab from "./Components/MemberTab";
 // eslint-disable-next-line import/order
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../../Common/Toast/ToastStyle.css";
 
 function GroupInfo() {
   const { groupId } = useParams();
@@ -49,13 +50,7 @@ function GroupInfo() {
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -71,13 +66,7 @@ function GroupInfo() {
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -92,7 +81,6 @@ function GroupInfo() {
 
   return (
     <>
-      <ToastContainer />
       <InviteModal
         show={show}
         handleClose={handleClose}

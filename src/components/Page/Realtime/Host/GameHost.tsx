@@ -13,6 +13,7 @@ import ChatBox from "../Components/Chat/ChatBox";
 import "../Realtime.css";
 import BodyHost from "./BodyHost";
 import "react-toastify/dist/ReactToastify.css";
+import "../../../Common/Toast/ToastStyle.css";
 
 function GameHost({
   socket,
@@ -61,13 +62,7 @@ function GameHost({
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }, [idx, presentationId]);

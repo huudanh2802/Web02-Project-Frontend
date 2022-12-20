@@ -1,0 +1,9 @@
+.toast_container{
+    position: "top-right";
+    autoClose: 2000;
+    hideProgressBar: false;
+    closeOnClick: true;
+    draggable: true;
+    progress: undefined;
+    theme: "light"
+}

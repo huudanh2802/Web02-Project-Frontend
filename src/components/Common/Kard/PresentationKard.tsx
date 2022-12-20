@@ -5,10 +5,11 @@ import { FaCalendar } from "react-icons/fa";
 import moment from "moment";
 
 import "./Kard.css";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import "react-toastify/dist/ReactToastify.css";
+import "../Toast/ToastStyle.css";
 
 function PresentationKard({
   presentation,
@@ -33,65 +34,50 @@ function PresentationKard({
     })
       .then((response) => {
         toast.success("Presentation has been deleted.", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
         setPresentation(response.data);
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
   return (
-    <>
-      <ToastContainer />
-      <div className="d-flex flex-column">
-        <Card
-          key={index}
-          className="kard"
-          style={{ marginBottom: "8px" }}
-          onClick={viewPresentation}
-        >
-          <div className="kard-header">
-            <img
-              src={`/assets/card-bg-${Math.floor(Math.random() * 8)}.jpg`}
-              alt="bg"
-            />
+    <div className="d-flex flex-column">
+      <Card
+        key={index}
+        className="kard"
+        style={{ marginBottom: "8px" }}
+        onClick={viewPresentation}
+      >
+        <div className="kard-header">
+          <img
+            src={`/assets/card-bg-${Math.floor(Math.random() * 8)}.jpg`}
+            alt="bg"
+          />
+        </div>
+        <div className="kard-body">
+          <header>{presentation.name}</header>
+          <div className="time">
+            <FaCalendar className="mx-2" />
+            <small>
+              {moment(presentation.createdAt.toString()).format(
+                "MMMM Do, YYYY"
+              )}
+            </small>
           </div>
-          <div className="kard-body">
-            <header>{presentation.name}</header>
-            <div className="time">
-              <FaCalendar className="mx-2" />
-              <small>
-                {moment(presentation.createdAt.toString()).format(
-                  "MMMM Do, YYYY"
-                )}
-              </small>
-            </div>
-          </div>
-        </Card>
-        <Button
-          style={{ width: "inherit", marginBottom: "24px" }}
-          onClick={() => deletePresentation()}
-          variant="danger"
-        >
-          Delete presentation
-        </Button>
-      </div>
-    </>
+        </div>
+      </Card>
+      <Button
+        style={{ width: "inherit", marginBottom: "24px" }}
+        onClick={() => deletePresentation()}
+        variant="danger"
+      >
+        Delete presentation
+      </Button>
+    </div>
   );
 }
 

@@ -7,8 +7,9 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
-import { ToastContainer, toast } from "react-toastify";
 import {
   HeadingDTO,
   MutipleChoiceDTO,
@@ -16,7 +17,6 @@ import {
   PresentationDTO,
   SlideDTO
 } from "../../../dtos/PresentationDTO";
-import "react-toastify/dist/ReactToastify.css";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 
 import Body from "./Components/Body";
@@ -25,6 +25,7 @@ import SlideEdit from "./Components/SlideEdit";
 import TopBar from "./Components/TopBar";
 
 import "./Presentation.css";
+import "../../Common/Toast/ToastStyle.css";
 
 function Presentation({
   setGame,
@@ -75,24 +76,12 @@ function Presentation({
     })
       .then((response) => {
         toast.success("Presentation has been updated", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -107,13 +96,7 @@ function Presentation({
       })
       .catch((err) => {
         toast.error(err, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
         setTimeout(() => {
           navigate("/");
@@ -192,50 +175,41 @@ function Presentation({
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   };
 
   return (
-    <>
-      <ToastContainer />
-      <Container fluid>
-        <TopBar
-          sendSlide={() => sendSlide()}
-          present={present}
+    <Container fluid>
+      <TopBar
+        sendSlide={() => sendSlide()}
+        present={present}
+        detailPresentation={detailPresentation}
+        setPresentation={setPresentation}
+        registerName={registerName}
+        handleSubmitName={handleSubmitName}
+      />
+      <Row className="mt-2">
+        <SlideBar
+          addMutipleChoice={addMutipleChoice}
+          addHeading={addHeading}
+          addParagraph={addParagraph}
           detailPresentation={detailPresentation}
-          setPresentation={setPresentation}
-          registerName={registerName}
-          handleSubmitName={handleSubmitName}
+          currentSlide={currentSlide}
+          changeSlide={changeSlide}
         />
-        <Row className="mt-2">
-          <SlideBar
-            addMutipleChoice={addMutipleChoice}
-            addHeading={addHeading}
-            addParagraph={addParagraph}
-            detailPresentation={detailPresentation}
+        <Body currentSlide={currentSlide} />
+        <Col lg={3}>
+          <SlideEdit
             currentSlide={currentSlide}
-            changeSlide={changeSlide}
+            detailPresentation={detailPresentation}
+            setCurrentSlide={setCurrentSlide}
+            setPresentation={setPresentation}
           />
-          <Body currentSlide={currentSlide} />
-          <Col lg={3}>
-            <SlideEdit
-              currentSlide={currentSlide}
-              detailPresentation={detailPresentation}
-              setCurrentSlide={setCurrentSlide}
-              setPresentation={setPresentation}
-            />
-          </Col>
-        </Row>
-      </Container>
-    </>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

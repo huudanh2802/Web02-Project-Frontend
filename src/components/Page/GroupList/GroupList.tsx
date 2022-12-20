@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Button, Container, Row, Col, Tab, Tabs } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
-import GroupKard from "../../Common/Kard/GroupKard";
-import GroupDTO from "../../../dtos/GroupDTO";
-import { axiosPrivate } from "../../../token/axiosPrivate";
-import PresentationTab from "../GroupDetail/Components/PresentationTab";
-import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
+import { useEffect, useState } from "react";
+import { Button, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import GroupDTO from "../../../dtos/GroupDTO";
+import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
+import { axiosPrivate } from "../../../token/axiosPrivate";
+import GroupKard from "../../Common/Kard/GroupKard";
+import PresentationTab from "../GroupDetail/Components/PresentationTab";
+import "../../Common/Toast/ToastStyle.css";
 
 function GroupList() {
   const [ownGroup, setOwnGroup] = useState<GroupDTO[]>([]);
@@ -22,13 +23,7 @@ function GroupList() {
       })
       .catch((error: any) => {
         toast.error(error.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -45,13 +40,7 @@ function GroupList() {
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -68,13 +57,7 @@ function GroupList() {
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -85,42 +68,39 @@ function GroupList() {
   }, []);
 
   return (
-    <>
-      <ToastContainer />
-      <Container>
-        <Tabs defaultActiveKey="created" id="group-list-tab" className="mb-3">
-          <Tab eventKey="created" title="Created">
-            <Button href="/group/newgroup" variant="primary">
-              Create new Group
-            </Button>
-            <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
-              {ownGroup.map((group, index) => (
-                <Col>
-                  <GroupKard group={group} index={index} />
-                </Col>
-              ))}
-            </Row>
-          </Tab>
+    <Container>
+      <Tabs defaultActiveKey="created" id="group-list-tab" className="mb-3">
+        <Tab eventKey="created" title="Created">
+          <Button href="/group/newgroup" variant="primary">
+            Create new Group
+          </Button>
+          <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
+            {ownGroup.map((group, index) => (
+              <Col>
+                <GroupKard group={group} index={index} />
+              </Col>
+            ))}
+          </Row>
+        </Tab>
 
-          <Tab eventKey="joined" title="Joined">
-            <Row xs={1} md={2} lg={4}>
-              {memberGroup.map((group, index) => (
-                <Col>
-                  <GroupKard group={group} index={index} />
-                </Col>
-              ))}
-            </Row>
-          </Tab>
+        <Tab eventKey="joined" title="Joined">
+          <Row xs={1} md={2} lg={4}>
+            {memberGroup.map((group, index) => (
+              <Col>
+                <GroupKard group={group} index={index} />
+              </Col>
+            ))}
+          </Row>
+        </Tab>
 
-          <Tab eventKey="presentation" title="Prensentation">
-            <PresentationTab
-              presentations={presentations}
-              setPresentations={setPresentations}
-            />
-          </Tab>
-        </Tabs>
-      </Container>
-    </>
+        <Tab eventKey="presentation" title="Prensentation">
+          <PresentationTab
+            presentations={presentations}
+            setPresentations={setPresentations}
+          />
+        </Tab>
+      </Tabs>
+    </Container>
   );
 }
 

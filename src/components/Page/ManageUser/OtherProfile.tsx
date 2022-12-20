@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router";
-import { ToastContainer, toast } from "react-toastify";
-import { axiosPrivate } from "../../../token/axiosPrivate";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { axiosPrivate } from "../../../token/axiosPrivate";
+import "../../Common/Toast/ToastStyle.css";
 
 export default function OtherProfile() {
   const [user, setUser] = useState({
@@ -24,13 +25,7 @@ export default function OtherProfile() {
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light"
+          className: "toast_container"
         });
       });
   }
@@ -41,47 +36,44 @@ export default function OtherProfile() {
   }, []);
 
   return (
-    <>
-      <ToastContainer />
+    <Container
+      style={{
+        background: "#318F9B",
+        width: "1100px",
+        height: "300px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column"
+      }}
+    >
       <Container
         style={{
-          background: "#318F9B",
-          width: "1100px",
-          height: "300px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column"
+          background: "white",
+          width: "800px",
+          height: "227px",
+          borderRadius: "32px"
         }}
       >
-        <Container
-          style={{
-            background: "white",
-            width: "800px",
-            height: "227px",
-            borderRadius: "32px"
-          }}
-        >
-          <Row>
-            <Col xs={4}>
-              <img src="/assets/profilePicture.svg" />
-            </Col>
-            <Col>
-              <Row style={{ marginTop: "50px" }}>
-                <span style={{ fontWeight: "bold", fontSize: "22px" }}>
-                  {user.email}
-                </span>
-              </Row>
-              <Row>
-                <span>Created At: {user.date}</span>
-              </Row>
-              <Row>
-                <span>Fullname: {user.fullname}</span>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+        <Row>
+          <Col xs={4}>
+            <img src="/assets/profilePicture.svg" />
+          </Col>
+          <Col>
+            <Row style={{ marginTop: "50px" }}>
+              <span style={{ fontWeight: "bold", fontSize: "22px" }}>
+                {user.email}
+              </span>
+            </Row>
+            <Row>
+              <span>Created At: {user.date}</span>
+            </Row>
+            <Row>
+              <span>Fullname: {user.fullname}</span>
+            </Row>
+          </Col>
+        </Row>
       </Container>
-    </>
+    </Container>
   );
 }

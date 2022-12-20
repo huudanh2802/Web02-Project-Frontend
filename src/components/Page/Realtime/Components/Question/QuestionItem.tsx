@@ -125,7 +125,7 @@ function QuestionItem({
                   </Button>
                 )}
                 {userRole !== 0 && !question.own && question.answered && (
-                  <Button variant="secondary" disabled>
+                  <Button variant="outline-secondary" disabled>
                     {question.vote} <FaArrowAltCircleUp className="mb-1" />
                   </Button>
                 )}

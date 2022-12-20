@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Col, Offcanvas, Row, Form } from "react-bootstrap";
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Offcanvas,
+  Row,
+  Form
+} from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
@@ -42,7 +49,6 @@ function QuestionBox({
     const date = new Date();
     const idx = questionLog.length;
     const tempQuestionLog = [
-      ...questionLog,
       {
         idx,
         username,
@@ -53,7 +59,8 @@ function QuestionBox({
         answered: false,
         voted: false,
         vote: 0
-      }
+      },
+      ...questionLog
     ];
     setQuestionLog(tempQuestionLog);
     setQuestionText("");
@@ -83,7 +90,6 @@ function QuestionBox({
         const { idx, question, date, role } = data;
         const otherUsername = data.username;
         const tempQuestionLog = [
-          ...questionLog,
           {
             idx,
             username: otherUsername,
@@ -94,7 +100,8 @@ function QuestionBox({
             answered: false,
             voted: false,
             vote: 0
-          }
+          },
+          ...questionLog
         ];
         setQuestionLog(tempQuestionLog);
         if (!showQuestion) setNewQuestionCount(newQuestionCount + 1);
@@ -106,65 +113,67 @@ function QuestionBox({
     };
   });
 
-  // Vote handling
+  // Vote & answered handling
+  function getSortedId(idx: number) {
+    const sortedId = questionLog.findIndex((question) => question.idx === idx);
+    console.log(sortedId);
+    return sortedId;
+  }
+
+  function setSortedQuestionLog(
+    sortedId: number,
+    updatedQuestion: QuestionItemDTO
+  ) {
+    setQuestionLog([
+      ...questionLog.slice(0, sortedId),
+      updatedQuestion,
+      ...questionLog.slice(sortedId + 1)
+    ]);
+  }
+
   const handleVote = (idx: number) => {
-    socket.emit(`send_${questionLog[idx].voted ? "un" : ""}vote`, {
+    const sortedId = getSortedId(idx);
+    socket.emit(`send_${questionLog[sortedId].voted ? "un" : ""}vote`, {
       idx,
       game
     });
 
-    const updatedQuestion = questionLog[idx];
+    const updatedQuestion = questionLog[sortedId];
     updatedQuestion.vote += updatedQuestion.voted ? -1 : 1;
     updatedQuestion.voted = !updatedQuestion.voted;
-    setQuestionLog([
-      ...questionLog.slice(0, updatedQuestion.idx),
-      updatedQuestion,
-      ...questionLog.slice(updatedQuestion.idx + 1)
-    ]);
+    setSortedQuestionLog(sortedId, updatedQuestion);
   };
 
   const handleAnswered = (idx: number) => {
+    const sortedId = getSortedId(idx);
     socket.emit("send_answered", { idx, game });
 
-    const updatedQuestion = questionLog[idx];
+    const updatedQuestion = questionLog[sortedId];
     updatedQuestion.answered = true;
-    setQuestionLog([
-      ...questionLog.slice(0, updatedQuestion.idx),
-      updatedQuestion,
-      ...questionLog.slice(updatedQuestion.idx + 1)
-    ]);
+    setSortedQuestionLog(sortedId, updatedQuestion);
   };
 
   useEffect(() => {
     socket.on("receive_vote", (data: { idx: number }) => {
       const { idx } = data;
-      const updatedQuestion = questionLog[idx];
+      const sortedId = getSortedId(idx);
+      const updatedQuestion = questionLog[sortedId];
       updatedQuestion.vote += 1;
-      setQuestionLog([
-        ...questionLog.slice(0, updatedQuestion.idx),
-        updatedQuestion,
-        ...questionLog.slice(updatedQuestion.idx + 1)
-      ]);
+      setSortedQuestionLog(sortedId, updatedQuestion);
     });
     socket.on("receive_unvote", (data: { idx: number }) => {
       const { idx } = data;
-      const updatedQuestion = questionLog[idx];
+      const sortedId = getSortedId(idx);
+      const updatedQuestion = questionLog[sortedId];
       updatedQuestion.vote -= 1;
-      setQuestionLog([
-        ...questionLog.slice(0, updatedQuestion.idx),
-        updatedQuestion,
-        ...questionLog.slice(updatedQuestion.idx + 1)
-      ]);
+      setSortedQuestionLog(sortedId, updatedQuestion);
     });
     socket.on("receive_answered", (data: { idx: number }) => {
       const { idx } = data;
-      const updatedQuestion = questionLog[idx];
+      const sortedId = getSortedId(idx);
+      const updatedQuestion = questionLog[sortedId];
       updatedQuestion.answered = true;
-      setQuestionLog([
-        ...questionLog.slice(0, updatedQuestion.idx),
-        updatedQuestion,
-        ...questionLog.slice(updatedQuestion.idx + 1)
-      ]);
+      setSortedQuestionLog(sortedId, updatedQuestion);
     });
 
     return () => {
@@ -173,6 +182,34 @@ function QuestionBox({
       socket.off("receive_answered");
     };
   });
+
+  // Sort handling
+  const sortTypeName = ["Most recent", "Unanswered", "Most voted"];
+  const [sortType, setSortType] = useState(0);
+  const handleSort = (idx: number) => {
+    setSortType(idx);
+    const sortedQuestionLog = questionLog;
+    sortedQuestionLog.sort((a: QuestionItemDTO, b: QuestionItemDTO) => {
+      switch (idx) {
+        case 0: // Most recent
+          if (a.idx < b.idx) return 1;
+          if (a.idx > b.idx) return -1;
+          break;
+        case 1: // Answered
+          if (Number(a.answered) < Number(b.answered)) return -1;
+          if (Number(a.answered) > Number(b.answered)) return 1;
+          break;
+        case 2: // Most votes
+          if (a.vote < b.vote) return 1;
+          if (a.vote > b.vote) return -1;
+          break;
+        default:
+          return 0;
+      }
+      return 0;
+    });
+    setQuestionLog(sortedQuestionLog);
+  };
 
   return (
     <>
@@ -186,7 +223,33 @@ function QuestionBox({
         </Offcanvas.Header>
         <Offcanvas.Body style={{ height: "100vh" }}>
           <Col className="game-chatbox">
-            <Row className="game-chat">
+            <ButtonGroup>
+              {sortTypeName.map((type, idx) => (
+                <>
+                  {idx === sortType && (
+                    <Button
+                      variant="outline-dark"
+                      style={{ cursor: "default" }}
+                      active
+                    >
+                      {type}
+                    </Button>
+                  )}
+                  {idx !== sortType && (
+                    <Button
+                      variant="outline-dark"
+                      onClick={() => handleSort(idx)}
+                    >
+                      {type}
+                    </Button>
+                  )}
+                </>
+              ))}
+            </ButtonGroup>
+            <Row
+              className="game-chat mt-3"
+              style={{ height: `${userRole === 0 ? "87" : "82"}%` }}
+            >
               <QuestionBody
                 questionLog={questionLog}
                 handleVote={handleVote}
@@ -194,21 +257,23 @@ function QuestionBox({
                 userRole={userRole}
               />
             </Row>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Row style={{ marginTop: "16px" }}>
-                <Col lg={9}>
-                  <Form.Control
-                    onChange={(e) => setQuestionText(e.target.value)}
-                    value={questionText}
-                  />
-                </Col>
-                <Col>
-                  <div className="d-grid">
-                    <Button type="submit">Send</Button>
-                  </div>
-                </Col>
-              </Row>
-            </Form>
+            {userRole !== 0 && (
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                <Row style={{ marginTop: "16px" }}>
+                  <Col lg={9}>
+                    <Form.Control
+                      onChange={(e) => setQuestionText(e.target.value)}
+                      value={questionText}
+                    />
+                  </Col>
+                  <Col>
+                    <div className="d-grid">
+                      <Button type="submit">Send</Button>
+                    </div>
+                  </Col>
+                </Row>
+              </Form>
+            )}
           </Col>
         </Offcanvas.Body>
       </Offcanvas>

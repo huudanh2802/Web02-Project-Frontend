@@ -10,7 +10,6 @@ type Slide = {
 
 export type MutipleChoiceDTO = Slide & {
   type: 1;
-
   question: string;
   correct: string;
   answers: AnswerDTO[];

@@ -36,7 +36,7 @@ export default function ParagraphViewer({
   }, [idx, presentation?.slides, setIdx, setSlide, socket]);
 
   return (
-    <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
+    <Row className="mb-2" style={{ textAlign: "center" }}>
       <Col className="game-question">
         <h2 style={{ fontWeight: "bold" }}>{slide?.heading}</h2>
         <h3>{slide?.paragraph}</h3>

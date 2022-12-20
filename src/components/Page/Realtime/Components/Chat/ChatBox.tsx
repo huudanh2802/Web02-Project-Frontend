@@ -4,7 +4,7 @@ import { Button, Col, Offcanvas, Row, Form } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
-import { ChatItemDTO } from "../../../../../dtos/RealtimeDTO";
+import { ChatItemDTO } from "../../../../../dtos/GameDTO";
 
 import ChatFAB from "./ChatFAB";
 import ChatBody from "./ChatBody";
@@ -34,14 +34,14 @@ function ChatBox({
 }) {
   // Chat textfield handling
   const [chatText, setChatText] = useState("");
-  const [chatHistory, setChatHistory] = useState<ChatItemDTO[]>([]);
+  const [chatLog, setChatLog] = useState<ChatItemDTO[]>([]);
   const { handleSubmit } = useForm();
   const onSubmit = () => {
     if (chatText.length <= 0) return;
     // Local handling
     const date = new Date();
-    const tempChatHistory = [
-      ...chatHistory,
+    const tempChatLog = [
+      ...chatLog,
       {
         username,
         chat: chatText,
@@ -50,7 +50,7 @@ function ChatBox({
         role: userRole
       }
     ];
-    setChatHistory(tempChatHistory);
+    setChatLog(tempChatLog);
     setChatText("");
 
     // Socket
@@ -70,8 +70,8 @@ function ChatBox({
       (data: { username: string; chat: string; role: number; date: Date }) => {
         const { chat, date, role } = data;
         const otherUsername = data.username;
-        const tempChatHistory = [
-          ...chatHistory,
+        const tempChatLog = [
+          ...chatLog,
           {
             username: otherUsername,
             chat,
@@ -80,7 +80,7 @@ function ChatBox({
             role
           }
         ];
-        setChatHistory(tempChatHistory);
+        setChatLog(tempChatLog);
         if (!showChat) setNewChatCount(newChatCount + 1);
       }
     );
@@ -99,7 +99,7 @@ function ChatBox({
         <Offcanvas.Body style={{ height: "100vh" }}>
           <Col className="game-chatbox">
             <Row className="game-chat">
-              <ChatBody chatHistory={chatHistory} />
+              <ChatBody chatLog={chatLog} />
             </Row>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Row style={{ marginTop: "16px" }}>

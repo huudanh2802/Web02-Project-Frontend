@@ -25,7 +25,11 @@ function Lobby({
   const leaveGame = () => {
     console.log(`leaveGame: ${JSON.stringify({ username, game })}`);
     socket.emit("leave_game", { username, game });
-    navigate(`/join`);
+    if (localStorage.getItem("fullname") === null) {
+      navigate("/join");
+    } else {
+      navigate("/group/grouplist");
+    }
   };
 
   // Game handling

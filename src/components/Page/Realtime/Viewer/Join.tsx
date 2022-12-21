@@ -31,7 +31,6 @@ function Join({
 
   const joinGame = () => {
     if (username !== "" && game !== "") {
-      console.log(`joinGame: ${JSON.stringify({ username, game })}`);
       socket.emit("join_game", { username, game });
     }
   };

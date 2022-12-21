@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Row, Modal } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import GroupPresentKard from "../../../Common/Kard/GroupPresentKard";
+import GroupPresentJoinKard from "../../../Common/Kard/GroupPresentJoinKard";
 
 import ViewPresentationDTO from "../../../../dtos/ViewPresentationDTO";
 
@@ -14,6 +16,8 @@ function PresentationSection({
   setGame: React.Dispatch<React.SetStateAction<string>>;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
+  const { groupId } = useParams(); // groupId
+
   // Presentation list modal
   const [presentations, setPresentations] = useState<ViewPresentationDTO[]>([]);
   const [show, setShow] = useState(false);
@@ -30,6 +34,19 @@ function PresentationSection({
       handleShow();
     });
   };
+
+  // Current presentation
+  const [curPresentation, setCurPresentation] = useState<ViewPresentationDTO>();
+  const [curGame, setCurGame] = useState<string>();
+  useEffect(() => {
+    axiosPrivate({
+      method: "get",
+      url: `${process.env.REACT_APP_API_SERVER}/game/currentPresentation/${groupId}`
+    }).then((response) => {
+      setCurPresentation(response.data.presentation);
+      setCurGame(response.data.game.game);
+    });
+  }, [groupId]);
 
   return (
     <>
@@ -52,9 +69,22 @@ function PresentationSection({
           </Row>
         </Modal.Body>
       </Modal>
+
       <h3 className="fw-bold mb-2">Presentation</h3>
       <Button onClick={listPresentation}>Present</Button>
-      <header className="mt-4">No current Presentation</header>
+      {curGame && curPresentation && (
+        <GroupPresentJoinKard
+          presentation={curPresentation}
+          idx={0}
+          game={curGame}
+          setGame={setGame}
+          socket={socket}
+          groupId={groupId!}
+        />
+      )}
+      {(!curGame || !curPresentation) && (
+        <header className="mt-2">No current Presentation</header>
+      )}
     </>
   );
 }

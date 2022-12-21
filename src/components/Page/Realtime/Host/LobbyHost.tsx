@@ -51,7 +51,7 @@ function LobbyHost({
         setGroup(response.data);
       });
     }
-  });
+  }, [groupId]);
 
   // Game handling
   const startGame = () => {
@@ -61,7 +61,7 @@ function LobbyHost({
 
   const endGame = () => {
     socket.emit("end_game", { game });
-    navigate(-1);
+    navigate("/group/grouplist");
   };
 
   return (
@@ -72,8 +72,8 @@ function LobbyHost({
             <Card.Body>
               <div className="mb-3 mt-md-4 mx-4">
                 <h4 className="fw-bold" style={{ textAlign: "center" }}>
-                  {groupId && group
-                    ? `${group.name} presentation`
+                  {groupId
+                    ? `${group?.name} presentation`
                     : `Game code: ${game}`}
                 </h4>
               </div>

@@ -18,23 +18,6 @@ function PresentationSection({
 }) {
   const { groupId } = useParams(); // groupId
 
-  // Presentation list modal
-  const [presentations, setPresentations] = useState<ViewPresentationDTO[]>([]);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const listPresentation = () => {
-    const id = localStorage.getItem("id");
-    axiosPrivate({
-      method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/presentation/getview/${id}`
-    }).then((response) => {
-      setPresentations(response.data);
-      handleShow();
-    });
-  };
-
   // Current presentation
   const [curPresentation, setCurPresentation] = useState<ViewPresentationDTO>();
   const [curGame, setCurGame] = useState<string>();
@@ -47,6 +30,27 @@ function PresentationSection({
       setCurGame(response.data.game.game);
     });
   }, [groupId]);
+
+  // Presentation list modal
+  const [presentations, setPresentations] = useState<ViewPresentationDTO[]>([]);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    if (curGame && curPresentation)
+      alert("Another presentation is in session.");
+    setShow(true);
+  };
+
+  const listPresentation = () => {
+    const id = localStorage.getItem("id");
+    axiosPrivate({
+      method: "get",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/getview/${id}`
+    }).then((response) => {
+      setPresentations(response.data);
+      handleShow();
+    });
+  };
 
   return (
     <>

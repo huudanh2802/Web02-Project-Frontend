@@ -247,7 +247,7 @@ function QuestionBox({
               ))}
             </ButtonGroup>
             <Row
-              className="game-chat mt-3"
+              className="game-question mt-3"
               style={{ height: `${userRole === 0 ? "87" : "82"}%` }}
             >
               <QuestionBody

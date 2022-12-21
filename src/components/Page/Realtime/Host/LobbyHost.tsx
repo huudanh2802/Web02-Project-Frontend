@@ -81,7 +81,7 @@ function LobbyHost({
               <Row xs={4} md={4} lg={3} style={{ marginTop: "16px" }}>
                 {users.map((user) => (
                   <Col>
-                    <h5>{user.username}</h5>
+                    <h5 style={{ textAlign: "center" }}>{user.username}</h5>
                   </Col>
                 ))}
               </Row>

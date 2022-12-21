@@ -71,9 +71,19 @@ function Game({
       }
     });
 
+    socket.on("disrupt_game", () => {
+      alert("Game is terminated since another is starting.");
+      if (localStorage.getItem("fullname") === null) {
+        navigate("/join");
+      } else {
+        navigate("/group/grouplist");
+      }
+    });
+
     return () => {
       socket.off("end_game");
       socket.off("finish_game");
+      socket.off("disrupt_game");
     };
   }, [idx, presentation?.slides, socket, username, game, navigate]);
 

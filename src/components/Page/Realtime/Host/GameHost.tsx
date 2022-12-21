@@ -3,7 +3,7 @@
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 
@@ -20,6 +20,7 @@ function GameHost({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   game: string;
 }) {
+  const navigate = useNavigate();
   const { presentationId } = useParams();
   const username = localStorage.getItem("fullname");
 
@@ -68,6 +69,18 @@ function GameHost({
       console.log(response.data);
     });
   }, [idx, presentationId]);
+
+  useEffect(() => {
+    socket.on("disrupt_game", () => {
+      alert("Your game is terminated since another is starting.");
+      socket.emit("leave_game", { username, game });
+      navigate("/group/grouplist");
+    });
+
+    return () => {
+      socket.off("disrupt_game");
+    };
+  }, [idx, presentation?.slides, socket, username, game, navigate]);
 
   return (
     <Container className="game-container game-container-primary" fluid>

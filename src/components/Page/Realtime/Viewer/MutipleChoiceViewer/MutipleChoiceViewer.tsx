@@ -113,6 +113,25 @@ export default function MutipleChoiceAnswer({
     socket
   ]);
 
+  useEffect(() => {
+    socket.on("submit_answer", (data: { username: string; id: string }) => {
+      const { id } = data;
+      const checkArray = gameAnswer.filter((a) => a.id === id);
+      if (checkArray.length === 0) {
+        setGameAnswer((oldAnswer) => [...oldAnswer, { id, count: 1 }]);
+      } else {
+        const cloneAnswer = [...gameAnswer];
+        const answerIdx = cloneAnswer.findIndex((a) => a.id === id);
+        cloneAnswer[answerIdx].count += 1;
+        setGameAnswer(cloneAnswer);
+      }
+    });
+
+    return () => {
+      socket.off("submit_answer");
+    };
+  }, [gameAnswer, socket]);
+
   return (
     <>
       <Row className="mb-4" style={{ textAlign: "center" }}>

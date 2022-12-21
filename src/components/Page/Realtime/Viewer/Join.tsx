@@ -31,7 +31,7 @@ function Join({
 
   const joinGame = () => {
     if (username !== "" && game !== "") {
-      socket.emit("join_game", { username, game });
+      socket.emit("join_game", { username, game, groupId: null });
     }
   };
 

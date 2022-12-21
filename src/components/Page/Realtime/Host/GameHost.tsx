@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 
 import { axiosPrivate } from "../../../../token/axiosPrivate";
@@ -29,6 +31,7 @@ function GameHost({
   // Chat box handling
   const [newChatCount, setNewChatCount] = useState(0);
   const [showChat, setShowChat] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleShowChat = () => {
     setShowChat(true);
     setNewChatCount(0);
@@ -62,6 +65,7 @@ function GameHost({
 
   // Game handling
   useEffect(() => {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/game/get/${presentationId}`
@@ -75,11 +79,20 @@ function GameHost({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }, [idx, presentationId]);
 
   return (
     <Container className="game-container game-container-primary" fluid>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <BodyHost
         slide={slide}
         idx={idx}

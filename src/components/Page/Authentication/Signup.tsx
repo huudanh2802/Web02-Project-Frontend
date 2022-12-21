@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../../../index.css";
@@ -26,6 +28,7 @@ function Signup({
 }) {
   // Routing
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   // Data
   // const [auth, setAuth] = useState({
@@ -55,6 +58,7 @@ function Signup({
     //   password: data.password
     // });
     // setForm(1);
+    setLoading(true);
     axiosPublic
       .post(`/user/signup`, {
         email: data.email,
@@ -74,7 +78,8 @@ function Signup({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   };
   const { errors } = formState;
 
@@ -93,6 +98,7 @@ function Signup({
         console.log(result.data);
 
         // Authenticate
+        setLoading(true);
         axios
           .post(`${process.env.REACT_APP_API_SERVER}/user/googleAuthen`, {
             email: result.data.email,
@@ -112,7 +118,8 @@ function Signup({
             toast.error(err.response.data.error, {
               className: "toast_container"
             });
-          });
+          })
+          .finally(() => setLoading(false));
       } catch (err) {
         console.log(err);
       }
@@ -161,6 +168,14 @@ function Signup({
   // if (form === 0)
   return (
     <Container fluid style={bgStyle}>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={8} lg={6} xs={12} />
         <Col md={6} lg={4} xs={8}>

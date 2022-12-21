@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // import {Image} from "react-bootstrap";
 import MemberSelection from "../MemberSelection/MemberSelection";
@@ -22,6 +24,7 @@ import "../../../Common/Toast/ToastStyle.css";
 
 export default function NewGroup() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const localData = {
     id: localStorage.getItem("id")!,
     email: localStorage.getItem("email")!
@@ -42,6 +45,7 @@ export default function NewGroup() {
   });
 
   function sendData() {
+    setLoading(true);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/newgroup`,
@@ -59,7 +63,8 @@ export default function NewGroup() {
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }
 
   const onSubmit = handleSubmit((data) => {
@@ -78,6 +83,14 @@ export default function NewGroup() {
 
   return (
     <form onSubmit={onSubmit}>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Container className="mt-3">
         <Row className="m-4">
           {/* <Col lg={4}>

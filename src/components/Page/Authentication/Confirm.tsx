@@ -3,15 +3,19 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import "../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import axiosPublic from "../../../token/axiosPublic";
 import "react-toastify/dist/ReactToastify.css";
 import "../../Common/Toast/ToastStyle.css";
 
 export default function Confirm() {
   const { token } = useParams();
+  const [loading, setLoading] = useState(false);
   function confirmToken() {
+    setLoading(true);
     axiosPublic
       .get(`/user/verify/${token}`)
       .then((response) => {
@@ -22,7 +26,8 @@ export default function Confirm() {
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }
   useEffect(() => {
     confirmToken();
@@ -31,6 +36,14 @@ export default function Confirm() {
 
   return (
     <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={6} lg={4} xs={8}>
           <Card className="shadow">

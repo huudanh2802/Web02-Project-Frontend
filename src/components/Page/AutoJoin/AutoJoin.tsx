@@ -1,15 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import "react-toastify/dist/ReactToastify.css";
 import "../../Common/Toast/ToastStyle.css";
 
 export default function AutoJoin() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const userId = localStorage.getItem("id");
   const { groupId } = useParams();
   useEffect(() => {
+    setLoading(true);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/autojoin/${groupId}`,
@@ -38,8 +42,20 @@ export default function AutoJoin() {
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }, [groupId, navigate, userId]);
 
-  return <div />;
+  return (
+    <div>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
+    </div>
+  );
 }

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Card, Accordion, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { removeItem } from "../../../helpers/functions";
 import MemberDTO from "../../../dtos/MemberDTO";
 import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
@@ -26,6 +28,7 @@ function UserKard({
   const [role, setRole] = useState("Owner");
   const [tag, setTag] = useState("gold");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const redirectProfile = () => {
     console.log("Hello");
@@ -38,6 +41,7 @@ function UserKard({
       role: roleId,
       memberId: info.id
     };
+    setLoading(true);
     axiosPrivate({
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
@@ -66,7 +70,8 @@ function UserKard({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const kick = () => {
@@ -75,6 +80,7 @@ function UserKard({
       role: roleId,
       memberId: info.id
     };
+    setLoading(true);
     axiosPrivate({
       method: "delete",
       url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
@@ -98,7 +104,8 @@ function UserKard({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -113,6 +120,14 @@ function UserKard({
 
   return (
     <Card className="user-kard">
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <div className="kard-body">
         <img
           src="/assets/avatar_alt.svg"

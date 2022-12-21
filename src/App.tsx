@@ -5,8 +5,8 @@ import BaseRouter from "./routers/BaseRouter";
 function App() {
   return (
     <>
-      <ToastContainer />;
-      <BaseRouter />;
+      <ToastContainer />
+      <BaseRouter />
     </>
   );
 }

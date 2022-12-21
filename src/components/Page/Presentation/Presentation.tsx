@@ -8,6 +8,8 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
 import {
@@ -36,6 +38,7 @@ function Presentation({
 }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
     type: 1,
     question: "",
@@ -64,6 +67,7 @@ function Presentation({
   } = useForm();
 
   async function sendSlide() {
+    setLoading(true);
     axiosPrivate({
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/update/${id}`,
@@ -83,9 +87,11 @@ function Presentation({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }
   useEffect(() => {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/get/${id}`
@@ -101,7 +107,8 @@ function Presentation({
         setTimeout(() => {
           navigate("/");
         }, 2500);
-      });
+      })
+      .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -162,6 +169,7 @@ function Presentation({
   const present = () => {
     const game = Math.floor(Math.random() * 10000);
     // Backend
+    setLoading(true);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/game/newgame/`,
@@ -177,11 +185,20 @@ function Presentation({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <Container fluid>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <TopBar
         sendSlide={() => sendSlide()}
         present={present}

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
@@ -41,8 +43,10 @@ function Game({
   });
   const [idx, setIdx] = useState(0);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/game/get/${presentationId}`
@@ -56,12 +60,15 @@ function Game({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }, [idx, presentationId]);
 
   useEffect(() => {
     socket.on("end_game", () => {
-      alert("Host has ended the game");
+      toast("Host has ended the game", {
+        className: "toast_container"
+      });
       socket.emit("leave_game", { username, game });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");
@@ -71,7 +78,9 @@ function Game({
     });
 
     socket.on("finish_game", () => {
-      alert("Game has ended");
+      toast("Game has ended", {
+        className: "toast_container"
+      });
       socket.emit("leave_game", { username, game });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");
@@ -108,6 +117,14 @@ function Game({
 
   return (
     <Container className={`game-container game-container-${bg}`} fluid>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Body
         slide={slide}
         idx={idx}

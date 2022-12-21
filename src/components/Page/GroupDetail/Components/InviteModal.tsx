@@ -1,9 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,8 +23,10 @@ function InviteModal({
   groupMember: GroupInfoDTO;
 }) {
   const { register, handleSubmit } = useForm();
+  const [loading, setLoading] = useState(false);
   const onSubmit = (data: any) => {
     const email = data;
+    setLoading(true);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/invitebyemail/${groupId}`,
@@ -37,11 +41,20 @@ function InviteModal({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Modal.Header closeButton>
         <Modal.Title>Invite user</Modal.Title>
       </Modal.Header>

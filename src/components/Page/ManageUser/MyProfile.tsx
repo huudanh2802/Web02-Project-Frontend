@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import "../../Common/Toast/ToastStyle.css";
@@ -15,9 +17,11 @@ export default function MyProfile() {
   });
 
   const { register, handleSubmit } = useForm();
+  const [loading, setLoading] = useState(false);
   const localId = localStorage.getItem("id");
 
   function setData() {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/user/get/${localId}`
@@ -30,10 +34,12 @@ export default function MyProfile() {
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }
 
   function onSubmit(data: any) {
+    setLoading(true);
     axiosPrivate({
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/user/update`,
@@ -53,10 +59,12 @@ export default function MyProfile() {
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }
 
   function OnChangePass(data: any) {
+    setLoading(true);
     axiosPrivate({
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/user/updatepassword`,
@@ -74,7 +82,8 @@ export default function MyProfile() {
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   }
   useEffect(() => {
     setData();
@@ -93,6 +102,14 @@ export default function MyProfile() {
         flexDirection: "column"
       }}
     >
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Container
         style={{
           background: "white",

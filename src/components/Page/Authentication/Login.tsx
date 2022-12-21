@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../../../index.css";
@@ -35,7 +37,10 @@ function Login({
   const formOptions = { resolver: yupResolver(formAuthSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
+
+  const [loading, setLoading] = useState(false);
   const onSubmit = (data: FieldValues) => {
+    setLoading(true);
     axiosPublic
       .post(`/user/login`, {
         email: data.email,
@@ -59,7 +64,8 @@ function Login({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   // Google login
@@ -77,6 +83,7 @@ function Login({
         console.log(result.data);
 
         // Authenticate
+        setLoading(true);
         axiosPublic
           .post(`/user/googleAuthen`, {
             email: result.data.email,
@@ -96,7 +103,8 @@ function Login({
             toast.error(err.response.data.error, {
               className: "toast_container"
             });
-          });
+          })
+          .finally(() => setLoading(false));
       } catch (err) {
         console.log(err);
       }
@@ -115,6 +123,14 @@ function Login({
   // First form: Email & password
   return (
     <Container fluid style={bgStyle}>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={8} lg={6} xs={12} />
         <Col md={6} lg={4} xs={8}>

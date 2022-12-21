@@ -12,6 +12,7 @@ export default function Body({
   socket,
   presentation,
   game,
+  username,
   setIdx,
   setSlide,
   setBg
@@ -21,6 +22,7 @@ export default function Body({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   presentation: PresentationDTO;
   game: string;
+  username: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
   setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
   setBg: React.Dispatch<React.SetStateAction<string>>;
@@ -34,6 +36,7 @@ export default function Body({
           socket={socket}
           presentation={presentation!}
           game={game}
+          username={username}
           setIdx={setIdx}
           setSlide={setSlide}
           setBg={setBg}

@@ -10,6 +10,7 @@ import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import ChatBox from "../Components/Chat/ChatBox";
+import QuestionBox from "../Components/Question/QuestionBox";
 import "../Realtime.css";
 import BodyHost from "./BodyHost";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,15 +25,25 @@ function GameHost({
 }) {
   const { presentationId } = useParams();
   const username = localStorage.getItem("fullname");
-  const [newChatCount, setNewChatCount] = useState(0);
 
   // Chat box handling
+  const [newChatCount, setNewChatCount] = useState(0);
   const [showChat, setShowChat] = useState(false);
   const handleShowChat = () => {
     setShowChat(true);
     setNewChatCount(0);
   };
   const handleCloseChat = () => setShowChat(false);
+
+  // Question box handling
+  const [newQuestionCount, setNewQuestionCount] = useState(0);
+  const [showQuestion, setShowQuestion] = useState(false);
+  const handleShowQuestion = () => {
+    setShowQuestion(true);
+    setNewQuestionCount(0);
+  };
+  const handleCloseQuestion = () => setShowQuestion(false);
+
   const [presentation, setPresentation] = useState<PresentationDTO>();
   const [slide, setSlide] = useState<SlideDTO>({
     type: 1,
@@ -88,6 +99,17 @@ function GameHost({
         handleCloseChat={handleCloseChat}
         newChatCount={newChatCount}
         setNewChatCount={setNewChatCount}
+      />
+      <QuestionBox
+        username={username!}
+        userRole={0}
+        game={game}
+        socket={socket}
+        showQuestion={showQuestion}
+        handleShowQuestion={handleShowQuestion}
+        handleCloseQuestion={handleCloseQuestion}
+        newQuestionCount={newQuestionCount}
+        setNewQuestionCount={setNewQuestionCount}
       />
     </Container>
   );

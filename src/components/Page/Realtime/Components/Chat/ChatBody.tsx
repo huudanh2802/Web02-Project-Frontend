@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { Col, Row } from "react-bootstrap";
 
-import { ChatItemDTO } from "../../../../../dtos/RealtimeDTO";
+import { ChatItemDTO } from "../../../../../dtos/GameDTO";
 
 import ChatItem from "./ChatItem";
 
-function ChatBody({ chatHistory }: { chatHistory: ChatItemDTO[] }) {
+function ChatBody({ chatLog }: { chatLog: ChatItemDTO[] }) {
   // Scroll to bottom
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -13,11 +13,11 @@ function ChatBody({ chatHistory }: { chatHistory: ChatItemDTO[] }) {
   });
   useEffect(() => {
     bottomRef.current?.scrollIntoView();
-  }, [chatHistory]);
+  }, [chatLog]);
 
   return (
     <Col className="game-chat-list">
-      {chatHistory.map((chat) => (
+      {chatLog.map((chat) => (
         <Row>
           <ChatItem chat={chat} />
         </Row>

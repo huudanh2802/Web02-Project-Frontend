@@ -26,6 +26,7 @@ export default function MutipleChoiceAnswer({
   socket,
   presentation,
   game,
+  username,
   setIdx,
   setSlide,
   setBg
@@ -35,6 +36,7 @@ export default function MutipleChoiceAnswer({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   presentation: PresentationDTO;
   game: string;
+  username: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
   setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
   setBg: React.Dispatch<React.SetStateAction<string>>;
@@ -113,7 +115,7 @@ export default function MutipleChoiceAnswer({
 
   return (
     <>
-      <Row className="mt-4 mb-4" style={{ textAlign: "center" }}>
+      <Row className="mb-4" style={{ textAlign: "center" }}>
         <Col className="game-question">
           <h3 style={{ fontWeight: "bold" }}>
             {idx + 1}. {slide?.question}
@@ -129,7 +131,9 @@ export default function MutipleChoiceAnswer({
                 id={a.id}
                 answer={a.answer}
                 question={idx}
+                correct={slide.correct}
                 game={game}
+                username={username}
                 socket={socket}
                 setAnswer={setAnswer}
                 setSubmitted={setSubmitted}

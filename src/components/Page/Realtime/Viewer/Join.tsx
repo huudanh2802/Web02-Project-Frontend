@@ -39,13 +39,19 @@ function Join({
   useEffect(() => {
     socket.on(
       "join_game_result",
-      (data: { success: boolean; game: string; presentation: string }) => {
+      (data: {
+        success: boolean;
+        game: string;
+        presentation: string;
+        isPrivate: boolean;
+      }) => {
         console.log(`Game ${data.game} available: ${data.success}`);
         if (data.success === true) {
           console.log(`Game: ${data.game}`);
           navigate(`/lobby/${data.presentation}/${data.game}`);
         } else if (data.success === false) {
-          alert(`Failed to join non-existent game ${data.game}`);
+          const gameType = data.isPrivate ? "private" : "non-existent";
+          alert(`Failed to join ${gameType} game ${data.game}`);
         }
       }
     );

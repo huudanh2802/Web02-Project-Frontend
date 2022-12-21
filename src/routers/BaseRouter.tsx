@@ -37,7 +37,10 @@ function BaseRouter() {
         element={<GroupRouter setGame={setGame} socket={socket} />}
       >
         <Route path="grouplist" element={<GroupList />} />
-        <Route path="detail/:id" element={<GroupDetail />} />
+        <Route
+          path="detail/:groupId"
+          element={<GroupDetail setGame={setGame} socket={socket} />}
+        />
         <Route path="newgroup" element={<NewGroupPage />} />
         <Route path="myprofile" element={<MyProfile />} />
         <Route path="autojoin/:groupId" element={<AutoJoin />} />
@@ -76,6 +79,12 @@ function BaseRouter() {
           element={<LobbyHost game={game} socket={socket} />}
         />
       )}
+      {isLoggedIn && (
+        <Route
+          path="/lobbyhost/:presentationId/:groupId/:id"
+          element={<LobbyHost game={game} socket={socket} />}
+        />
+      )}
       <Route
         path="/lobby/:presentationId/:id"
         element={<Lobby username={username} game={game} socket={socket} />}
@@ -83,6 +92,12 @@ function BaseRouter() {
       {isLoggedIn && (
         <Route
           path="/gamehost/:presentationId/:id"
+          element={<GameHost socket={socket} game={game} />}
+        />
+      )}
+      {isLoggedIn && (
+        <Route
+          path="/gamehost/:presentationId/:groupId/:id"
           element={<GameHost socket={socket} game={game} />}
         />
       )}

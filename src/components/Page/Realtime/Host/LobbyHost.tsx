@@ -5,6 +5,9 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
+
+import GroupDTO from "../../../../dtos/GroupDTO";
 
 import "../../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,7 +20,7 @@ function LobbyHost({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
   const navigate = useNavigate();
-  const { presentationId, id } = useParams();
+  const { presentationId, groupId, id } = useParams();
 
   interface User {
     id: string;
@@ -36,6 +39,19 @@ function LobbyHost({
       socket.off(`${game}_users`);
     };
   }, []);
+
+  // Group presentation
+  const [group, setGroup] = useState<GroupDTO>();
+  useEffect(() => {
+    if (groupId) {
+      axiosPrivate({
+        method: "get",
+        url: `${process.env.REACT_APP_API_SERVER}/group/get/${groupId}`
+      }).then((response: any) => {
+        setGroup(response.data);
+      });
+    }
+  });
 
   // Game handling
   const startGame = () => {
@@ -56,7 +72,9 @@ function LobbyHost({
             <Card.Body>
               <div className="mb-3 mt-md-4 mx-4">
                 <h4 className="fw-bold" style={{ textAlign: "center" }}>
-                  Game code: {game}
+                  {groupId && group
+                    ? `${group.name} presentation`
+                    : `Game code: ${game}`}
                 </h4>
               </div>
               <header className="fw-bold">Joined users:</header>

@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { useParams } from "react-router";
+import MemberOptionDTO from "../../../../../dtos/MemberOptionDTO";
 import { axiosPrivate } from "../../../../../token/axiosPrivate";
 import MemberSearchBox, {
   MemberOption
 } from "../../../../Common/MemberSearchBox/MemberSearchBox";
-import MemberOptionDTO from "../../../../../dtos/MemberOptionDTO";
-import { removeItem } from "../../../../../helpers/functions";
 
 function CollabsMember({
   member,

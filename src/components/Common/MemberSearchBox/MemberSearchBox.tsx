@@ -13,7 +13,7 @@ export default function MemberSearchBox({
   addMember
 }: {
   member: MemberOption[];
-  addMember: (event: any) => void;
+  addMember: (event: any | undefined) => void;
 }) {
   return (
     <Container>
@@ -21,8 +21,7 @@ export default function MemberSearchBox({
         <Select
           styles={{
             control: (baseStyles) => ({
-              ...baseStyles,
-              borderRadius: "20px"
+              ...baseStyles
             })
           }}
           value={null}

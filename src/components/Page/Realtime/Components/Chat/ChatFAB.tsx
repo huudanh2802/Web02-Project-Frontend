@@ -13,11 +13,11 @@ function ChatFAB({
 }) {
   return (
     <>
-      <Button className="fab" variant="dark" onClick={handleShowChat}>
+      <Button className="fab fab-chat" variant="dark" onClick={handleShowChat}>
         <FaComment className="mb-2" />
       </Button>
       {newChatCount > 0 && (
-        <span className="fab-noti">
+        <span className="fab-noti fab-chat-noti">
           {newChatCount <= 9 ? newChatCount : "9+"}
         </span>
       )}

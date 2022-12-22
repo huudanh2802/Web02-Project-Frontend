@@ -7,6 +7,7 @@ import { Socket } from "socket.io-client";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import ChatBox from "../Components/Chat/ChatBox";
+import QuestionBox from "../Components/Question/QuestionBox";
 import "../Realtime.css";
 import Body from "./Body";
 
@@ -21,7 +22,6 @@ function Game({
 }) {
   const { presentationId } = useParams();
   const loggedIn = localStorage.getItem("email") !== null;
-  const [newChatCount, setNewChatCount] = useState(0);
   const [presentation, setPresentation] = useState<PresentationDTO>();
   const [slide, setSlide] = useState<SlideDTO>({
     type: 1,
@@ -76,15 +76,27 @@ function Game({
       socket.off("finish_game");
     };
   }, [idx, presentation?.slides, socket, username, game, navigate]);
+
   // Chat box handling
+  const [newChatCount, setNewChatCount] = useState(0);
   const [showChat, setShowChat] = useState(false);
   const handleShowChat = () => {
     setShowChat(true);
     setNewChatCount(0);
   };
+  const handleCloseChat = () => setShowChat(false);
+
+  // Question box handling
+  const [newQuestionCount, setNewQuestionCount] = useState(0);
+  const [showQuestion, setShowQuestion] = useState(false);
+  const handleShowQuestion = () => {
+    setShowQuestion(true);
+    setNewQuestionCount(0);
+  };
+  const handleCloseQuestion = () => setShowQuestion(false);
+
   const [bg, setBg] = useState("primary");
 
-  const handleCloseChat = () => setShowChat(false);
   return (
     <Container className={`game-container game-container-${bg}`} fluid>
       <Body
@@ -93,6 +105,7 @@ function Game({
         socket={socket}
         presentation={presentation!}
         game={game}
+        username={username}
         setIdx={setIdx}
         setSlide={setSlide}
         setBg={setBg}
@@ -107,6 +120,17 @@ function Game({
         handleCloseChat={handleCloseChat}
         newChatCount={newChatCount}
         setNewChatCount={setNewChatCount}
+      />
+      <QuestionBox
+        username={username}
+        userRole={loggedIn ? 1 : 2}
+        game={game}
+        socket={socket}
+        showQuestion={showQuestion}
+        handleShowQuestion={handleShowQuestion}
+        handleCloseQuestion={handleCloseQuestion}
+        newQuestionCount={newQuestionCount}
+        setNewQuestionCount={setNewQuestionCount}
       />
     </Container>
   );

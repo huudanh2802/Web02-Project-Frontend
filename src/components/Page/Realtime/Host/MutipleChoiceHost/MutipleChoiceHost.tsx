@@ -75,7 +75,7 @@ export default function MutipleChoiceHost({
 
   const handleNextQuestion = () => {
     setShowAnswer(false);
-    setAnswer([]);
+    setAnswer(answerTemplate);
     setIdx(idx + 1);
     setSlide(presentation?.slides[idx]);
     socket.emit("next_question", { game, slide });
@@ -108,7 +108,7 @@ export default function MutipleChoiceHost({
 
   return (
     <Col>
-      <Row className="mt-4 mb-4" style={{ textAlign: "center" }}>
+      <Row className="mb-4" style={{ textAlign: "center" }}>
         <Col className="game-question">
           <h3 style={{ fontWeight: "bold" }}>
             {idx + 1}. {slide?.question}
@@ -152,7 +152,7 @@ export default function MutipleChoiceHost({
             presentation &&
             idx + 1 < presentation.slides.length && (
               <Button variant="light" onClick={handleNextQuestion}>
-                Next question
+                Next slide
               </Button>
             )}
           {showAnswer &&

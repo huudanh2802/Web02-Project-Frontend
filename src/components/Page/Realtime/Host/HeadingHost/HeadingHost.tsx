@@ -46,22 +46,28 @@ export default function HeadingHost({
   };
 
   return (
-    <Row className="mt-2 mb-2" style={{ textAlign: "center" }}>
-      <Col>
-        <Col className="game-question">
-          <h3 style={{ fontWeight: "bold" }}>{slide?.heading}</h3>
-        </Col>{" "}
-        {presentation && idx + 1 < presentation.slides.length && (
-          <Button variant="primary" onClick={handleNextSlide}>
-            Next slide
-          </Button>
-        )}
-        {presentation && idx + 1 >= presentation.slides.length && (
-          <Button variant="dark" onClick={handleFinishGame}>
-            Finish game
-          </Button>
-        )}
-      </Col>
-    </Row>
+    <Col>
+      <Row className="mb-2" style={{ textAlign: "center" }}>
+        <Col>
+          <Col className="game-question">
+            <h3 style={{ fontWeight: "bold" }}>{slide?.heading}</h3>
+          </Col>{" "}
+        </Col>
+      </Row>
+      <Row>
+        <Col style={{ textAlign: "center" }}>
+          {presentation && idx + 1 < presentation.slides.length && (
+            <Button variant="light" onClick={handleNextSlide}>
+              Next slide
+            </Button>
+          )}
+          {presentation && idx + 1 >= presentation.slides.length && (
+            <Button variant="dark" onClick={handleFinishGame}>
+              Finish game
+            </Button>
+          )}
+        </Col>
+      </Row>
+    </Col>
   );
 }

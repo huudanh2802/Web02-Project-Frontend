@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import moment from "moment";
 
-import { ChatItemDTO } from "../../../../../dtos/RealtimeDTO";
+import { ChatItemDTO } from "../../../../../dtos/GameDTO";
 
 function ChatItem({ chat }: { chat: ChatItemDTO }) {
   // Role handling
-  const [role, setRole] = useState("Admin");
+  const [role, setRole] = useState("Host");
   const [tag, setTag] = useState("gold");
 
   useEffect(() => {
@@ -20,7 +20,7 @@ function ChatItem({ chat }: { chat: ChatItemDTO }) {
         setTag("gray");
         break;
       default:
-        setRole("Admin");
+        setRole("Host");
         setTag("gold");
     }
     if (chat.own) setTag("own");

@@ -147,6 +147,7 @@ function NewPresentation() {
         setPresentation={setNewPresentation}
         registerName={registerName}
         handleSubmitName={handleSubmitName}
+        checkOwn={false}
       />
       <Row className="mt-2">
         <SlideBar

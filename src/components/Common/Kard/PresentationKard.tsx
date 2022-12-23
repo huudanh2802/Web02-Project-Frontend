@@ -1,7 +1,7 @@
 import React, { Key, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaCalendar } from "react-icons/fa";
+import { FaCalendar, FaUser } from "react-icons/fa";
 import moment from "moment";
 
 import "./Kard.css";
@@ -16,11 +16,13 @@ import "../Toast/ToastStyle.css";
 function PresentationKard({
   presentation,
   index,
-  setPresentation
+  setPresentation,
+  collabs
 }: {
   presentation: ViewPresentationDTO;
   index: Key;
   setPresentation: React.Dispatch<React.SetStateAction<ViewPresentationDTO[]>>;
+  collabs: boolean;
 }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -65,7 +67,18 @@ function PresentationKard({
         style={{ marginBottom: "8px" }}
         onClick={viewPresentation}
       >
-        <div className="kard-header">
+        <div
+          className="kard-header"
+          style={
+            collabs ? { background: "yellow" } : { background: "aquamarine" }
+          }
+        >
+          <div style={{ margin: "20px" }}>
+            <FaUser />
+            <span style={{ fontWeight: "bold", margin: "10" }}>
+              {collabs ? "Collabs" : "Owned"}
+            </span>
+          </div>
           <img
             src={`/assets/card-bg-${Math.floor(Math.random() * 8)}.jpg`}
             alt="bg"
@@ -83,13 +96,15 @@ function PresentationKard({
           </div>
         </div>
       </Card>
-      <Button
-        style={{ width: "inherit", marginBottom: "24px" }}
-        onClick={() => deletePresentation()}
-        variant="danger"
-      >
-        Delete presentation
-      </Button>
+      {!collabs && (
+        <Button
+          style={{ width: "inherit", marginBottom: "24px" }}
+          onClick={() => deletePresentation()}
+          variant="danger"
+        >
+          Delete presentation
+        </Button>
+      )}
     </div>
   );
 }

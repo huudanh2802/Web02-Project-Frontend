@@ -37,6 +37,7 @@ function Presentation({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
   const { id } = useParams();
+  const userId = localStorage.getItem("id");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
@@ -53,6 +54,7 @@ function Presentation({
     ]
   });
 
+  const [checkOwn, setOwn] = useState(false);
   const [detailPresentation, setPresentation] = useState<PresentationDTO>({
     name: "",
     creator: "",
@@ -99,6 +101,9 @@ function Presentation({
       .then((response) => {
         setCurrentSlide(response.data.slides[0]);
         setPresentation(response.data);
+        if (response.data.creator === userId) {
+          setOwn(true);
+        }
       })
       .catch((err) => {
         toast.error(err, {
@@ -206,6 +211,7 @@ function Presentation({
         setPresentation={setPresentation}
         registerName={registerName}
         handleSubmitName={handleSubmitName}
+        checkOwn={checkOwn}
       />
       <Row className="mt-2">
         <SlideBar

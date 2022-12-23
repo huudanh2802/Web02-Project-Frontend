@@ -14,8 +14,13 @@ import "../../Common/Toast/ToastStyle.css";
 function GroupList() {
   const [ownGroup, setOwnGroup] = useState<GroupDTO[]>([]);
   const [memberGroup, setMemberGroup] = useState<GroupDTO[]>([]);
-  const [presentations, setPresentations] = useState<ViewPresentationDTO[]>([]);
   const [loading, setLoading] = useState(false);
+  const [presentationsOwn, setPresentationsOwn] = useState<
+    ViewPresentationDTO[]
+  >([]);
+  const [presentationsCollabs, setPresentationsCollabs] = useState<
+    ViewPresentationDTO[]
+  >([]);
   function getOwnGroup() {
     const id = localStorage.getItem("id");
     setLoading(true);
@@ -50,15 +55,32 @@ function GroupList() {
       .finally(() => setLoading(false));
   }
 
-  function getPresentation() {
+  function getPresentationOwn() {
     const id = localStorage.getItem("id");
     setLoading(true);
     axiosPrivate({
       method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/presentation/getview/${id}`
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/presentationown/${id}`
     })
       .then((response) => {
-        setPresentations(response.data);
+        setPresentationsOwn(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
+  }
+  function getPresentationCollabs() {
+    const id = localStorage.getItem("id");
+    setLoading(true);
+    axiosPrivate({
+      method: "get",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/presentationcollabs/${id}`
+    })
+      .then((response) => {
+        setPresentationsCollabs(response.data);
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
@@ -70,7 +92,8 @@ function GroupList() {
   useEffect(() => {
     getOwnGroup();
     getMemberGroup();
-    getPresentation();
+    getPresentationOwn();
+    getPresentationCollabs();
   }, []);
 
   return (
@@ -109,8 +132,9 @@ function GroupList() {
 
         <Tab eventKey="presentation" title="Prensentation">
           <PresentationTab
-            presentations={presentations}
-            setPresentations={setPresentations}
+            presentationsOwn={presentationsOwn}
+            setPresentationsOwn={setPresentationsOwn}
+            presentationsCollabs={presentationsCollabs}
           />
         </Tab>
       </Tabs>

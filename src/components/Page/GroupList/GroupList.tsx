@@ -9,7 +9,12 @@ import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 function GroupList() {
   const [ownGroup, setOwnGroup] = useState<GroupDTO[]>([]);
   const [memberGroup, setMemberGroup] = useState<GroupDTO[]>([]);
-  const [presentations, setPresentations] = useState<ViewPresentationDTO[]>([]);
+  const [presentationsOwn, setPresentationsOwn] = useState<
+    ViewPresentationDTO[]
+  >([]);
+  const [presentationsCollabs, setPresentationsCollabs] = useState<
+    ViewPresentationDTO[]
+  >([]);
   function getOwnGroup() {
     const id = localStorage.getItem("id");
 
@@ -34,20 +39,31 @@ function GroupList() {
     });
   }
 
-  function getPresentation() {
+  function getPresentationOwn() {
     const id = localStorage.getItem("id");
 
     axiosPrivate({
       method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/presentation/getview/${id}`
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/presentationown/${id}`
     }).then((response) => {
-      setPresentations(response.data);
+      setPresentationsOwn(response.data);
+    });
+  }
+  function getPresentationCollabs() {
+    const id = localStorage.getItem("id");
+
+    axiosPrivate({
+      method: "get",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/presentationcollabs/${id}`
+    }).then((response) => {
+      setPresentationsCollabs(response.data);
     });
   }
   useEffect(() => {
     getOwnGroup();
     getMemberGroup();
-    getPresentation();
+    getPresentationOwn();
+    getPresentationCollabs();
   }, []);
 
   return (
@@ -78,8 +94,9 @@ function GroupList() {
 
         <Tab eventKey="presentation" title="Prensentation">
           <PresentationTab
-            presentations={presentations}
-            setPresentations={setPresentations}
+            presentationsOwn={presentationsOwn}
+            setPresentationsOwn={setPresentationsOwn}
+            presentationsCollabs={presentationsCollabs}
           />
         </Tab>
       </Tabs>

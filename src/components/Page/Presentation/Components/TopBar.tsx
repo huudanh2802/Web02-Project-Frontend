@@ -6,13 +6,20 @@ import {
   UseFormHandleSubmit,
   UseFormRegister
 } from "react-hook-form";
-import { FaArrowLeft, FaEdit, FaPlay, FaSave } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaEdit,
+  FaPlay,
+  FaSave,
+  FaUserPlus
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PresentationDTO } from "../../../../dtos/PresentationDTO";
 
 import NameModal from "./NameModal";
 
 import "../Presentation.css";
+import CollabsModal from "./Collabs/CollabsModal";
 
 function TopBar({
   sendSlide,
@@ -20,7 +27,8 @@ function TopBar({
   detailPresentation,
   setPresentation,
   registerName,
-  handleSubmitName
+  handleSubmitName,
+  checkOwn
 }: {
   sendSlide: () => Promise<void>;
   present: (() => void) | undefined;
@@ -28,11 +36,17 @@ function TopBar({
   setPresentation: React.Dispatch<React.SetStateAction<PresentationDTO>>;
   registerName: UseFormRegister<FieldValues>;
   handleSubmitName: UseFormHandleSubmit<FieldValues>;
+  checkOwn: boolean;
 }) {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+
+  const [showCollabs, setShowCollabs] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleCloseCollabs = () => setShowCollabs(false);
+  const handleShowCollabs = () => setShowCollabs(true);
 
   return (
     <>
@@ -43,6 +57,10 @@ function TopBar({
         setPresentation={setPresentation}
         registerName={registerName}
         handleSubmitName={handleSubmitName}
+      />
+      <CollabsModal
+        showCollabs={showCollabs}
+        handleCloseCollabs={handleCloseCollabs}
       />
       <Row className="p-top-bar">
         <Col lg={1}>
@@ -62,7 +80,7 @@ function TopBar({
             />
           </h2>
         </Col>
-        <Col lg={4}>
+        <Col lg={6}>
           <Row>
             <Col />
             <Col>
@@ -73,6 +91,17 @@ function TopBar({
               >
                 <FaSave style={{ margin: "0 8px 4px 0" }} /> Save
               </Button>
+              {checkOwn && (
+                <Button
+                  className="p-present-button"
+                  variant="outline-dark"
+                  onClick={handleShowCollabs}
+                >
+                  <FaUserPlus style={{ margin: "0 8px 4px 0" }} /> Manage
+                  Collabs
+                </Button>
+              )}
+
               {present && (
                 <Button
                   className="p-present-button ml-2"

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Button, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -5,11 +6,15 @@ import PresentationKard from "../../../Common/Kard/PresentationKard";
 import ViewPresentationDTO from "../../../../dtos/ViewPresentationDTO";
 
 function PresentationTab({
-  presentations,
-  setPresentations
+  presentationsOwn,
+  setPresentationsOwn,
+  presentationsCollabs
 }: {
-  presentations: ViewPresentationDTO[];
-  setPresentations: React.Dispatch<React.SetStateAction<ViewPresentationDTO[]>>;
+  presentationsOwn: ViewPresentationDTO[];
+  setPresentationsOwn: React.Dispatch<
+    React.SetStateAction<ViewPresentationDTO[]>
+  >;
+  presentationsCollabs: ViewPresentationDTO[];
 }) {
   const navigate = useNavigate();
 
@@ -21,19 +26,36 @@ function PresentationTab({
       <Button className="mx-2" onClick={() => navigate(`/join`)}>
         Join a Game
       </Button>
-      {presentations.length > 0 && (
-        <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
-          {presentations.map((presentation, idx) => (
-            <Col>
-              <PresentationKard
-                setPresentation={setPresentations}
-                presentation={presentation}
-                index={idx}
-              />
-            </Col>
-          ))}
-        </Row>
-      )}
+      <Row xs={1} md={2} lg={4} style={{ marginTop: "16px" }}>
+        {presentationsOwn.length > 0 && (
+          <>
+            {presentationsOwn.map((presentation, idx) => (
+              <Col>
+                <PresentationKard
+                  setPresentation={setPresentationsOwn}
+                  presentation={presentation}
+                  index={idx}
+                  collabs={false}
+                />
+              </Col>
+            ))}
+          </>
+        )}
+        {presentationsCollabs.length > 0 && (
+          <>
+            {presentationsCollabs.map((presentation, idx) => (
+              <Col>
+                <PresentationKard
+                  setPresentation={setPresentationsOwn}
+                  presentation={presentation}
+                  index={idx}
+                  collabs
+                />
+              </Col>
+            ))}
+          </>
+        )}
+      </Row>
     </>
   );
 }

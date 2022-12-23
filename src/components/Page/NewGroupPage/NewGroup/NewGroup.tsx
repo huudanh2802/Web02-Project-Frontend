@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
+import { useNavigate } from "react-router";
 import Select from "react-select";
 
 import MemberSelection from "../MemberSelection/MemberSelection";
@@ -15,18 +15,17 @@ import "./NewGroup.css";
 
 import NewGroupDTO from "../../../../dtos/NewGroupDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
-import MemberRole from "../MemberRole/MemberRole";
 // eslint-disable-next-line import/order
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../../Common/Toast/ToastStyle.css";
 
 import MemberDTO from "../../../../dtos/MemberDTO";
+import MemberOptionDTO from "../../../../dtos/MemberOptionDTO";
+import MemberRoleDTO from "../../../../dtos/MemberRoleDTO";
 import MemberSearchBox, {
   MemberOption
 } from "../../../Common/MemberSearchBox/MemberSearchBox";
-import MemberOptionDTO from "../../../../dtos/MemberOptionDTO";
-import MemberRoleDTO from "../../../../dtos/MemberRoleDTO";
 
 function OwnerRole({ owner }: { owner: MemberDTO }) {
   const option = [{ value: 0, label: "Owner" }];

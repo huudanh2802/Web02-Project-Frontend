@@ -5,7 +5,7 @@ import { SlideDTO, PresentationDTO } from "../../../../dtos/PresentationDTO";
 import HeadingHost from "./HeadingHost/HeadingHost";
 import MutipleChoiceHost from "./MutipleChoiceHost/MutipleChoiceHost";
 import ParagraphHost from "./ParaphaphHost/ParagraphHost";
-import { ResultItemDTO } from "../../../../dtos/GameDTO";
+import { ResultItemDTO, AnswerCounterDTO } from "../../../../dtos/GameDTO";
 
 export default function BodyHost({
   slide,
@@ -18,7 +18,11 @@ export default function BodyHost({
   result,
   setResult,
   newResultCount,
-  setNewResultCount
+  setNewResultCount,
+  answer,
+  setAnswer,
+  showAnswer,
+  setShowAnswer
 }: {
   slide: SlideDTO;
   idx: number;
@@ -31,6 +35,10 @@ export default function BodyHost({
   setResult: React.Dispatch<React.SetStateAction<ResultItemDTO[]>>;
   newResultCount: number;
   setNewResultCount: React.Dispatch<React.SetStateAction<number>>;
+  answer: AnswerCounterDTO[];
+  setAnswer: React.Dispatch<React.SetStateAction<AnswerCounterDTO[]>>;
+  showAnswer: boolean;
+  setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   switch (slide.type) {
     case 1: {
@@ -47,6 +55,10 @@ export default function BodyHost({
           setResult={setResult}
           newResultCount={newResultCount}
           setNewResultCount={setNewResultCount}
+          answer={answer}
+          setAnswer={setAnswer}
+          showAnswer={showAnswer}
+          setShowAnswer={setShowAnswer}
         />
       );
     }

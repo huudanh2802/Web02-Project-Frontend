@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-
 import { Row, Col } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import {
@@ -16,8 +15,8 @@ import {
   PresentationDTO,
   SlideDTO
 } from "../../../../../dtos/PresentationDTO";
-import Answer from "./Answer";
 import { AnswerCounterDTO } from "../../../../../dtos/GameDTO";
+import Answer from "./Answer";
 import "../../Realtime.css";
 
 export default function MutipleChoiceAnswer({
@@ -29,7 +28,11 @@ export default function MutipleChoiceAnswer({
   username,
   setIdx,
   setSlide,
-  setBg
+  setBg,
+  gameAnswer,
+  setGameAnswer,
+  showAnswer,
+  setShowAnswer
 }: {
   slide: MutipleChoiceDTO;
   idx: number;
@@ -40,28 +43,13 @@ export default function MutipleChoiceAnswer({
   setIdx: React.Dispatch<React.SetStateAction<number>>;
   setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
   setBg: React.Dispatch<React.SetStateAction<string>>;
+  gameAnswer: AnswerCounterDTO[];
+  setGameAnswer: React.Dispatch<React.SetStateAction<AnswerCounterDTO[]>>;
+  showAnswer: boolean;
+  setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [answer, setAnswer] = useState("");
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [gameAnswer, setGameAnswer] = useState<AnswerCounterDTO[]>([
-    {
-      id: "A",
-      count: 0
-    },
-    {
-      id: "B",
-      count: 0
-    },
-    {
-      id: "C",
-      count: 0
-    },
-    {
-      id: "D",
-      count: 0
-    }
-  ]);
   useEffect(() => {
     socket.on("show_answer", () => {
       setShowAnswer(true);
@@ -110,7 +98,9 @@ export default function MutipleChoiceAnswer({
     setIdx,
     setSlide,
     slide,
-    socket
+    socket,
+    setGameAnswer,
+    setShowAnswer
   ]);
 
   useEffect(() => {
@@ -130,7 +120,7 @@ export default function MutipleChoiceAnswer({
     return () => {
       socket.off("submit_answer");
     };
-  }, [gameAnswer, socket]);
+  }, [gameAnswer, socket, setGameAnswer]);
 
   return (
     <>
@@ -195,10 +185,10 @@ export default function MutipleChoiceAnswer({
                     <YAxis allowDecimals={false} stroke="white" />
                   )}
                   {gameAnswer.length > 0 && (
-                    <Bar dataKey="count" fill="white" />
+                    <Tooltip itemStyle={{ color: "black" }} />
                   )}
                   {gameAnswer.length > 0 && (
-                    <Tooltip itemStyle={{ color: "black" }} />
+                    <Bar dataKey="count" fill="white" />
                   )}
                 </BarChart>
               </ResponsiveContainer>

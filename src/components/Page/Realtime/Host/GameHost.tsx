@@ -13,7 +13,7 @@ import QuestionBox from "../Components/Question/QuestionBox";
 import ResultBox from "../Components/Result/ResultBox";
 import "../Realtime.css";
 import BodyHost from "./BodyHost";
-import { ResultItemDTO } from "../../../../dtos/GameDTO";
+import { ResultItemDTO, AnswerCounterDTO } from "../../../../dtos/GameDTO";
 
 function GameHost({
   socket,
@@ -69,6 +69,25 @@ function GameHost({
     ]
   });
   const [idx, setIdx] = useState(0);
+  const [answer, setAnswer] = useState<AnswerCounterDTO[]>([
+    {
+      id: "A",
+      count: 0
+    },
+    {
+      id: "B",
+      count: 0
+    },
+    {
+      id: "C",
+      count: 0
+    },
+    {
+      id: "D",
+      count: 0
+    }
+  ]);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   // Game handling
   useEffect(() => {
@@ -81,6 +100,29 @@ function GameHost({
       console.log(response.data);
     });
   }, [idx, presentationId]);
+
+  useEffect(() => {
+    socket.emit("request_current_slide", { game });
+  }, [game, socket]);
+
+  useEffect(() => {
+    socket.once(
+      "result_current_slide",
+      (data: {
+        slide: number;
+        answer: AnswerCounterDTO[];
+        showAnswer: boolean;
+      }) => {
+        setIdx(data.slide);
+        setAnswer(data.answer);
+        setShowAnswer(data.showAnswer);
+      }
+    );
+
+    return () => {
+      socket.off("result_current_slide");
+    };
+  });
 
   useEffect(() => {
     socket.on("disrupt_game", () => {
@@ -108,6 +150,10 @@ function GameHost({
         setResult={setResult}
         newResultCount={newResultCount}
         setNewResultCount={setNewResultCount}
+        answer={answer}
+        setAnswer={setAnswer}
+        showAnswer={showAnswer}
+        setShowAnswer={setShowAnswer}
       />
       <ChatBox
         username={username!}

@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
+import { AnswerCounterDTO } from "../../../../dtos/GameDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import ChatBox from "../Components/Chat/ChatBox";
 import QuestionBox from "../Components/Question/QuestionBox";
@@ -37,7 +38,28 @@ function Game({
     ]
   });
   const [idx, setIdx] = useState(0);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [gameAnswer, setGameAnswer] = useState<AnswerCounterDTO[]>([
+    {
+      id: "A",
+      count: 0
+    },
+    {
+      id: "B",
+      count: 0
+    },
+    {
+      id: "C",
+      count: 0
+    },
+    {
+      id: "D",
+      count: 0
+    }
+  ]);
   const navigate = useNavigate();
+
+  const [bg, setBg] = useState("primary");
 
   useEffect(() => {
     axiosPrivate({
@@ -49,6 +71,30 @@ function Game({
       console.log(response.data);
     });
   }, [idx, presentationId]);
+
+  useEffect(() => {
+    socket.emit("request_current_slide", { game });
+  }, [game, socket]);
+
+  useEffect(() => {
+    socket.once(
+      "result_current_slide",
+      (data: {
+        slide: number;
+        answer: AnswerCounterDTO[];
+        showAnswer: boolean;
+      }) => {
+        setIdx(data.slide);
+        setGameAnswer(data.answer);
+        setShowAnswer(data.showAnswer);
+        if (data.showAnswer) setBg("failed");
+      }
+    );
+
+    return () => {
+      socket.off("result_current_slide");
+    };
+  });
 
   useEffect(() => {
     socket.on("end_game", () => {
@@ -105,8 +151,6 @@ function Game({
   };
   const handleCloseQuestion = () => setShowQuestion(false);
 
-  const [bg, setBg] = useState("primary");
-
   return (
     <Container className={`game-container game-container-${bg}`} fluid>
       <Body
@@ -119,6 +163,10 @@ function Game({
         setIdx={setIdx}
         setSlide={setSlide}
         setBg={setBg}
+        gameAnswer={gameAnswer}
+        setGameAnswer={setGameAnswer}
+        showAnswer={showAnswer}
+        setShowAnswer={setShowAnswer}
       />
       <ChatBox
         username={username}

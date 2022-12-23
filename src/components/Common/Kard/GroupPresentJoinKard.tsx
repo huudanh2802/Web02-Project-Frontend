@@ -47,11 +47,16 @@ function GroupPresentKard({
         game: string;
         presentation: string;
         isPrivate: boolean;
+        slide: number;
       }) => {
         console.log(`Game ${data.game} available: ${data.success}`);
         if (data.success === true) {
           console.log(`Game: ${data.game}`);
-          navigate(`/lobby/${data.presentation}/${data.game}`);
+          if (data.slide === -1) {
+            navigate(`/lobby/${data.presentation}/${data.game}`);
+          } else {
+            navigate(`/game/${data.presentation}/${data.game}`);
+          }
         } else if (data.success === false) {
           const gameType = data.isPrivate ? "private" : "non-existent";
           alert(`Failed to join ${gameType} game ${data.game}`);
@@ -61,9 +66,13 @@ function GroupPresentKard({
 
     socket.on(
       "join_host_game_result",
-      (data: { game: string; presentation: any }) => {
+      (data: { game: string; presentation: any; slide: number }) => {
         console.log(`Game: ${data.game}`);
-        navigate(`/lobbycohost/${data.presentation}/${groupId}/${data.game}`);
+        if (data.slide === -1) {
+          navigate(`/lobbycohost/${data.presentation}/${groupId}/${data.game}`);
+        } else {
+          navigate(`/gamehost/${data.presentation}/${groupId}/${data.game}`);
+        }
       }
     );
 

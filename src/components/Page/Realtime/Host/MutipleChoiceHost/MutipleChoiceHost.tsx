@@ -15,12 +15,13 @@ import {
   Tooltip
 } from "recharts";
 import { Socket } from "socket.io-client";
-import { ResultItemDTO } from "../../../../../dtos/GameDTO";
+import { ResultItemDTO, AnswerCounterDTO } from "../../../../../dtos/GameDTO";
 import {
   MutipleChoiceDTO,
   PresentationDTO,
   SlideDTO
 } from "../../../../../dtos/PresentationDTO";
+
 import "../../Realtime.css";
 import AnswerHost from "./AnswerHost";
 
@@ -39,7 +40,11 @@ export default function MutipleChoiceHost({
   result,
   setResult,
   newResultCount,
-  setNewResultCount
+  setNewResultCount,
+  answer,
+  setAnswer,
+  showAnswer,
+  setShowAnswer
 }: {
   slide: MutipleChoiceDTO;
   idx: number;
@@ -52,28 +57,12 @@ export default function MutipleChoiceHost({
   setResult: React.Dispatch<React.SetStateAction<ResultItemDTO[]>>;
   newResultCount: number;
   setNewResultCount: React.Dispatch<React.SetStateAction<number>>;
+  answer: AnswerCounterDTO[];
+  setAnswer: React.Dispatch<React.SetStateAction<AnswerCounterDTO[]>>;
+  showAnswer: boolean;
+  setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { groupId } = useParams();
-
-  const [answer, setAnswer] = useState<AnswerCounter[]>([
-    {
-      id: "A",
-      count: 0
-    },
-    {
-      id: "B",
-      count: 0
-    },
-    {
-      id: "C",
-      count: 0
-    },
-    {
-      id: "D",
-      count: 0
-    }
-  ]);
-  const [showAnswer, setShowAnswer] = useState(false);
 
   useEffect(() => {
     socket.on(
@@ -157,7 +146,9 @@ export default function MutipleChoiceHost({
     idx,
     presentation?.slides,
     setIdx,
-    setSlide
+    setSlide,
+    setAnswer,
+    setShowAnswer
   ]);
 
   // Button handling
@@ -249,10 +240,10 @@ export default function MutipleChoiceHost({
                 {answer.length > 0 && (
                   <YAxis allowDecimals={false} stroke="white" />
                 )}
-                {answer.length > 0 && <Bar dataKey="count" fill="white" />}
                 {answer.length > 0 && (
                   <Tooltip itemStyle={{ color: "black" }} />
                 )}
+                {answer.length > 0 && <Bar dataKey="count" fill="white" />}
               </BarChart>
             </ResponsiveContainer>
           </div>

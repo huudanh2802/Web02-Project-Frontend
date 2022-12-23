@@ -27,7 +27,7 @@ export default function HeadingHost({
   setIdx: React.Dispatch<React.SetStateAction<number>>;
   setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
 }) {
-  const { presentationId } = useParams();
+  const { presentationId, groupId } = useParams();
 
   // Button handling
 
@@ -41,7 +41,7 @@ export default function HeadingHost({
 
   const handleFinishGame = () => {
     alert("End of presentation");
-    socket.emit("finish_game", { game });
+    socket.emit("finish_game", { game, groupId });
     navigate(`/group/presentation/${presentationId}`);
   };
 

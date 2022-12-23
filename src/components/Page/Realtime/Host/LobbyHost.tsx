@@ -60,7 +60,7 @@ function LobbyHost({
   };
 
   const endGame = () => {
-    socket.emit("end_game", { game });
+    socket.emit("end_game", { game, groupId });
     navigate("/group/grouplist");
   };
 

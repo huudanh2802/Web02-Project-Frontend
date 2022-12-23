@@ -64,7 +64,7 @@ export default function MutipleChoiceHost({
       count: 0
     }
   ];
-  const { presentationId } = useParams();
+  const { presentationId, groupId } = useParams();
 
   const [answer, setAnswer] = useState<AnswerCounter[]>(answerTemplate);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -136,7 +136,7 @@ export default function MutipleChoiceHost({
 
   const handleFinishGame = () => {
     alert("End of presentation");
-    socket.emit("finish_game", { game });
+    socket.emit("finish_game", { game, groupId });
     navigate(`/group/presentation/${presentationId}`);
   };
 

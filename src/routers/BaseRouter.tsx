@@ -20,6 +20,7 @@ import LobbyHost from "../components/Page/Realtime/Host/LobbyHost";
 import Game from "../components/Page/Realtime/Viewer/Game";
 import GameHost from "../components/Page/Realtime/Host/GameHost";
 import ForgotPassword from "../components/Page/Authentication/ForgotPassword";
+import NotFound from "../components/Page/NotFound/NotFound";
 
 // Socket IO
 const socket = io(`${process.env.REACT_APP_API_SERVER}`);
@@ -92,6 +93,7 @@ function BaseRouter() {
         path="/game/:presentationId/:id"
         element={<Game socket={socket} game={game} username={username} />}
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

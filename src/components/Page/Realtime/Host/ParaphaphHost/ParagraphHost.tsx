@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
 import { Socket } from "socket.io-client";
@@ -28,7 +28,7 @@ export default function ParagraphHost({
   setIdx: React.Dispatch<React.SetStateAction<number>>;
   setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
 }) {
-  const { presentationId, groupId } = useParams();
+  const { groupId } = useParams();
 
   // Button handling
 
@@ -43,8 +43,33 @@ export default function ParagraphHost({
   const handleFinishGame = () => {
     alert("End of presentation");
     socket.emit("finish_game", { game, groupId });
-    navigate(`/group/presentation/${presentationId}`);
+    navigate(`/group/grouplist`);
   };
+
+  useEffect(() => {
+    socket.on("next_question", () => {
+      setIdx(idx + 1);
+      setSlide(presentation?.slides[idx]);
+    });
+
+    socket.on("finish_game", () => {
+      alert("Game has ended");
+      socket.emit("leave_game", {
+        username: localStorage.getItem("fullname"),
+        game
+      });
+      if (localStorage.getItem("fullname") === null) {
+        navigate("/join");
+      } else {
+        navigate("/group/grouplist");
+      }
+    });
+
+    return () => {
+      socket.off("next_question");
+      socket.off("finish_game");
+    };
+  }, [idx, presentation?.slides, setIdx, setSlide, socket, game, navigate]);
 
   return (
     <Col>

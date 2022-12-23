@@ -85,7 +85,7 @@ function GroupInfo({
           {groupMember.name}
         </h1>
         <hr className="my-3" />
-        <PresentationSection setGame={setGame} socket={socket} />
+        <PresentationSection setGame={setGame} socket={socket} owner={owner} />
         <hr className="my-3" />
         <MemberSection
           groupMember={groupMember}

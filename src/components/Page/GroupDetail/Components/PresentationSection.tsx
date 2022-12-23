@@ -11,10 +11,12 @@ import ViewPresentationDTO from "../../../../dtos/ViewPresentationDTO";
 
 function PresentationSection({
   setGame,
-  socket
+  socket,
+  owner
 }: {
   setGame: React.Dispatch<React.SetStateAction<string>>;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  owner: boolean;
 }) {
   const { groupId } = useParams(); // groupId
 
@@ -109,6 +111,7 @@ function PresentationSection({
           setGame={setGame}
           socket={socket}
           groupId={groupId!}
+          owner={owner}
         />
       )}
       {(!curGame || !curPresentation) && (

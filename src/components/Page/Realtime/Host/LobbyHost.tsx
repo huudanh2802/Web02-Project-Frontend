@@ -29,14 +29,19 @@ function LobbyHost({
   }
 
   const [users, setUsers] = useState<User[]>([]);
+  const [cohosts, setCohosts] = useState<User[]>([]);
 
   useEffect(() => {
     socket.on(`${game}_users`, (data: { users: User[] }) => {
       setUsers(data.users);
     });
+    socket.on(`${game}_cohosts`, (data: { cohosts: User[] }) => {
+      setCohosts(data.cohosts);
+    });
 
     return () => {
       socket.off(`${game}_users`);
+      socket.off(`${game}_cohosts`);
     };
   }, []);
 
@@ -77,14 +82,32 @@ function LobbyHost({
                     : `Game code: ${game}`}
                 </h4>
               </div>
-              <header className="fw-bold">Joined users:</header>
-              <Row xs={4} md={4} lg={3} style={{ marginTop: "16px" }}>
-                {users.map((user) => (
-                  <Col>
-                    <h5 style={{ textAlign: "center" }}>{user.username}</h5>
-                  </Col>
-                ))}
-              </Row>
+              {users.length > 0 && (
+                <>
+                  <header className="fw-bold">Joined users:</header>
+                  <Row xs={4} md={4} lg={3} style={{ marginTop: "16px" }}>
+                    {users.map((user) => (
+                      <Col>
+                        <h5 style={{ textAlign: "center" }}>{user.username}</h5>
+                      </Col>
+                    ))}
+                  </Row>
+                </>
+              )}
+              {cohosts.length > 0 && (
+                <>
+                  <header className="fw-bold mt-4">Joined co-hosts:</header>
+                  <Row xs={4} md={4} lg={3} style={{ marginTop: "16px" }}>
+                    {cohosts.map((cohost) => (
+                      <Col>
+                        <h5 style={{ textAlign: "center" }}>
+                          {cohost.username}
+                        </h5>
+                      </Col>
+                    ))}
+                  </Row>
+                </>
+              )}
 
               <div className="d-grid mt-4">
                 <Button variant="primary" onClick={startGame}>

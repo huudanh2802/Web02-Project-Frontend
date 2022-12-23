@@ -10,8 +10,10 @@ import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import ChatBox from "../Components/Chat/ChatBox";
 import QuestionBox from "../Components/Question/QuestionBox";
+import ResultBox from "../Components/Result/ResultBox";
 import "../Realtime.css";
 import BodyHost from "./BodyHost";
+import { ResultItemDTO } from "../../../../dtos/GameDTO";
 
 function GameHost({
   socket,
@@ -41,6 +43,16 @@ function GameHost({
     setNewQuestionCount(0);
   };
   const handleCloseQuestion = () => setShowQuestion(false);
+
+  // Result box handling
+  const [result, setResult] = useState<ResultItemDTO[]>([]);
+  const [newResultCount, setNewResultCount] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+  const handleShowResult = () => {
+    setShowResult(true);
+    setNewResultCount(0);
+  };
+  const handleCloseResult = () => setShowResult(false);
 
   const [presentation, setPresentation] = useState<PresentationDTO>();
   const [slide, setSlide] = useState<SlideDTO>({
@@ -92,6 +104,10 @@ function GameHost({
         game={game}
         setIdx={setIdx}
         setSlide={setSlide}
+        result={result}
+        setResult={setResult}
+        newResultCount={newResultCount}
+        setNewResultCount={setNewResultCount}
       />
       <ChatBox
         username={username!}
@@ -115,6 +131,15 @@ function GameHost({
         newQuestionCount={newQuestionCount}
         setNewQuestionCount={setNewQuestionCount}
       />
+      {slide.type === 1 && (
+        <ResultBox
+          showResult={showResult}
+          handleShowResult={handleShowResult}
+          handleCloseResult={handleCloseResult}
+          newResultCount={newResultCount}
+          resultLog={result}
+        />
+      )}
     </Container>
   );
 }

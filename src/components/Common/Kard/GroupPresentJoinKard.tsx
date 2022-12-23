@@ -17,7 +17,8 @@ function GroupPresentKard({
   game,
   setGame,
   socket,
-  groupId
+  groupId,
+  owner
 }: {
   presentation: ViewPresentationDTO;
   idx: Key;
@@ -25,6 +26,7 @@ function GroupPresentKard({
   setGame: React.Dispatch<React.SetStateAction<string>>;
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   groupId: string;
+  owner: boolean;
 }) {
   const navigate = useNavigate();
   const username = localStorage.getItem("fullname");
@@ -32,7 +34,8 @@ function GroupPresentKard({
   const joinGroupPresent = () => {
     if (username !== "" && game !== "") {
       setGame(game);
-      socket.emit("join_game", { username, game, groupId });
+      if (owner) socket.emit("join_host_game", { username, game });
+      else socket.emit("join_game", { username, game, groupId });
     }
   };
 
@@ -55,10 +58,20 @@ function GroupPresentKard({
         }
       }
     );
+
+    socket.on(
+      "join_host_game_result",
+      (data: { game: string; presentation: any }) => {
+        console.log(`Game: ${data.game}`);
+        navigate(`/lobbycohost/${data.presentation}/${groupId}/${data.game}`);
+      }
+    );
+
     return () => {
       socket.off("join_game_result");
+      socket.off("join_host_game_result");
     };
-  }, [navigate, socket]);
+  }, [navigate, socket, game, groupId, owner, presentation.id, presentation]);
 
   return (
     <div className="d-flex flex-column mt-2">

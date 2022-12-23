@@ -15,13 +15,12 @@ import {
   Tooltip
 } from "recharts";
 import { Socket } from "socket.io-client";
-import ResultBox from "../../Components/Result/ResultBox";
+import { ResultItemDTO } from "../../../../../dtos/GameDTO";
 import {
   MutipleChoiceDTO,
   PresentationDTO,
   SlideDTO
 } from "../../../../../dtos/PresentationDTO";
-import { ResultItemDTO } from "../../../../../dtos/GameDTO";
 import "../../Realtime.css";
 import AnswerHost from "./AnswerHost";
 
@@ -36,7 +35,11 @@ export default function MutipleChoiceHost({
   presentation,
   game,
   setIdx,
-  setSlide
+  setSlide,
+  result,
+  setResult,
+  newResultCount,
+  setNewResultCount
 }: {
   slide: MutipleChoiceDTO;
   idx: number;
@@ -45,8 +48,14 @@ export default function MutipleChoiceHost({
   game: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
   setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
+  result: ResultItemDTO[];
+  setResult: React.Dispatch<React.SetStateAction<ResultItemDTO[]>>;
+  newResultCount: number;
+  setNewResultCount: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const answerTemplate = [
+  const { groupId } = useParams();
+
+  const [answer, setAnswer] = useState<AnswerCounter[]>([
     {
       id: "A",
       count: 0
@@ -63,21 +72,8 @@ export default function MutipleChoiceHost({
       id: "D",
       count: 0
     }
-  ];
-  const { presentationId, groupId } = useParams();
-
-  const [answer, setAnswer] = useState<AnswerCounter[]>(answerTemplate);
+  ]);
   const [showAnswer, setShowAnswer] = useState(false);
-
-  // Result box handling
-  const [result, setResult] = useState<ResultItemDTO[]>([]);
-  const [newResultCount, setNewResultCount] = useState(0);
-  const [showResult, setShowResult] = useState(false);
-  const handleShowResult = () => {
-    setShowResult(true);
-    setNewResultCount(0);
-  };
-  const handleCloseResult = () => setShowResult(false);
 
   useEffect(() => {
     socket.on(
@@ -113,10 +109,56 @@ export default function MutipleChoiceHost({
       }
     );
 
+    socket.on("next_question", () => {
+      setIdx(idx + 1);
+      setSlide(presentation?.slides[idx]);
+      setNewResultCount(0);
+      setShowAnswer(false);
+      setAnswer([
+        {
+          id: "A",
+          count: 0
+        },
+        {
+          id: "B",
+          count: 0
+        },
+        {
+          id: "C",
+          count: 0
+        },
+        {
+          id: "D",
+          count: 0
+        }
+      ]);
+      setIdx(idx + 1);
+      setSlide(presentation?.slides[idx]);
+      setResult([]);
+      setNewResultCount(0);
+    });
+
+    socket.on("show_answer", () => {
+      setShowAnswer(true);
+    });
+
     return () => {
       socket.off("submit_answer");
+      socket.off("next_question");
+      socket.off("show_answer");
     };
-  }, [answer, socket, result, newResultCount]);
+  }, [
+    answer,
+    socket,
+    result,
+    newResultCount,
+    setResult,
+    setNewResultCount,
+    idx,
+    presentation?.slides,
+    setIdx,
+    setSlide
+  ]);
 
   // Button handling
   const handleShowAnswer = () => {
@@ -127,86 +169,114 @@ export default function MutipleChoiceHost({
 
   const handleNextQuestion = () => {
     setShowAnswer(false);
-    setAnswer(answerTemplate);
+    setAnswer([
+      {
+        id: "A",
+        count: 0
+      },
+      {
+        id: "B",
+        count: 0
+      },
+      {
+        id: "C",
+        count: 0
+      },
+      {
+        id: "D",
+        count: 0
+      }
+    ]);
     setIdx(idx + 1);
     setSlide(presentation?.slides[idx]);
     setResult([]);
+    setNewResultCount(0);
     socket.emit("next_question", { game, slide });
   };
 
   const handleFinishGame = () => {
     alert("End of presentation");
     socket.emit("finish_game", { game, groupId });
-    navigate(`/group/presentation/${presentationId}`);
+    navigate(`/group/grouplist`);
   };
 
+  useEffect(() => {
+    socket.on("finish_game", () => {
+      alert("Game has ended");
+      socket.emit("leave_game", {
+        username: localStorage.getItem("fullname"),
+        game
+      });
+      if (localStorage.getItem("fullname") === null) {
+        navigate("/join");
+      } else {
+        navigate("/group/grouplist");
+      }
+    });
+
+    return () => {
+      socket.off("finish_game");
+    };
+  }, [idx, presentation?.slides, setIdx, setSlide, socket, game, navigate]);
+
   return (
-    <>
-      <Col>
-        <Row className="mb-4" style={{ textAlign: "center" }}>
-          <Col className="game-question">
-            <h3 style={{ fontWeight: "bold" }}>
-              {idx + 1}. {slide?.question}
-            </h3>
+    <Col>
+      <Row className="mb-4" style={{ textAlign: "center" }}>
+        <Col className="game-question">
+          <h3 style={{ fontWeight: "bold" }}>
+            {idx + 1}. {slide?.question}
+          </h3>
+        </Col>
+      </Row>
+      <Row sm={1} md={2} lg={2}>
+        {slide?.answers.map((a) => (
+          <Col>
+            <AnswerHost
+              id={a.id}
+              answer={a.answer}
+              correct={a.id === slide.correct}
+              show={showAnswer}
+            />
           </Col>
-        </Row>
-        <Row sm={1} md={2} lg={2}>
-          {slide?.answers.map((a) => (
-            <Col>
-              <AnswerHost
-                id={a.id}
-                answer={a.answer}
-                correct={a.id === slide.correct}
-                show={showAnswer}
-              />
-            </Col>
-          ))}
-        </Row>
-        <Row>
-          <Col style={{ textAlign: "center" }}>
-            <div style={{ height: "95%", marginTop: "80px" }}>
-              <ResponsiveContainer width="80%" height="70%">
-                <BarChart style={{ marginLeft: "12%" }} data={answer}>
-                  {answer.length > 0 && <XAxis dataKey="id" stroke="white" />}
-                  {answer.length > 0 && (
-                    <YAxis allowDecimals={false} stroke="white" />
-                  )}
-                  {answer.length > 0 && <Bar dataKey="count" fill="white" />}
-                  {answer.length > 0 && (
-                    <Tooltip itemStyle={{ color: "black" }} />
-                  )}
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            {!showAnswer && (
-              <Button variant="light" onClick={handleShowAnswer}>
-                Show results
+        ))}
+      </Row>
+      <Row>
+        <Col style={{ textAlign: "center" }}>
+          <div style={{ height: "95%", marginTop: "80px" }}>
+            <ResponsiveContainer width="80%" height="70%">
+              <BarChart style={{ marginLeft: "12%" }} data={answer}>
+                {answer.length > 0 && <XAxis dataKey="id" stroke="white" />}
+                {answer.length > 0 && (
+                  <YAxis allowDecimals={false} stroke="white" />
+                )}
+                {answer.length > 0 && <Bar dataKey="count" fill="white" />}
+                {answer.length > 0 && (
+                  <Tooltip itemStyle={{ color: "black" }} />
+                )}
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          {!showAnswer && (
+            <Button variant="light" onClick={handleShowAnswer}>
+              Show results
+            </Button>
+          )}
+          {showAnswer &&
+            presentation &&
+            idx + 1 < presentation.slides.length && (
+              <Button variant="light" onClick={handleNextQuestion}>
+                Next slide
               </Button>
             )}
-            {showAnswer &&
-              presentation &&
-              idx + 1 < presentation.slides.length && (
-                <Button variant="light" onClick={handleNextQuestion}>
-                  Next slide
-                </Button>
-              )}
-            {showAnswer &&
-              presentation &&
-              idx + 1 >= presentation.slides.length && (
-                <Button variant="light" onClick={handleFinishGame}>
-                  Finish game
-                </Button>
-              )}
-          </Col>
-        </Row>
-      </Col>
-      <ResultBox
-        showResult={showResult}
-        handleShowResult={handleShowResult}
-        handleCloseResult={handleCloseResult}
-        newResultCount={newResultCount}
-        resultLog={result}
-      />
-    </>
+          {showAnswer &&
+            presentation &&
+            idx + 1 >= presentation.slides.length && (
+              <Button variant="light" onClick={handleFinishGame}>
+                Finish game
+              </Button>
+            )}
+        </Col>
+      </Row>
+    </Col>
   );
 }

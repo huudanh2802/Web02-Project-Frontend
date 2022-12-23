@@ -16,6 +16,7 @@ import NewPresentation from "../components/Page/Presentation/NewPresentation/New
 import Presentation from "../components/Page/Presentation/Presentation";
 import Join from "../components/Page/Realtime/Viewer/Join";
 import Lobby from "../components/Page/Realtime/Viewer/Lobby";
+import LobbyCoHost from "../components/Page/Realtime/Host/LobbyCoHost";
 import LobbyHost from "../components/Page/Realtime/Host/LobbyHost";
 import Game from "../components/Page/Realtime/Viewer/Game";
 import GameHost from "../components/Page/Realtime/Host/GameHost";
@@ -34,6 +35,7 @@ function BaseRouter() {
   useEffect(() => {
     if (isLoggedIn) {
       const userId = localStorage.getItem("id");
+      setUsername(localStorage.getItem("fullname")!);
       socket.emit("join_all_room", { userId });
     }
   }, [isLoggedIn]);
@@ -101,6 +103,14 @@ function BaseRouter() {
         <Route
           path="/lobbyhost/:presentationId/:groupId/:id"
           element={<LobbyHost game={game} socket={socket} />}
+        />
+      )}
+      {isLoggedIn && (
+        <Route
+          path="/lobbycohost/:presentationId/:groupId/:id"
+          element={
+            <LobbyCoHost username={username} game={game} socket={socket} />
+          }
         />
       )}
       <Route

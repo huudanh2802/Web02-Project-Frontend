@@ -31,6 +31,20 @@ function PresentationSection({
     });
   }, [groupId]);
 
+  useEffect(() => {
+    socket.on(
+      "show_group_present",
+      (data: { game: string; presentation: any }) => {
+        setCurPresentation(data.presentation);
+        setCurGame(data.game);
+      }
+    );
+
+    return () => {
+      socket.off("show_group_present");
+    };
+  });
+
   // Presentation list modal
   const [presentations, setPresentations] = useState<ViewPresentationDTO[]>([]);
   const [show, setShow] = useState(false);

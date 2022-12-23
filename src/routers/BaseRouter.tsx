@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router";
 import io from "socket.io-client";
 import GroupList from "../components/Page/GroupList/GroupList";
@@ -29,6 +29,24 @@ function BaseRouter() {
   // Data handling
   const [username, setUsername] = useState("");
   const [game, setGame] = useState("");
+
+  // Join all "group" rooms via socket.io
+  useEffect(() => {
+    if (isLoggedIn) {
+      const userId = localStorage.getItem("id");
+      socket.emit("join_all_room", { userId });
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    socket.on("alert_group_present", (data: { groupName: string }) => {
+      alert(`A presentation in your group "${data.groupName}" is in session`);
+    });
+
+    return () => {
+      socket.off("alert_group_present");
+    };
+  });
 
   return (
     <Routes>

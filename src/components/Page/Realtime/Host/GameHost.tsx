@@ -3,15 +3,17 @@
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import ChatBox from "../Components/Chat/ChatBox";
 import QuestionBox from "../Components/Question/QuestionBox";
+import ResultBox from "../Components/Result/ResultBox";
 import "../Realtime.css";
 import BodyHost from "./BodyHost";
+import { ResultItemDTO, AnswerCounterDTO } from "../../../../dtos/GameDTO";
 
 function GameHost({
   socket,
@@ -20,6 +22,7 @@ function GameHost({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   game: string;
 }) {
+  const navigate = useNavigate();
   const { presentationId } = useParams();
   const username = localStorage.getItem("fullname");
 
@@ -41,6 +44,16 @@ function GameHost({
   };
   const handleCloseQuestion = () => setShowQuestion(false);
 
+  // Result box handling
+  const [result, setResult] = useState<ResultItemDTO[]>([]);
+  const [newResultCount, setNewResultCount] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+  const handleShowResult = () => {
+    setShowResult(true);
+    setNewResultCount(0);
+  };
+  const handleCloseResult = () => setShowResult(false);
+
   const [presentation, setPresentation] = useState<PresentationDTO>();
   const [slide, setSlide] = useState<SlideDTO>({
     type: 1,
@@ -56,6 +69,25 @@ function GameHost({
     ]
   });
   const [idx, setIdx] = useState(0);
+  const [answer, setAnswer] = useState<AnswerCounterDTO[]>([
+    {
+      id: "A",
+      count: 0
+    },
+    {
+      id: "B",
+      count: 0
+    },
+    {
+      id: "C",
+      count: 0
+    },
+    {
+      id: "D",
+      count: 0
+    }
+  ]);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   // Game handling
   useEffect(() => {
@@ -69,6 +101,41 @@ function GameHost({
     });
   }, [idx, presentationId]);
 
+  useEffect(() => {
+    socket.emit("request_current_slide", { game });
+  }, [game, socket]);
+
+  useEffect(() => {
+    socket.once(
+      "result_current_slide",
+      (data: {
+        slide: number;
+        answer: AnswerCounterDTO[];
+        showAnswer: boolean;
+      }) => {
+        setIdx(data.slide);
+        setAnswer(data.answer);
+        setShowAnswer(data.showAnswer);
+      }
+    );
+
+    return () => {
+      socket.off("result_current_slide");
+    };
+  });
+
+  useEffect(() => {
+    socket.on("disrupt_game", () => {
+      alert("Your game is terminated since another is starting.");
+      socket.emit("leave_game", { username, game });
+      navigate("/group/grouplist");
+    });
+
+    return () => {
+      socket.off("disrupt_game");
+    };
+  }, [idx, presentation?.slides, socket, username, game, navigate]);
+
   return (
     <Container className="game-container game-container-primary" fluid>
       <BodyHost
@@ -79,6 +146,14 @@ function GameHost({
         game={game}
         setIdx={setIdx}
         setSlide={setSlide}
+        result={result}
+        setResult={setResult}
+        newResultCount={newResultCount}
+        setNewResultCount={setNewResultCount}
+        answer={answer}
+        setAnswer={setAnswer}
+        showAnswer={showAnswer}
+        setShowAnswer={setShowAnswer}
       />
       <ChatBox
         username={username!}
@@ -102,6 +177,15 @@ function GameHost({
         newQuestionCount={newQuestionCount}
         setNewQuestionCount={setNewQuestionCount}
       />
+      {slide.type === 1 && (
+        <ResultBox
+          showResult={showResult}
+          handleShowResult={handleShowResult}
+          handleCloseResult={handleCloseResult}
+          newResultCount={newResultCount}
+          resultLog={result}
+        />
+      )}
     </Container>
   );
 }

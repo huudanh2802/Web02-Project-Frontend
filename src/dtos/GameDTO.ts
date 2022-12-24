@@ -18,6 +18,13 @@ export interface QuestionItemDTO {
   vote: number;
 }
 
+export interface ResultItemDTO {
+  username: string;
+  id: string;
+  correct: boolean;
+  createdAt: Date;
+}
+
 export interface AnswerCounterDTO {
   id: string;
   count: number;

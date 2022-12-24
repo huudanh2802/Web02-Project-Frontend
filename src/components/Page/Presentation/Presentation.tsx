@@ -3,12 +3,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
 
-import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 import {
   HeadingDTO,
   MutipleChoiceDTO,
@@ -160,7 +160,11 @@ function Presentation({
     }).then((response) => {
       console.log(`Game ${game} created successfully.`);
       setGame(game.toString());
-      socket.emit("create_game", { game: game.toString(), presentation: id });
+      socket.emit("create_game", {
+        game: game.toString(),
+        presentation: id,
+        group: null
+      });
       navigate(`/lobbyhost/${id}/${game}`);
     });
   };

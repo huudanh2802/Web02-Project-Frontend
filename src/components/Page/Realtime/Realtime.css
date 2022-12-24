@@ -63,12 +63,25 @@
   bottom: 184px;
 }
 
+.fab-result {
+  bottom: 224px;
+}
+
+.fab-result-noti {
+  bottom: 280px;
+}
+
 .game-chatbox {
   background-color: white;
   height: 100%;
 }
 
 .game-chat {
+  margin: 0 0px;
+  height: 90%;
+}
+
+.game-question {
   margin: 0 0px;
 }
 

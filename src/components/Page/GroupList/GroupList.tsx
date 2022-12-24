@@ -3,7 +3,7 @@ import { Button, Container, Row, Col, Tab, Tabs } from "react-bootstrap";
 import GroupKard from "../../Common/Kard/GroupKard";
 import GroupDTO from "../../../dtos/GroupDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
-import PresentationTab from "../GroupDetail/Components/PresentationTab";
+import PresentationTab from "./Components/PresentationTab";
 import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 
 function GroupList() {

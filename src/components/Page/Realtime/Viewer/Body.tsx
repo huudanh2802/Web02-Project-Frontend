@@ -2,6 +2,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React from "react";
 import { Socket } from "socket.io-client";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
+import { AnswerCounterDTO } from "../../../../dtos/GameDTO";
 import HeadingViewer from "./HeadingViewer/HeadingViewer";
 import MutipleChoiceViewer from "./MutipleChoiceViewer/MutipleChoiceViewer";
 import ParagraphViewer from "./ParagraphViewer/ParagraphViewer";
@@ -15,7 +16,11 @@ export default function Body({
   username,
   setIdx,
   setSlide,
-  setBg
+  setBg,
+  gameAnswer,
+  setGameAnswer,
+  showAnswer,
+  setShowAnswer
 }: {
   slide: SlideDTO;
   idx: number;
@@ -26,6 +31,10 @@ export default function Body({
   setIdx: React.Dispatch<React.SetStateAction<number>>;
   setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
   setBg: React.Dispatch<React.SetStateAction<string>>;
+  gameAnswer: AnswerCounterDTO[];
+  setGameAnswer: React.Dispatch<React.SetStateAction<AnswerCounterDTO[]>>;
+  showAnswer: boolean;
+  setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   switch (slide.type) {
     case 1: {
@@ -40,6 +49,10 @@ export default function Body({
           setIdx={setIdx}
           setSlide={setSlide}
           setBg={setBg}
+          gameAnswer={gameAnswer}
+          setGameAnswer={setGameAnswer}
+          showAnswer={showAnswer}
+          setShowAnswer={setShowAnswer}
         />
       );
     }

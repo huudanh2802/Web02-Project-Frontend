@@ -129,24 +129,11 @@ function Login({
   return (
     <Container fluid style={bgStyle}>
       {loading && (
-        <div
-          style={{
-            backgroundColor: "black",
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            width: "70px",
-            height: "70px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            opacity: "0.6",
-            borderRadius: "10px"
-          }}
-        >
+        <div className="spinner-background">
           <Spinner animation="border" variant="light" />
         </div>
       )}
+
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={8} lg={6} xs={12} />
         <Col md={6} lg={4} xs={8}>

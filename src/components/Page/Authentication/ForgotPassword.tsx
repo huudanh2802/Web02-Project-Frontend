@@ -52,21 +52,7 @@ function ForgotPassword() {
   return (
     <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
       {loading && (
-        <div
-          style={{
-            backgroundColor: "black",
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            width: "70px",
-            height: "70px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            opacity: "0.6",
-            borderRadius: "10px"
-          }}
-        >
+        <div className="spinner-background">
           <Spinner animation="border" variant="light" />
         </div>
       )}

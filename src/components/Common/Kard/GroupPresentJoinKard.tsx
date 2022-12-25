@@ -13,7 +13,7 @@ import "../Toast/ToastStyle.css";
 import "./Kard.css";
 import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 
-function GroupPresentKard({
+function GroupPresentJoinKard({
   presentation,
   idx,
   game,
@@ -111,4 +111,4 @@ function GroupPresentKard({
   );
 }
 
-export default GroupPresentKard;
+export default GroupPresentJoinKard;

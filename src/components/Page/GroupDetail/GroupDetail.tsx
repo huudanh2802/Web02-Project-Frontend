@@ -57,7 +57,7 @@ function GroupInfo({
     setLoading(true);
     axiosPrivate({
       method: "post",
-      url: `${process.env.REACT_APP_API_SERVER}/group/checkowner/`,
+      url: `${process.env.REACT_APP_API_SERVER}/group/checkcoowner/`,
       data: checkOwnerDTO
     })
       .then((response) => {

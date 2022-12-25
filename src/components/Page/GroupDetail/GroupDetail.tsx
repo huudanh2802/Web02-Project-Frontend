@@ -73,6 +73,7 @@ function GroupInfo({
   }
 
   function checkCoOwner(ownerId: string) {
+    console.log("ha");
     const checkOwnerDTO: CheckOwnerDTO = {
       ownerId,
       groupId: groupId!

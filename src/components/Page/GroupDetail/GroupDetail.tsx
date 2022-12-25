@@ -3,8 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { toast } from "react-toastify";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import CheckOwnerDTO from "../../../dtos/CheckOwnerDTO";
 import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
@@ -12,6 +15,8 @@ import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
 import "./GroupDetail.css";
 
 import InviteModal from "./Components/InviteModal";
+import "react-toastify/dist/ReactToastify.css";
+import "../../Common/Toast/ToastStyle.css";
 import PresentationSection from "./Components/PresentationSection";
 import MemberSection from "./Components/MemberSection";
 
@@ -25,6 +30,7 @@ function GroupInfo({
   const { groupId } = useParams();
   const [owner, setOwner] = useState(false);
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -45,23 +51,39 @@ function GroupInfo({
       ownerId,
       groupId: groupId!
     };
+    setLoading(true);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/checkowner/`,
       data: checkOwnerDTO
-    }).then((response) => {
-      setOwner(response.data);
-    });
+    })
+      .then((response) => {
+        setOwner(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }
 
   function getGroupMember() {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/group/get/${groupId}`
-    }).then((response) => {
-      setGroupMember(response.data);
-      console.log(response.data);
-    });
+    })
+      .then((response) => {
+        setGroupMember(response.data);
+        console.log(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }
 
   useEffect(() => {
@@ -74,6 +96,14 @@ function GroupInfo({
 
   return (
     <>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <InviteModal
         show={show}
         handleClose={handleClose}

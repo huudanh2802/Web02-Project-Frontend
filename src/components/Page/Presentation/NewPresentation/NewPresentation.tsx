@@ -5,6 +5,9 @@ import { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   HeadingDTO,
   MutipleChoiceDTO,
@@ -19,11 +22,14 @@ import SlideBar from "../Components/SlideBar";
 import SlideEdit from "../Components/SlideEdit";
 import TopBar from "../Components/TopBar";
 
+import "react-toastify/dist/ReactToastify.css";
+import "../../../Common/Toast/ToastStyle.css";
 import "../Presentation.css";
 
 function NewPresentation() {
   const localId = localStorage.getItem("id");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
     type: 1,
     question: "",
@@ -50,6 +56,7 @@ function NewPresentation() {
     formState: { errors: errorsName }
   } = useForm();
   async function sendSlide() {
+    setLoading(true);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/newpresentation`,
@@ -58,9 +65,16 @@ function NewPresentation() {
         "Content-Type": "application/json"
       },
       data: newPresentation
-    }).then((response) => {
-      navigate(`/group/presentation/${response.data}`);
-    });
+    })
+      .then((response) => {
+        navigate(`/group/presentation/${response.data}`);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }
 
   const addMutipleChoice = (event: any) => {
@@ -118,6 +132,14 @@ function NewPresentation() {
   };
   return (
     <Container fluid>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <TopBar
         sendSlide={() => sendSlide()}
         present={undefined}

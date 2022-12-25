@@ -1,17 +1,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../../../index.css";
 import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axiosPublic from "../../../token/axiosPublic";
+import "react-toastify/dist/ReactToastify.css";
+import "../../Common/Toast/ToastStyle.css";
 
 function Login({
   setUsername
@@ -31,7 +36,10 @@ function Login({
   const formOptions = { resolver: yupResolver(formAuthSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
+
+  const [loading, setLoading] = useState(false);
   const onSubmit = (data: FieldValues) => {
+    setLoading(true);
     axiosPublic
       .post(`/user/login`, {
         email: data.email,
@@ -44,12 +52,19 @@ function Login({
         localStorage.setItem("fullname", res.data.fullname);
         setUsername(res.data.fullname);
 
-        alert("Login successful!");
-        navigate("/group/grouplist");
+        toast.success("Login successful!", {
+          className: "toast_container"
+        });
+        setTimeout(() => {
+          navigate("/group/grouplist");
+        }, 2500);
       })
       .catch((err: any) => {
-        alert(err.response.data.error);
-      });
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   // Google login
@@ -67,6 +82,7 @@ function Login({
         console.log(result.data);
 
         // Authenticate
+        setLoading(true);
         axiosPublic
           .post(`/user/googleAuthen`, {
             email: result.data.email,
@@ -83,8 +99,11 @@ function Login({
             navigate("/group/grouplist");
           })
           .catch((err: any) => {
-            alert(err.response.data.error);
-          });
+            toast.error(err.response.data.error, {
+              className: "toast_container"
+            });
+          })
+          .finally(() => setLoading(false));
       } catch (err) {
         console.log(err);
       }
@@ -103,6 +122,14 @@ function Login({
   // First form: Email & password
   return (
     <Container fluid style={bgStyle}>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={8} lg={6} xs={12} />
         <Col md={6} lg={4} xs={8}>
@@ -167,6 +194,14 @@ function Login({
                       Don&apos;t have an account?{" "}
                       <a href="/signup" className="text-primary fw-bold">
                         Sign up
+                      </a>
+                    </p>
+                  </div>
+                  <div className="mt-3">
+                    <p className="mt-3 text-center">
+                      Forgot your password?{" "}
+                      <a href="/forget" className="text-primary fw-bold">
+                        Click here
                       </a>
                     </p>
                   </div>

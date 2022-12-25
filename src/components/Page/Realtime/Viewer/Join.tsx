@@ -1,17 +1,20 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react-hooks/exhaustive-deps */
+import { yupResolver } from "@hookform/resolvers/yup";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React, { useEffect } from "react";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
-import { DefaultEventsMap } from "@socket.io/component-emitter";
+import * as Yup from "yup";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import { FaExclamationTriangle } from "react-icons/fa";
 import "../../../../index.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "../../../Common/Toast/ToastStyle.css";
 
 function Join({
   username,
@@ -55,7 +58,9 @@ function Join({
           }
         } else if (data.success === false) {
           const gameType = data.isPrivate ? "private" : "non-existent";
-          alert(`Failed to join ${gameType} game ${data.game}`);
+          toast.error(`Failed to join ${gameType} game ${data.game}`, {
+            className: "toast_container"
+          });
         }
       }
     );

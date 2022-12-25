@@ -1,14 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { useEffect } from "react";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Socket } from "socket.io-client";
+import "../../../Common/Toast/ToastStyle.css";
 
-import "../../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../../../../index.css";
 
 function Lobby({
   username,
@@ -45,7 +48,9 @@ function Lobby({
 
   useEffect(() => {
     socket.on("end_game", () => {
-      alert("Host has ended the game");
+      toast("Host has ended the game", {
+        className: "toast_container"
+      });
       socket.emit("leave_game", { username, game });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");

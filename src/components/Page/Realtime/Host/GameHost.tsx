@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
+import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 
 import { axiosPrivate } from "../../../../token/axiosPrivate";
@@ -13,6 +16,8 @@ import QuestionBox from "../Components/Question/QuestionBox";
 import ResultBox from "../Components/Result/ResultBox";
 import "../Realtime.css";
 import BodyHost from "./BodyHost";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../Common/Toast/ToastStyle.css";
 import { ResultItemDTO, AnswerCounterDTO } from "../../../../dtos/GameDTO";
 
 function GameHost({
@@ -29,6 +34,7 @@ function GameHost({
   // Chat box handling
   const [newChatCount, setNewChatCount] = useState(0);
   const [showChat, setShowChat] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleShowChat = () => {
     setShowChat(true);
     setNewChatCount(0);
@@ -91,14 +97,22 @@ function GameHost({
 
   // Game handling
   useEffect(() => {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/game/get/${presentationId}`
-    }).then((response) => {
-      setPresentation(response.data);
-      setSlide(response.data.slides[idx]);
-      console.log(response.data);
-    });
+    })
+      .then((response) => {
+        setPresentation(response.data);
+        setSlide(response.data.slides[idx]);
+        console.log(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }, [idx, presentationId]);
 
   useEffect(() => {
@@ -126,7 +140,9 @@ function GameHost({
 
   useEffect(() => {
     socket.on("disrupt_game", () => {
-      alert("Your game is terminated since another is starting.");
+      toast("Your game is terminated since another is starting.", {
+        className: "toast_container"
+      });
       socket.emit("leave_game", { username, game });
       navigate("/group/grouplist");
     });
@@ -138,6 +154,14 @@ function GameHost({
 
   return (
     <Container className="game-container game-container-primary" fluid>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <BodyHost
         slide={slide}
         idx={idx}

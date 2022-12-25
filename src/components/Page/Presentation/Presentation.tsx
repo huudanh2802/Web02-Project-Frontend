@@ -1,12 +1,15 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-alert */
 
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
+import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import {
@@ -24,6 +27,7 @@ import SlideEdit from "./Components/SlideEdit";
 import TopBar from "./Components/TopBar";
 
 import "./Presentation.css";
+import "../../Common/Toast/ToastStyle.css";
 
 function Presentation({
   setGame,
@@ -35,6 +39,7 @@ function Presentation({
   const { id } = useParams();
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [currentSlide, setCurrentSlide] = useState<SlideDTO>({
     type: 1,
     question: "",
@@ -64,6 +69,7 @@ function Presentation({
   } = useForm();
 
   async function sendSlide() {
+    setLoading(true);
     axiosPrivate({
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/update/${id}`,
@@ -73,11 +79,21 @@ function Presentation({
       },
 
       data: detailPresentation
-    }).then((response) => {
-      alert("Presentation has been updated");
-    });
+    })
+      .then((response) => {
+        toast.success("Presentation has been updated", {
+          className: "toast_container"
+        });
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }
   useEffect(() => {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/get/${id}`
@@ -90,9 +106,14 @@ function Presentation({
         }
       })
       .catch((err) => {
-        alert(err);
-        navigate("/");
-      });
+        toast.error(err, {
+          className: "toast_container"
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2500);
+      })
+      .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -153,24 +174,40 @@ function Presentation({
   const present = () => {
     const game = Math.floor(Math.random() * 10000);
     // Backend
+    setLoading(true);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/game/newgame/`,
       data: { game, presentationId: id }
-    }).then((response) => {
-      console.log(`Game ${game} created successfully.`);
-      setGame(game.toString());
-      socket.emit("create_game", {
-        game: game.toString(),
-        presentation: id,
-        group: null
-      });
-      navigate(`/lobbyhost/${id}/${game}`);
-    });
+    })
+      .then((response) => {
+        console.log(`Game ${game} created successfully.`);
+        setGame(game.toString());
+        socket.emit("create_game", {
+          game: game.toString(),
+          presentation: id,
+          group: null
+        });
+        navigate(`/lobbyhost/${id}/${game}`);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <Container fluid>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <TopBar
         sendSlide={() => sendSlide()}
         present={present}

@@ -6,6 +6,9 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../Common/Toast/ToastStyle.css";
 
 import "../../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -45,7 +48,10 @@ function Lobby({
 
   useEffect(() => {
     socket.on("end_game", () => {
-      alert("Host has ended the game");
+      // alert("Host has ended the game");
+      toast("Host has ended the game", {
+        className: "toast_container"
+      });
       socket.emit("leave_game", { username, game });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");

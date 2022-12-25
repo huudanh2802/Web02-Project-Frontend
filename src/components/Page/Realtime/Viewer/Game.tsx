@@ -1,8 +1,11 @@
-/* eslint-disable no-alert */
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 import { AnswerCounterDTO } from "../../../../dtos/GameDTO";
@@ -11,6 +14,7 @@ import ChatBox from "../Components/Chat/ChatBox";
 import QuestionBox from "../Components/Question/QuestionBox";
 import "../Realtime.css";
 import Body from "./Body";
+import "../../../Common/Toast/ToastStyle.css";
 
 function Game({
   username,
@@ -58,18 +62,27 @@ function Game({
     }
   ]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [bg, setBg] = useState("primary");
 
   useEffect(() => {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/game/get/${presentationId}`
-    }).then((response) => {
-      setPresentation(response.data);
-      setSlide(response.data.slides[idx]);
-      console.log(response.data);
-    });
+    })
+      .then((response) => {
+        setPresentation(response.data);
+        setSlide(response.data.slides[idx]);
+        console.log(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }, [idx, presentationId]);
 
   useEffect(() => {
@@ -98,7 +111,9 @@ function Game({
 
   useEffect(() => {
     socket.on("end_game", () => {
-      alert("Host has ended the game");
+      toast("Host has ended the game", {
+        className: "toast_container"
+      });
       socket.emit("leave_game", { username, game });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");
@@ -108,7 +123,9 @@ function Game({
     });
 
     socket.on("finish_game", () => {
-      alert("Game has ended");
+      toast("Game has ended", {
+        className: "toast_container"
+      });
       socket.emit("leave_game", { username, game });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");
@@ -118,7 +135,10 @@ function Game({
     });
 
     socket.on("disrupt_game", () => {
-      alert("Game is terminated since another is starting.");
+      // alert("Game is terminated since another is starting.");
+      toast("Game is terminated since another is starting.", {
+        className: "toast_container"
+      });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");
       } else {
@@ -153,6 +173,14 @@ function Game({
 
   return (
     <Container className={`game-container game-container-${bg}`} fluid>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Body
         slide={slide}
         idx={idx}

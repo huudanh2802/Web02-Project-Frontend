@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../components/Common/Toast/ToastStyle.css";
 import io from "socket.io-client";
 import GroupList from "../components/Page/GroupList/GroupList";
 import { NewGroupPage } from "../components/Page/NewGroupPage/NewGroupPage";
@@ -20,6 +23,8 @@ import LobbyCoHost from "../components/Page/Realtime/Host/LobbyCoHost";
 import LobbyHost from "../components/Page/Realtime/Host/LobbyHost";
 import Game from "../components/Page/Realtime/Viewer/Game";
 import GameHost from "../components/Page/Realtime/Host/GameHost";
+import ForgotPassword from "../components/Page/Authentication/ForgotPassword";
+import NotFound from "../components/Page/NotFound/NotFound";
 
 // Socket IO
 const socket = io(`${process.env.REACT_APP_API_SERVER}`);
@@ -42,7 +47,10 @@ function BaseRouter() {
 
   useEffect(() => {
     socket.on("alert_group_present", (data: { groupName: string }) => {
-      alert(`A presentation in your group "${data.groupName}" is in session`);
+      // alert(`A presentation in your group "${data.groupName}" is in session`);
+      toast(`A presentation in your group "${data.groupName}" is in session`, {
+        className: "toast_container"
+      });
     });
 
     return () => {
@@ -73,6 +81,7 @@ function BaseRouter() {
       </Route>
       <Route path="/login" element={<Login setUsername={setUsername} />} />
       <Route path="/signup" element={<Signup setUsername={setUsername} />} />
+      <Route path="/forget" element={<ForgotPassword />} />
       <Route path="/verification" element={<Verification />} />
       <Route path="/confirm/:token" element={<Confirm />} />
       <Route
@@ -133,6 +142,7 @@ function BaseRouter() {
         path="/game/:presentationId/:id"
         element={<Game socket={socket} game={game} username={username} />}
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

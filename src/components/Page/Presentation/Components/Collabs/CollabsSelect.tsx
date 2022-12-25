@@ -2,8 +2,13 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
 import { useParams } from "react-router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../../Common/Toast/ToastStyle.css";
 import MemberOptionDTO from "../../../../../dtos/MemberOptionDTO";
 import { axiosPrivate } from "../../../../../token/axiosPrivate";
 import MemberSearchBox, {
@@ -42,36 +47,43 @@ export default function CollabsSelect({
 }) {
   const localId = localStorage.getItem("id");
   const { id } = useParams();
+  const [loading, setLoading] = useState(false);
   const [listCollabs, setListCollabs] = useState<MemberOptionDTO[]>([]);
   const [memberSearch, setMemberSearch] = useState<MemberOption[]>([]);
 
   function getMemberSearch(collabs: MemberOptionDTO[]) {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/user/getMemberSearch/${localId}`
-    }).then((response) => {
-      const { data } = response;
-      const memberOption: MemberOption[] = data.map((d: MemberOptionDTO) => ({
-        value: d,
-        label: d.email,
-        disabled: false
-      }));
-      collabs.forEach((c) => {
-        const memberId = memberOption.findIndex((m) => m.value.id === c.id);
-        memberOption[memberId].disabled = true;
-      });
-      setMemberSearch(memberOption);
-    });
+    })
+      .then((response) => {
+        const { data } = response;
+        const memberOption: MemberOption[] = data.map((d: MemberOptionDTO) => ({
+          value: d,
+          label: d.email,
+          disabled: false
+        }));
+        collabs.forEach((c) => {
+          const memberId = memberOption.findIndex((m) => m.value.id === c.id);
+          memberOption[memberId].disabled = true;
+        });
+        setMemberSearch(memberOption);
+      })
+      .finally(() => setLoading(false));
   }
 
   function getListCollabs() {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/getCollabs/${id}`
-    }).then((response) => {
-      setListCollabs(response.data);
-      getMemberSearch(response.data);
-    });
+    })
+      .then((response) => {
+        setListCollabs(response.data);
+        getMemberSearch(response.data);
+      })
+      .finally(() => setLoading(false));
   }
 
   function removeMember(member: MemberOptionDTO) {
@@ -92,18 +104,31 @@ export default function CollabsSelect({
   }
 
   function updateCollabs() {
+    setLoading(true);
     axiosPrivate({
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/updateCollabs/${id}`,
       data: listCollabs
     })
       .then((response) => {
-        alert("Collabs Updated");
+        // alert("Collabs Updated");
+        toast.success("Collabs Updated!", {
+          className: "toast_container"
+        });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }
   return (
     <>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <MemberSearchBox member={memberSearch} addMember={(m) => addMember(m)} />
       <ul>
         <li

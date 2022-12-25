@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Button, Col, Row, Modal } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../Common/Toast/ToastStyle.css";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import GroupPresentKard from "../../../Common/Kard/GroupPresentKard";
@@ -64,7 +67,10 @@ function PresentationSection({
   const handleClose = () => setShow(false);
   const handleShow = () => {
     if (curGame && curPresentation)
-      alert("Another presentation is in session.");
+      // alert("Another presentation is in session.");
+      toast("Another presentation is in session.", {
+        className: "toast_container"
+      });
     setShow(true);
   };
 

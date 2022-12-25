@@ -1,5 +1,9 @@
 import mem from "mem";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axiosPublic from "./axiosPublic";
+import "../components/Common/Toast/ToastStyle.css";
+
 // eslint-disable-next-line consistent-return
 const refreshTokenFn = async () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -29,7 +33,9 @@ const refreshTokenFn = async () => {
       return session;
     }
   } catch (error) {
-    alert("Please login to continue");
+    toast.error("Please login to continue", {
+      className: "toast_container"
+    });
     window.location = `${process.env.REACT_APP_BASE_URL}/login`;
     localStorage.removeItem("id");
     localStorage.removeItem("email");

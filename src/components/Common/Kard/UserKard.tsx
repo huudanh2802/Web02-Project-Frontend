@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Card, Accordion, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { removeItem } from "../../../helpers/functions";
 import MemberDTO from "../../../dtos/MemberDTO";
 import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
 import ModifyGroupDTO from "../../../dtos/ModifyGroupDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
+import "react-toastify/dist/ReactToastify.css";
+import "../Toast/ToastStyle.css";
 
 function UserKard({
   groupMember,
@@ -23,6 +28,7 @@ function UserKard({
   const [role, setRole] = useState("Owner");
   const [tag, setTag] = useState("gold");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const redirectProfile = () => {
     console.log("Hello");
@@ -35,26 +41,37 @@ function UserKard({
       role: roleId,
       memberId: info.id
     };
+    setLoading(true);
     axiosPrivate({
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
       data: updateReq
-    }).then((response) => {
-      if (response.status === 200) {
-        if (roleId === 1) {
-          removeItem(groupMember.coowner, info);
-          groupMember.member.push(info);
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          if (roleId === 1) {
+            removeItem(groupMember.coowner, info);
+            groupMember.member.push(info);
+          } else {
+            removeItem(groupMember.member, info);
+            groupMember.coowner.push(info);
+          }
+          toast.success("User's role has been changed.", {
+            className: "toast_container"
+          });
+          setGroupMember(response.data);
         } else {
-          removeItem(groupMember.member, info);
-          groupMember.coowner.push(info);
+          toast(`${response}`, {
+            className: "toast_container"
+          });
         }
-        alert("User's role has been changed.");
-        setGroupMember(response.data);
-      } else {
-        // eslint-disable-next-line no-alert
-        alert(response);
-      }
-    });
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   const kick = () => {
@@ -63,21 +80,32 @@ function UserKard({
       role: roleId,
       memberId: info.id
     };
+    setLoading(true);
     axiosPrivate({
       method: "delete",
       url: `${process.env.REACT_APP_API_SERVER}/group/member/`,
       data: kickReq
-    }).then((response) => {
-      if (response.status === 200) {
-        if (roleId === 1) removeItem(groupMember.coowner, info);
-        else removeItem(groupMember.member, info);
-        alert("User has been deleted");
-        setGroupMember(response.data);
-      } else {
-        // eslint-disable-next-line no-alert
-        alert(response);
-      }
-    });
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          if (roleId === 1) removeItem(groupMember.coowner, info);
+          else removeItem(groupMember.member, info);
+          toast.success("User has been deleted.", {
+            className: "toast_container"
+          });
+          setGroupMember(response.data);
+        } else {
+          toast(`${response}`, {
+            className: "toast_container"
+          });
+        }
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -92,6 +120,14 @@ function UserKard({
 
   return (
     <Card className="user-kard">
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <div className="kard-body">
         <img
           src="/assets/avatar_alt.svg"

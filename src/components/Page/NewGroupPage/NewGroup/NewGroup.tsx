@@ -1,26 +1,31 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Row, Col, Form, InputGroup, Button, Container } from "react-bootstrap";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
+import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { FaUserCircle } from "react-icons/fa";
+import { useNavigate } from "react-router";
 import Select from "react-select";
 
 import MemberSelection from "../MemberSelection/MemberSelection";
 import "./NewGroup.css";
 
 import NewGroupDTO from "../../../../dtos/NewGroupDTO";
-import MemberRole from "../MemberRole/MemberRole";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
+// eslint-disable-next-line import/order
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../Common/Toast/ToastStyle.css";
 
 import MemberDTO from "../../../../dtos/MemberDTO";
+import MemberOptionDTO from "../../../../dtos/MemberOptionDTO";
+import MemberRoleDTO from "../../../../dtos/MemberRoleDTO";
 import MemberSearchBox, {
   MemberOption
 } from "../../../Common/MemberSearchBox/MemberSearchBox";
-import MemberOptionDTO from "../../../../dtos/MemberOptionDTO";
-import MemberRoleDTO from "../../../../dtos/MemberRoleDTO";
 
 function OwnerRole({ owner }: { owner: MemberDTO }) {
   const option = [{ value: 0, label: "Owner" }];
@@ -55,6 +60,7 @@ function OwnerRole({ owner }: { owner: MemberDTO }) {
 
 export default function NewGroup() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const localId = localStorage.getItem("id");
   const [owner, setOwner] = useState<MemberDTO>({
     id: "",
@@ -62,12 +68,20 @@ export default function NewGroup() {
     fullname: ""
   });
   function getOwner() {
+    setLoading(true);
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/user/get/${localId}`
-    }).then((response) => {
-      setOwner(response.data);
-    });
+    })
+      .then((response) => {
+        setOwner(response.data);
+      })
+      .catch((error: any) => {
+        toast.error(error.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }
 
   const {
@@ -94,17 +108,25 @@ export default function NewGroup() {
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/user/getMemberSearch/${localId}`
-    }).then((response) => {
-      const { data } = response;
-      const memberOption: MemberOption[] = data.map((d: MemberOptionDTO) => ({
-        value: d,
-        label: d.email,
-        disabled: false
-      }));
-      setMemberSearch(memberOption);
-    });
+    })
+      .then((response) => {
+        const { data } = response;
+        const memberOption: MemberOption[] = data.map((d: MemberOptionDTO) => ({
+          value: d,
+          label: d.email,
+          disabled: false
+        }));
+        setMemberSearch(memberOption);
+      })
+      .catch((error: any) => {
+        toast.error(error.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }
   function sendData() {
+    setLoading(true);
     axiosPrivate({
       method: "post",
       url: `${process.env.REACT_APP_API_SERVER}/group/newgroup`,
@@ -118,9 +140,12 @@ export default function NewGroup() {
       .then((response) => {
         navigate(`/group/detail/${response.data}`);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }
 
   const onSubmit = handleSubmit((data) => {
@@ -173,6 +198,14 @@ export default function NewGroup() {
 
   return (
     <form onSubmit={onSubmit}>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Container className="mt-3">
         <Row className="m-4">
           <Col>
@@ -183,7 +216,9 @@ export default function NewGroup() {
                   aria-label="GroupName"
                   aria-describedby="basic-addon1"
                   className="input-box"
-                  {...register("name", { required: "This field is required" })}
+                  {...register("name", {
+                    required: "This field is required"
+                  })}
                 />
               </InputGroup>
               {errors.name && (

@@ -1,12 +1,17 @@
-import React, { Key } from "react";
+import React, { Key, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaCalendar, FaUser } from "react-icons/fa";
 import moment from "moment";
 
 import "./Kard.css";
+import { toast } from "react-toastify";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
+import "react-toastify/dist/ReactToastify.css";
+import "../Toast/ToastStyle.css";
 
 function PresentationKard({
   presentation,
@@ -20,6 +25,7 @@ function PresentationKard({
   collabs: boolean;
 }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const viewPresentation = () => {
     const link = `/group/presentation/${presentation.id.toString()}`;
@@ -27,16 +33,34 @@ function PresentationKard({
   };
 
   function deletePresentation() {
+    setLoading(true);
     axiosPrivate({
       method: "delete",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/${presentation.id}`
-    }).then((response) => {
-      alert("Presentation has been deleted");
-      setPresentation(response.data);
-    });
+    })
+      .then((response) => {
+        toast.success("Presentation has been deleted.", {
+          className: "toast_container"
+        });
+        setPresentation(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
   }
   return (
     <div className="d-flex flex-column">
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Card
         key={index}
         className="kard"

@@ -1,11 +1,16 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
+import { FaExclamationTriangle } from "react-icons/fa";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import "../../Common/Toast/ToastStyle.css";
 
@@ -15,8 +20,22 @@ export default function MyProfile() {
     date: "",
     fullname: ""
   });
-
-  const { register, handleSubmit } = useForm();
+  const formAuthSchema = Yup.object().shape({
+    updatedName: Yup.string().required("New name is required")
+  });
+  const passFormAuthSchema = Yup.object().shape({
+    oldPassword: Yup.string().required("Current Password is required"),
+    updatedPassword: Yup.string().required("New Password is required")
+  });
+  const formOptions = { resolver: yupResolver(formAuthSchema) };
+  const passFormOptions = { resolver: yupResolver(passFormAuthSchema) };
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const {
+    register: registerPass,
+    handleSubmit: handleSubmitPass,
+    formState: { errors: errors2 }
+  } = useForm(passFormOptions);
+  const { errors } = formState;
   const [loading, setLoading] = useState(false);
   const localId = localStorage.getItem("id");
 
@@ -28,7 +47,7 @@ export default function MyProfile() {
     })
       .then((response) => {
         setUser(response.data);
-        console.log(user);
+        console.log(response.data);
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
@@ -69,7 +88,8 @@ export default function MyProfile() {
       method: "put",
       url: `${process.env.REACT_APP_API_SERVER}/user/updatepassword`,
       data: {
-        id: localId,
+        email: user.email,
+        oldPassword: data.oldPassword,
         newPassword: data.updatedPassword
       }
     })
@@ -95,10 +115,8 @@ export default function MyProfile() {
       style={{
         background: "#318F9B",
         width: "1100px",
-        height: "300px",
+        height: "500px",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
         flexDirection: "column"
       }}
     >
@@ -112,9 +130,10 @@ export default function MyProfile() {
       )}
       <Container
         style={{
+          marginTop: "20px",
           background: "white",
           width: "800px",
-          height: "227px",
+          height: "450px",
           borderRadius: "32px"
         }}
       >
@@ -122,19 +141,79 @@ export default function MyProfile() {
           <Col xs={4}>
             <img src="/assets/profilePicture.svg" />
           </Col>
-          <Col>
-            <Row style={{ marginTop: "50px" }}>
-              <span style={{ fontWeight: "bold", fontSize: "22px" }}>
-                {user.email}
-              </span>
+          <Col style={{ marginLeft: "10px" }}>
+            <Row
+              style={{
+                marginTop: "50px",
+                fontWeight: "bold",
+                fontSize: "22px"
+              }}
+            >
+              {user.email}
             </Row>
-            <Row>
-              <span>Created At: {user.date}</span>
-            </Row>
-            <Row>
-              <span>Fullname: {user.fullname}</span>
-            </Row>
-            <Row>
+            <Row style={{ fontWeight: "bold" }}>Created At: {user.date}</Row>
+            <Row style={{ fontWeight: "bold" }}>Fullname: {user.fullname}</Row>
+            <Card style={{ marginTop: "10px", marginRight: "10px" }}>
+              <Card.Header as="h5">Edit Info</Card.Header>
+              <Card.Body>
+                <Row>
+                  <Col xs={6}>
+                    <Form onSubmit={handleSubmit(onSubmit)}>
+                      <Form.Control
+                        placeholder="Update name"
+                        {...register("updatedName")}
+                        style={{
+                          width: "200px",
+                          marginRight: "20px",
+                          marginBottom: "5px"
+                        }}
+                      />
+                      {errors.updatedName &&
+                        errors.updatedName.type === "required" && (
+                          <p className="error">
+                            <FaExclamationTriangle className="mx-2" />
+                            New fullname is required
+                          </p>
+                        )}
+                      <Button type="submit">Change Fullname</Button>
+                    </Form>
+                  </Col>
+
+                  <Col xs={6}>
+                    <Form onSubmit={handleSubmitPass(OnChangePass)}>
+                      <Form.Control
+                        type="password"
+                        placeholder="Old Password"
+                        {...registerPass("oldPassword")}
+                        style={{ width: "200px", marginBottom: "5px" }}
+                      />
+                      {errors2.oldPassword &&
+                        errors2.oldPassword.type === "required" && (
+                          <p className="error">
+                            <FaExclamationTriangle className="mx-2" />
+                            Current password is required
+                          </p>
+                        )}
+                      <Form.Control
+                        type="password"
+                        placeholder="New Password"
+                        {...registerPass("updatedPassword")}
+                        style={{ width: "200px", marginBottom: "5px" }}
+                      />
+                      {errors2.updatedPassword &&
+                        errors2.updatedPassword.type === "required" && (
+                          <p className="error">
+                            <FaExclamationTriangle className="mx-2" />
+                            New password is required
+                          </p>
+                        )}
+                      <Button type="submit">Change Password</Button>
+                    </Form>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+            {/* <Row>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <input
                   placeholder="Update name"
@@ -159,7 +238,7 @@ export default function MyProfile() {
                   Submit
                 </Button>
               </Form>
-            </Row>
+            </Row> */}
           </Col>
         </Row>
       </Container>

@@ -29,6 +29,7 @@ function GroupInfo({
   const navigate = useNavigate();
   const { groupId } = useParams();
   const [owner, setOwner] = useState(false);
+  const [coowner, setCoowner] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
@@ -57,11 +58,33 @@ function GroupInfo({
     setLoading(true);
     axiosPrivate({
       method: "post",
-      url: `${process.env.REACT_APP_API_SERVER}/group/checkcoowner/`,
+      url: `${process.env.REACT_APP_API_SERVER}/group/checkowner/`,
       data: checkOwnerDTO
     })
       .then((response) => {
         setOwner(response.data);
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
+  }
+
+  function checkCoOwner(ownerId: string) {
+    const checkOwnerDTO: CheckOwnerDTO = {
+      ownerId,
+      groupId: groupId!
+    };
+    setLoading(true);
+    axiosPrivate({
+      method: "post",
+      url: `${process.env.REACT_APP_API_SERVER}/group/checkcoowner/`,
+      data: checkOwnerDTO
+    })
+      .then((response) => {
+        setCoowner(response.data);
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
@@ -93,6 +116,7 @@ function GroupInfo({
     const ownerId = localStorage.getItem("id");
     if (ownerId) {
       checkOwner(ownerId);
+      checkCoOwner(ownerId);
     }
     getGroupMember();
   }, []);
@@ -150,7 +174,12 @@ function GroupInfo({
           </Col>
         </Row>
         <hr className="my-3" />
-        <PresentationSection setGame={setGame} socket={socket} owner={owner} />
+        <PresentationSection
+          setGame={setGame}
+          socket={socket}
+          owner={owner}
+          coowner={coowner}
+        />
         <hr className="my-3" />
         <MemberSection
           groupMember={groupMember}

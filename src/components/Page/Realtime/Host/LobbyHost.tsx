@@ -76,15 +76,23 @@ function LobbyHost({
   return (
     <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
       {loading && (
-        <Spinner
-          animation="border"
-          variant="dark"
+        <div
           style={{
+            backgroundColor: "black",
             position: "fixed",
             top: "50%",
-            left: "50%"
+            left: "50%",
+            width: "70px",
+            height: "70px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            opacity: "0.6",
+            borderRadius: "10px"
           }}
-        />
+        >
+          <Spinner animation="border" variant="light" />
+        </div>
       )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={8} lg={6} xs={8}>

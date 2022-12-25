@@ -106,7 +106,25 @@ function GroupList() {
 
   return (
     <Container>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <div
+          style={{
+            backgroundColor: "black",
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            width: "70px",
+            height: "70px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            opacity: "0.6",
+            borderRadius: "10px"
+          }}
+        >
+          <Spinner animation="border" variant="light" />
+        </div>
+      )}
       <Tabs defaultActiveKey="created" id="group-list-tab" className="mb-3">
         <Tab eventKey="created" title="Created">
           <Button href="/group/newgroup" variant="primary">

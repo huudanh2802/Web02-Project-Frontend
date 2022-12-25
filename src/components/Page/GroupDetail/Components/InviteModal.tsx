@@ -45,7 +45,17 @@ function InviteModal({
 
   return (
     <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <Modal.Header closeButton>
         <Modal.Title>Invite user</Modal.Title>
       </Modal.Header>

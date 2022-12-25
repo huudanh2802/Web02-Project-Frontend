@@ -126,7 +126,17 @@ export default function MyProfile() {
         flexDirection: "column"
       }}
     >
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <Container
         style={{
           marginTop: "20px",

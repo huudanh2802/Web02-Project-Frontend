@@ -171,7 +171,17 @@ function Game({
 
   return (
     <Container className={`game-container game-container-${bg}`} fluid>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <Body
         slide={slide}
         idx={idx}

@@ -118,7 +118,17 @@ function UserKard({
 
   return (
     <Card className="user-kard">
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <div className="kard-body">
         <img
           src="/assets/avatar_alt.svg"

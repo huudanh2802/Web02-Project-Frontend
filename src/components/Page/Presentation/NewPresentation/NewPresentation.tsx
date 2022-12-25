@@ -130,7 +130,17 @@ function NewPresentation() {
   };
   return (
     <Container fluid>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <TopBar
         sendSlide={() => sendSlide()}
         present={undefined}

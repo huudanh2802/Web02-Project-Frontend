@@ -45,5 +45,19 @@ export default function AutoJoin() {
       .finally(() => setLoading(false));
   }, [groupId, navigate, userId]);
 
-  return <div>{loading && <Spinner animation="border" />}</div>;
+  return (
+    <div>
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
+    </div>
+  );
 }

@@ -204,7 +204,17 @@ export default function NewGroup() {
 
   return (
     <form onSubmit={onSubmit}>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <Container className="mt-3">
         <Row className="m-4">
           <Col>

@@ -51,7 +51,17 @@ function PresentationKard({
   }
   return (
     <div className="d-flex flex-column">
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <Card
         key={index}
         className="kard"

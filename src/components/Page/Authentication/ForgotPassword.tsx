@@ -51,7 +51,17 @@ function ForgotPassword() {
   };
   return (
     <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={6} lg={4} xs={8}>
           <Card className="shadow">

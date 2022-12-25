@@ -173,7 +173,17 @@ function Signup({
   // if (form === 0)
   return (
     <Container fluid style={bgStyle}>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={8} lg={6} xs={12} />
         <Col md={6} lg={4} xs={8}>

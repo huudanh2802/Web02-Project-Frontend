@@ -152,7 +152,17 @@ function GameHost({
 
   return (
     <Container className="game-container game-container-primary" fluid>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <BodyHost
         slide={slide}
         idx={idx}

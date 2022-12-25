@@ -119,7 +119,17 @@ export default function CollabsSelect({
   }
   return (
     <>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <Spinner
+          animation="border"
+          variant="dark"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%"
+          }}
+        />
+      )}
       <MemberSearchBox member={memberSearch} addMember={(m) => addMember(m)} />
       <ul>
         <li

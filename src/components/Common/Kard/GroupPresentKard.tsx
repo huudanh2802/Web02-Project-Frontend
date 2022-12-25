@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { Key, useState } from "react";
-import { Card } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
+
 import { FaCalendar } from "react-icons/fa";
 import moment from "moment";
 import { Socket } from "socket.io-client";
@@ -52,14 +51,7 @@ function GroupPresentKard({
 
   return (
     <div className="d-flex flex-column">
-      {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+      {loading && <Spinner animation="border" />}
       <Card
         key={idx}
         className="kard"

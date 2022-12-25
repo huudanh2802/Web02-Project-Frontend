@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Card, Accordion, Button } from "react-bootstrap";
+import { Card, Accordion, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import { removeItem } from "../../../helpers/functions";
 import MemberDTO from "../../../dtos/MemberDTO";
 import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
@@ -120,14 +118,7 @@ function UserKard({
 
   return (
     <Card className="user-kard">
-      {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+      {loading && <Spinner animation="border" />}
       <div className="kard-body">
         <img
           src="/assets/avatar_alt.svg"

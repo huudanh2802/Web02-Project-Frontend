@@ -1,10 +1,8 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import "../../Common/Toast/ToastStyle.css";
@@ -52,14 +50,7 @@ export default function OtherProfile() {
         flexDirection: "column"
       }}
     >
-      {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+      {loading && <Spinner animation="border" />}
       <Container
         style={{
           background: "white",

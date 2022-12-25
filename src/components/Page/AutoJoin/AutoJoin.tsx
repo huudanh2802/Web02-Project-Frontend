@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Spinner } from "react-bootstrap";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import "react-toastify/dist/ReactToastify.css";
 import "../../Common/Toast/ToastStyle.css";
@@ -46,16 +45,5 @@ export default function AutoJoin() {
       .finally(() => setLoading(false));
   }, [groupId, navigate, userId]);
 
-  return (
-    <div>
-      {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
-    </div>
-  );
+  return <div>{loading && <Spinner animation="border" />}</div>;
 }

@@ -1,22 +1,28 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from "react";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
+import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Row,
+  Spinner
+} from "react-bootstrap";
+import { FieldValues, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
+import * as Yup from "yup";
 
-import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
-import "../../../index.css";
-import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axiosPublic from "../../../token/axiosPublic";
+import { FaExclamationTriangle, FaGoogle } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
+import "../../../index.css";
+import axiosPublic from "../../../token/axiosPublic";
 import "../../Common/Toast/ToastStyle.css";
+import "./FormStyle.css";
 
 function Login({
   setUsername
@@ -123,12 +129,7 @@ function Login({
   return (
     <Container fluid style={bgStyle}>
       {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <Spinner animation="border" variant="light" className="mx-auto" />
       )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={8} lg={6} xs={12} />

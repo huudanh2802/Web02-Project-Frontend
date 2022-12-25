@@ -2,12 +2,10 @@
 /* eslint-disable eqeqeq */
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import { PresentationDTO, SlideDTO } from "../../../../dtos/PresentationDTO";
 
 import { axiosPrivate } from "../../../../token/axiosPrivate";
@@ -154,14 +152,7 @@ function GameHost({
 
   return (
     <Container className="game-container game-container-primary" fluid>
-      {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+      {loading && <Spinner animation="border" />}
       <BodyHost
         slide={slide}
         idx={idx}

@@ -1,11 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,12 +46,9 @@ function InviteModal({
   return (
     <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
       {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <div className="spinner-background">
+          <Spinner animation="border" variant="light" />
+        </div>
       )}
       <Modal.Header closeButton>
         <Modal.Title>Invite user</Modal.Title>

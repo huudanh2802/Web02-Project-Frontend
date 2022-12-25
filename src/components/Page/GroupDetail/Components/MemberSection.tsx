@@ -3,7 +3,7 @@ import { Row, Col, Button } from "react-bootstrap";
 import UserKard from "../../../Common/Kard/UserKard";
 import GroupInfoDTO from "../../../../dtos/GroupInfoDTO";
 
-function MembersTab({
+function MemberSection({
   groupMember,
   setGroupMember,
   owner,
@@ -16,6 +16,7 @@ function MembersTab({
 }) {
   return (
     <>
+      <h3 className="fw-bold mb-2">Members</h3>
       <Button onClick={handleShow}>Invite</Button>
       <Row xs={1} md={3} lg={6} style={{ marginTop: "16px" }}>
         <Col>
@@ -62,4 +63,4 @@ function MembersTab({
   );
 }
 
-export default MembersTab;
+export default MemberSection;

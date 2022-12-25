@@ -174,7 +174,7 @@ export default function EditMutipleChoice({
         </InputGroup>
       ))}
       <div className="d-grid">
-        {currentSlide.answers.length < 4 && (
+        {currentSlide.answers.length <= 25 && (
           <Button className="mt-2" variant="primary" onClick={addAnswer}>
             Add answer
           </Button>

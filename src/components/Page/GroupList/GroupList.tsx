@@ -5,10 +5,12 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import GroupDTO from "../../../dtos/GroupDTO";
-import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
+import PresentationTab from "./Components/PresentationTab";
+import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
+
 import GroupKard from "../../Common/Kard/GroupKard";
-import PresentationTab from "../GroupDetail/Components/PresentationTab";
+
 import "../../Common/Toast/ToastStyle.css";
 
 function GroupList() {

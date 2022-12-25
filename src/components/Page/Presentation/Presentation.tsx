@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 
-import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -12,6 +11,7 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 import {
   HeadingDTO,
   MutipleChoiceDTO,
@@ -183,7 +183,11 @@ function Presentation({
       .then((response) => {
         console.log(`Game ${game} created successfully.`);
         setGame(game.toString());
-        socket.emit("create_game", { game: game.toString(), presentation: id });
+        socket.emit("create_game", {
+          game: game.toString(),
+          presentation: id,
+          group: null
+        });
         navigate(`/lobbyhost/${id}/${game}`);
       })
       .catch((err: any) => {

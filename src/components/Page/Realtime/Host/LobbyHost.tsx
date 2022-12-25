@@ -5,6 +5,9 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
+
+import GroupDTO from "../../../../dtos/GroupDTO";
 
 import "../../../../index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,7 +20,7 @@ function LobbyHost({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
   const navigate = useNavigate();
-  const { presentationId, id } = useParams();
+  const { presentationId, groupId, id } = useParams();
 
   interface User {
     id: string;
@@ -26,16 +29,34 @@ function LobbyHost({
   }
 
   const [users, setUsers] = useState<User[]>([]);
+  const [cohosts, setCohosts] = useState<User[]>([]);
 
   useEffect(() => {
     socket.on(`${game}_users`, (data: { users: User[] }) => {
       setUsers(data.users);
     });
+    socket.on(`${game}_cohosts`, (data: { cohosts: User[] }) => {
+      setCohosts(data.cohosts);
+    });
 
     return () => {
       socket.off(`${game}_users`);
+      socket.off(`${game}_cohosts`);
     };
   }, []);
+
+  // Group presentation
+  const [group, setGroup] = useState<GroupDTO>();
+  useEffect(() => {
+    if (groupId) {
+      axiosPrivate({
+        method: "get",
+        url: `${process.env.REACT_APP_API_SERVER}/group/get/${groupId}`
+      }).then((response: any) => {
+        setGroup(response.data);
+      });
+    }
+  }, [groupId]);
 
   // Game handling
   const startGame = () => {
@@ -44,8 +65,8 @@ function LobbyHost({
   };
 
   const endGame = () => {
-    socket.emit("end_game", { game });
-    navigate(-1);
+    socket.emit("end_game", { game, groupId });
+    navigate("/group/grouplist");
   };
 
   return (
@@ -56,17 +77,37 @@ function LobbyHost({
             <Card.Body>
               <div className="mb-3 mt-md-4 mx-4">
                 <h4 className="fw-bold" style={{ textAlign: "center" }}>
-                  Game code: {game}
+                  {groupId
+                    ? `${group?.name} presentation`
+                    : `Game code: ${game}`}
                 </h4>
               </div>
-              <header className="fw-bold">Joined users:</header>
-              <Row xs={4} md={4} lg={3} style={{ marginTop: "16px" }}>
-                {users.map((user) => (
-                  <Col>
-                    <h5>{user.username}</h5>
-                  </Col>
-                ))}
-              </Row>
+              {users.length > 0 && (
+                <>
+                  <header className="fw-bold">Joined users:</header>
+                  <Row xs={4} md={4} lg={3} style={{ marginTop: "16px" }}>
+                    {users.map((user) => (
+                      <Col>
+                        <h5 style={{ textAlign: "center" }}>{user.username}</h5>
+                      </Col>
+                    ))}
+                  </Row>
+                </>
+              )}
+              {cohosts.length > 0 && (
+                <>
+                  <header className="fw-bold mt-4">Joined co-hosts:</header>
+                  <Row xs={4} md={4} lg={3} style={{ marginTop: "16px" }}>
+                    {cohosts.map((cohost) => (
+                      <Col>
+                        <h5 style={{ textAlign: "center" }}>
+                          {cohost.username}
+                        </h5>
+                      </Col>
+                    ))}
+                  </Row>
+                </>
+              )}
 
               <div className="d-grid mt-4">
                 <Button variant="primary" onClick={startGame}>

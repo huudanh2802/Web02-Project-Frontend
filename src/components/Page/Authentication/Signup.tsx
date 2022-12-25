@@ -14,7 +14,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { FaGoogle, FaExclamationTriangle } from "react-icons/fa";
 import "../../../index.css";
-import background from "../../../bg-2.jpg";
 import "./FormStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axiosPublic from "../../../token/axiosPublic";
@@ -157,7 +156,7 @@ function Signup({
 
   // Background style
   const bgStyle = {
-    backgroundImage: `url(${background})`,
+    backgroundImage: `url(/assets/bg-2.jpg)`,
     height: "100%",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",

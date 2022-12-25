@@ -15,11 +15,13 @@ import {
   Tooltip
 } from "recharts";
 import { Socket } from "socket.io-client";
+import { ResultItemDTO, AnswerCounterDTO } from "../../../../../dtos/GameDTO";
 import {
   MutipleChoiceDTO,
   PresentationDTO,
   SlideDTO
 } from "../../../../../dtos/PresentationDTO";
+
 import "../../Realtime.css";
 import AnswerHost from "./AnswerHost";
 
@@ -34,7 +36,15 @@ export default function MutipleChoiceHost({
   presentation,
   game,
   setIdx,
-  setSlide
+  setSlide,
+  result,
+  setResult,
+  newResultCount,
+  setNewResultCount,
+  answer,
+  setAnswer,
+  showAnswer,
+  setShowAnswer
 }: {
   slide: MutipleChoiceDTO;
   idx: number;
@@ -43,29 +53,104 @@ export default function MutipleChoiceHost({
   game: string;
   setIdx: React.Dispatch<React.SetStateAction<number>>;
   setSlide: React.Dispatch<React.SetStateAction<SlideDTO>>;
+  result: ResultItemDTO[];
+  setResult: React.Dispatch<React.SetStateAction<ResultItemDTO[]>>;
+  newResultCount: number;
+  setNewResultCount: React.Dispatch<React.SetStateAction<number>>;
+  answer: AnswerCounterDTO[];
+  setAnswer: React.Dispatch<React.SetStateAction<AnswerCounterDTO[]>>;
+  showAnswer: boolean;
+  setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const answerTemplate = [
-    {
-      id: "A",
-      count: 0
-    },
-    {
-      id: "B",
-      count: 0
-    },
-    {
-      id: "C",
-      count: 0
-    },
-    {
-      id: "D",
-      count: 0
-    }
-  ];
-  const { presentationId } = useParams();
+  const { groupId } = useParams();
 
-  const [answer, setAnswer] = useState<AnswerCounter[]>(answerTemplate);
-  const [showAnswer, setShowAnswer] = useState(false);
+  useEffect(() => {
+    socket.on(
+      "submit_answer",
+      (data: {
+        username: string;
+        id: string;
+        correct: boolean;
+        createdAt: Date;
+      }) => {
+        const { username, id, correct, createdAt } = data;
+        const checkArray = answer.filter((a) => a.id === id);
+        if (checkArray.length === 0) {
+          setAnswer((oldAnswer) => [...oldAnswer, { id, count: 1 }]);
+        } else {
+          const cloneAnswer = [...answer];
+          const answerIdx = cloneAnswer.findIndex((a) => a.id === id);
+          cloneAnswer[answerIdx].count += 1;
+          setAnswer(cloneAnswer);
+
+          setResult([
+            ...result,
+            {
+              username,
+              id,
+              correct,
+              createdAt
+            }
+          ]);
+
+          setNewResultCount(newResultCount + 1);
+        }
+      }
+    );
+
+    socket.on("next_question", () => {
+      setIdx(idx + 1);
+      setSlide(presentation?.slides[idx]);
+      setNewResultCount(0);
+      setShowAnswer(false);
+      setAnswer([
+        {
+          id: "A",
+          count: 0
+        },
+        {
+          id: "B",
+          count: 0
+        },
+        {
+          id: "C",
+          count: 0
+        },
+        {
+          id: "D",
+          count: 0
+        }
+      ]);
+      setIdx(idx + 1);
+      setSlide(presentation?.slides[idx]);
+      setResult([]);
+      setNewResultCount(0);
+    });
+
+    socket.on("show_answer", () => {
+      setShowAnswer(true);
+    });
+
+    return () => {
+      socket.off("submit_answer");
+      socket.off("next_question");
+      socket.off("show_answer");
+    };
+  }, [
+    answer,
+    socket,
+    result,
+    newResultCount,
+    setResult,
+    setNewResultCount,
+    idx,
+    presentation?.slides,
+    setIdx,
+    setSlide,
+    setAnswer,
+    setShowAnswer
+  ]);
+
   // Button handling
   const handleShowAnswer = () => {
     setShowAnswer(true);
@@ -75,36 +160,55 @@ export default function MutipleChoiceHost({
 
   const handleNextQuestion = () => {
     setShowAnswer(false);
-    setAnswer(answerTemplate);
+    setAnswer([
+      {
+        id: "A",
+        count: 0
+      },
+      {
+        id: "B",
+        count: 0
+      },
+      {
+        id: "C",
+        count: 0
+      },
+      {
+        id: "D",
+        count: 0
+      }
+    ]);
     setIdx(idx + 1);
     setSlide(presentation?.slides[idx]);
+    setResult([]);
+    setNewResultCount(0);
     socket.emit("next_question", { game, slide });
   };
 
   const handleFinishGame = () => {
     alert("End of presentation");
-    socket.emit("finish_game", { game });
-    navigate(`/group/presentation/${presentationId}`);
+    socket.emit("finish_game", { game, groupId });
+    navigate(`/group/grouplist`);
   };
 
   useEffect(() => {
-    socket.on("submit_answer", (data: { id: string }) => {
-      const { id } = data;
-      const checkArray = answer.filter((a) => a.id === id);
-      if (checkArray.length === 0) {
-        setAnswer((oldAnswer) => [...oldAnswer, { id, count: 1 }]);
+    socket.on("finish_game", () => {
+      alert("Game has ended");
+      socket.emit("leave_game", {
+        username: localStorage.getItem("fullname"),
+        game
+      });
+      if (localStorage.getItem("fullname") === null) {
+        navigate("/join");
       } else {
-        const cloneAnswer = [...answer];
-        const answerIdx = cloneAnswer.findIndex((a) => a.id === id);
-        cloneAnswer[answerIdx].count += 1;
-        setAnswer(cloneAnswer);
+        navigate("/group/grouplist");
       }
     });
 
     return () => {
-      socket.off("submit_answer");
+      socket.off("finish_game");
     };
-  }, [answer, socket]);
+  }, [idx, presentation?.slides, setIdx, setSlide, socket, game, navigate]);
 
   return (
     <Col>
@@ -136,10 +240,10 @@ export default function MutipleChoiceHost({
                 {answer.length > 0 && (
                   <YAxis allowDecimals={false} stroke="white" />
                 )}
-                {answer.length > 0 && <Bar dataKey="count" fill="white" />}
                 {answer.length > 0 && (
                   <Tooltip itemStyle={{ color: "black" }} />
                 )}
+                {answer.length > 0 && <Bar dataKey="count" fill="white" />}
               </BarChart>
             </ResponsiveContainer>
           </div>

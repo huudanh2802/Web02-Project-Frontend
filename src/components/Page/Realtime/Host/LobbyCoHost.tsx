@@ -1,17 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DefaultEventsMap } from "@socket.io/component-emitter";
-import { useEffect } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
-import "../../../Common/Toast/ToastStyle.css";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 
-import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../../index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function Lobby({
   username,
@@ -23,7 +20,7 @@ function Lobby({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
   const navigate = useNavigate();
-  const { presentationId, id } = useParams();
+  const { presentationId, groupId, id } = useParams();
 
   const leaveGame = () => {
     console.log(`leaveGame: ${JSON.stringify({ username, game })}`);
@@ -38,7 +35,7 @@ function Lobby({
   // Game handling
   useEffect(() => {
     socket.on("start_game", () => {
-      navigate(`/game/${presentationId}/${id}`);
+      navigate(`/gamehost/${presentationId}/${groupId}/${id}`);
     });
 
     return () => {
@@ -48,9 +45,7 @@ function Lobby({
 
   useEffect(() => {
     socket.on("end_game", () => {
-      toast("Host has ended the game", {
-        className: "toast_container"
-      });
+      alert("Host has ended the game");
       socket.emit("leave_game", { username, game });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");

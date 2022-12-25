@@ -1,24 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useState } from "react";
-import { Container, Tab, Tabs } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { toast } from "react-toastify";
+import { axiosPrivate } from "../../../token/axiosPrivate";
 import CheckOwnerDTO from "../../../dtos/CheckOwnerDTO";
 import GroupInfoDTO from "../../../dtos/GroupInfoDTO";
-import { axiosPrivate } from "../../../token/axiosPrivate";
 
 import "./GroupDetail.css";
 
 import InviteModal from "./Components/InviteModal";
-import MemberTab from "./Components/MemberTab";
-// eslint-disable-next-line import/order
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../Common/Toast/ToastStyle.css";
+import PresentationSection from "./Components/PresentationSection";
+import MemberSection from "./Components/MemberSection";
 
-function GroupInfo() {
+function GroupInfo({
+  setGame,
+  socket
+}: {
+  setGame: React.Dispatch<React.SetStateAction<string>>;
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+}) {
   const { groupId } = useParams();
   const [owner, setOwner] = useState(false);
   const [show, setShow] = useState(false);
@@ -106,16 +114,15 @@ function GroupInfo() {
         <h1 className="page-title" style={{ marginBottom: "32px" }}>
           {groupMember.name}
         </h1>
-        <Tabs defaultActiveKey="members" id="group-list-tab" className="mb-3">
-          <Tab eventKey="members" title="Members">
-            <MemberTab
-              groupMember={groupMember}
-              setGroupMember={setGroupMember}
-              owner={owner}
-              handleShow={handleShow}
-            />
-          </Tab>
-        </Tabs>
+        <hr className="my-3" />
+        <PresentationSection setGame={setGame} socket={socket} owner={owner} />
+        <hr className="my-3" />
+        <MemberSection
+          groupMember={groupMember}
+          setGroupMember={setGroupMember}
+          owner={owner}
+          handleShow={handleShow}
+        />
       </Container>
     </>
   );

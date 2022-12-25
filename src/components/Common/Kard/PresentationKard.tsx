@@ -1,13 +1,11 @@
 import React, { Key, useState } from "react";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaCalendar, FaUser } from "react-icons/fa";
 import moment from "moment";
 
 import "./Kard.css";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
 import "react-toastify/dist/ReactToastify.css";
@@ -54,12 +52,9 @@ function PresentationKard({
   return (
     <div className="d-flex flex-column">
       {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <div className="spinner-background">
+          <Spinner animation="border" variant="light" />
+        </div>
       )}
       <Card
         key={index}

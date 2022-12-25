@@ -2,12 +2,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import {
   HeadingDTO,
   MutipleChoiceDTO,
@@ -133,12 +131,9 @@ function NewPresentation() {
   return (
     <Container fluid>
       {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <div className="spinner-background">
+          <Spinner animation="border" variant="light" />
+        </div>
       )}
       <TopBar
         sendSlide={() => sendSlide()}

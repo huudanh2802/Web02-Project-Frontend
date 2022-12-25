@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Row,
+  Spinner,
+  Tab,
+  Tabs
+} from "react-bootstrap";
 import { toast } from "react-toastify";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import "react-toastify/dist/ReactToastify.css";
 import GroupDTO from "../../../dtos/GroupDTO";
 import { axiosPrivate } from "../../../token/axiosPrivate";
@@ -101,12 +107,9 @@ function GroupList() {
   return (
     <Container>
       {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <div className="spinner-background">
+          <Spinner animation="border" variant="light" />
+        </div>
       )}
       <Tabs defaultActiveKey="created" id="group-list-tab" className="mb-3">
         <Tab eventKey="created" title="Created">

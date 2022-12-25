@@ -6,7 +6,9 @@ import { FaCalendar } from "react-icons/fa";
 import moment from "moment";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import { axiosPrivate } from "../../../token/axiosPrivate";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../Toast/ToastStyle.css";
 
 import "./Kard.css";
 import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
@@ -59,7 +61,10 @@ function GroupPresentKard({
           }
         } else if (data.success === false) {
           const gameType = data.isPrivate ? "private" : "non-existent";
-          alert(`Failed to join ${gameType} game ${data.game}`);
+          // alert(`Failed to join ${gameType} game ${data.game}`);
+          toast(`Failed to join ${gameType} game ${data.game}`, {
+            className: "toast_container"
+          });
         }
       }
     );

@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
@@ -136,7 +135,10 @@ function Game({
     });
 
     socket.on("disrupt_game", () => {
-      alert("Game is terminated since another is starting.");
+      // alert("Game is terminated since another is starting.");
+      toast("Game is terminated since another is starting.", {
+        className: "toast_container"
+      });
       if (localStorage.getItem("fullname") === null) {
         navigate("/join");
       } else {

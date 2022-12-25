@@ -5,6 +5,8 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
 
 import GroupDTO from "../../../../dtos/GroupDTO";
@@ -20,6 +22,7 @@ function LobbyHost({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const { presentationId, groupId, id } = useParams();
 
   interface User {
@@ -49,12 +52,15 @@ function LobbyHost({
   const [group, setGroup] = useState<GroupDTO>();
   useEffect(() => {
     if (groupId) {
+      setLoading(true);
       axiosPrivate({
         method: "get",
         url: `${process.env.REACT_APP_API_SERVER}/group/get/${groupId}`
-      }).then((response: any) => {
-        setGroup(response.data);
-      });
+      })
+        .then((response: any) => {
+          setGroup(response.data);
+        })
+        .finally(() => setLoading(false));
     }
   }, [groupId]);
 
@@ -71,6 +77,14 @@ function LobbyHost({
 
   return (
     <Container fluid style={{ backgroundColor: "#4bb8ad" }}>
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Row className="vh-100 d-flex justify-content-center align-items-center">
         <Col md={8} lg={6} xs={8}>
           <Card className="shadow">

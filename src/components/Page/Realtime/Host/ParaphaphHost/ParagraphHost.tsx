@@ -1,6 +1,8 @@
-/* eslint-disable no-alert */
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import React, { useEffect } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../../Common/Toast/ToastStyle.css";
 import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
 import { Socket } from "socket.io-client";
@@ -41,7 +43,10 @@ export default function ParagraphHost({
   };
 
   const handleFinishGame = () => {
-    alert("End of presentation");
+    // alert("End of presentation");
+    toast("End of presentation", {
+      className: "toast_container"
+    });
     socket.emit("finish_game", { game, groupId });
     navigate(`/group/grouplist`);
   };
@@ -53,7 +58,10 @@ export default function ParagraphHost({
     });
 
     socket.on("finish_game", () => {
-      alert("Game has ended");
+      // alert("Game has ended");
+      toast("Game has ended", {
+        className: "toast_container"
+      });
       socket.emit("leave_game", {
         username: localStorage.getItem("fullname"),
         game

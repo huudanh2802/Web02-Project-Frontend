@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../components/Common/Toast/ToastStyle.css";
 import io from "socket.io-client";
 import GroupList from "../components/Page/GroupList/GroupList";
 import { NewGroupPage } from "../components/Page/NewGroupPage/NewGroupPage";
@@ -44,7 +47,10 @@ function BaseRouter() {
 
   useEffect(() => {
     socket.on("alert_group_present", (data: { groupName: string }) => {
-      alert(`A presentation in your group "${data.groupName}" is in session`);
+      // alert(`A presentation in your group "${data.groupName}" is in session`);
+      toast(`A presentation in your group "${data.groupName}" is in session`, {
+        className: "toast_container"
+      });
     });
 
     return () => {

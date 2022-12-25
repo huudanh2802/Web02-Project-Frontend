@@ -75,14 +75,20 @@ function PresentationSection({
   };
 
   const listPresentation = () => {
+    alert("ahahah");
     const id = localStorage.getItem("id");
     axiosPrivate({
       method: "get",
-      url: `${process.env.REACT_APP_API_SERVER}/presentation/getview/${id}`
-    }).then((response) => {
-      setPresentations(response.data);
-      handleShow();
-    });
+      url: `${process.env.REACT_APP_API_SERVER}/game/getview/${id}`
+    })
+      .then((response) => {
+        setPresentations(response.data);
+        handleShow();
+        alert("Hohoho");
+      })
+      .catch(() => {
+        alert("houu roo");
+      });
   };
 
   return (

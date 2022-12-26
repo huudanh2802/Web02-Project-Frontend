@@ -54,4 +54,5 @@ li{
   align-items: center;
   opacity: 0.6;
   border-radius: 10px;
+  z-index: 99 !important;
 }

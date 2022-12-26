@@ -13,14 +13,15 @@ import "../Toast/ToastStyle.css";
 import "./Kard.css";
 import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 
-function GroupPresentKard({
+function GroupPresentJoinKard({
   presentation,
   idx,
   game,
   setGame,
   socket,
   groupId,
-  owner
+  owner,
+  coowner
 }: {
   presentation: ViewPresentationDTO;
   idx: Key;
@@ -29,6 +30,7 @@ function GroupPresentKard({
   socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   groupId: string;
   owner: boolean;
+  coowner: boolean;
 }) {
   const navigate = useNavigate();
   const username = localStorage.getItem("fullname");
@@ -36,7 +38,7 @@ function GroupPresentKard({
   const joinGroupPresent = () => {
     if (username !== "" && game !== "") {
       setGame(game);
-      if (owner) socket.emit("join_host_game", { username, game });
+      if (owner || coowner) socket.emit("join_host_game", { username, game });
       else socket.emit("join_game", { username, game, groupId });
     }
   };
@@ -111,4 +113,4 @@ function GroupPresentKard({
   );
 }
 
-export default GroupPresentKard;
+export default GroupPresentJoinKard;

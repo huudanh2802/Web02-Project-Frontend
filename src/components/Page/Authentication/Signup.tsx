@@ -117,6 +117,9 @@ function Signup({
             setUsername(res.data.fullname);
 
             // alert(JSON.stringify(res.data));
+            toast.success("Signup successful!", {
+              className: "toast_container"
+            });
             navigate("/group/grouplist");
           })
           .catch((err: any) => {

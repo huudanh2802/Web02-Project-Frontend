@@ -1,61 +1,37 @@
-import React, { Key, useState } from "react";
-import { Button, Card, Spinner } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { FaCalendar, FaUser } from "react-icons/fa";
+/* eslint-disable no-unused-vars */
 import moment from "moment";
+import React, { Key } from "react";
+import { Button, Card } from "react-bootstrap";
+import { FaCalendar, FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-import "./Kard.css";
-import { toast } from "react-toastify";
-import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
-import { axiosPrivate } from "../../../token/axiosPrivate";
 import "react-toastify/dist/ReactToastify.css";
+import ViewPresentationDTO from "../../../dtos/ViewPresentationDTO";
 import "../Toast/ToastStyle.css";
+import "./Kard.css";
 
 function PresentationKard({
   presentation,
   index,
   setPresentation,
-  collabs
+  collabs,
+  deletePresentation
 }: {
   presentation: ViewPresentationDTO;
   index: Key;
   setPresentation: React.Dispatch<React.SetStateAction<ViewPresentationDTO[]>>;
   collabs: boolean;
+  deletePresentation: (event: any) => void;
 }) {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
   const viewPresentation = () => {
     const link = `/group/presentation/${presentation.id.toString()}`;
     navigate(link);
   };
 
-  function deletePresentation() {
-    setLoading(true);
-    axiosPrivate({
-      method: "delete",
-      url: `${process.env.REACT_APP_API_SERVER}/presentation/${presentation.id}`
-    })
-      .then((response) => {
-        toast.success("Presentation has been deleted.", {
-          className: "toast_container"
-        });
-        setPresentation(response.data);
-      })
-      .catch((err: any) => {
-        toast.error(err.response.data.error, {
-          className: "toast_container"
-        });
-      })
-      .finally(() => setLoading(false));
-  }
   return (
     <div className="d-flex flex-column">
-      {loading && (
-        <div className="spinner-background">
-          <Spinner animation="border" variant="light" />
-        </div>
-      )}
       <Card
         key={index}
         className="kard"
@@ -94,7 +70,7 @@ function PresentationKard({
       {!collabs && (
         <Button
           style={{ width: "inherit", marginBottom: "24px" }}
-          onClick={() => deletePresentation()}
+          onClick={() => deletePresentation(presentation)}
           variant="danger"
         >
           Delete presentation

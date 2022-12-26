@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
-import { Button, Row, Col } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Row, Col, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import PresentationKard from "../../../Common/Kard/PresentationKard";
 import ViewPresentationDTO from "../../../../dtos/ViewPresentationDTO";
+import { axiosPrivate } from "../../../../token/axiosPrivate";
 
 function PresentationTab({
   presentationsOwn,
@@ -17,9 +19,37 @@ function PresentationTab({
   presentationsCollabs: ViewPresentationDTO[];
 }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  function deletePresentation(presentation: ViewPresentationDTO) {
+    setLoading(true);
+    axiosPrivate({
+      method: "delete",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/${presentation.id}`
+    })
+      .then((response) => {
+        toast.success("Presentation has been deleted.", {
+          className: "toast_container"
+        });
+        setPresentationsOwn((current) =>
+          current.filter((e) => e.id !== presentation.id)
+        );
+      })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+      })
+      .finally(() => setLoading(false));
+  }
 
   return (
     <>
+      {loading && (
+        <div className="spinner-background">
+          <Spinner animation="border" variant="light" />
+        </div>
+      )}
       <Button onClick={() => navigate(`/group/newpresentation`)}>
         Create new Presentation
       </Button>
@@ -36,6 +66,7 @@ function PresentationTab({
                   presentation={presentation}
                   index={idx}
                   collabs={false}
+                  deletePresentation={() => deletePresentation(presentation)}
                 />
               </Col>
             ))}
@@ -50,6 +81,7 @@ function PresentationTab({
                   presentation={presentation}
                   index={idx}
                   collabs
+                  deletePresentation={() => deletePresentation(presentation)}
                 />
               </Col>
             ))}

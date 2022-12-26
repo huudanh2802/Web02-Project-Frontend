@@ -130,6 +130,9 @@ function UserKard({
           alt="avatar"
         />
         <header className="kard-center">{info.fullname}</header>
+        <p style={{ margin: "0", padding: "2", overflowWrap: "anywhere" }}>
+          {info.email}
+        </p>
         <span className={`tag tag-${tag}`} style={{ margin: "4px auto" }}>
           {role}
         </span>

@@ -90,8 +90,26 @@ function Presentation({
       })
       .finally(() => setLoading(false));
   }
+
+  function checkAutho() {
+    axiosPrivate({
+      method: "post",
+      url: `${process.env.REACT_APP_API_SERVER}/presentation/checkautho/${id}`,
+      data: { userId }
+    })
+      .then(() => {})
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+        navigate("/");
+      })
+
+      .finally(() => setLoading(false));
+  }
   useEffect(() => {
     setLoading(true);
+    checkAutho();
     axiosPrivate({
       method: "get",
       url: `${process.env.REACT_APP_API_SERVER}/presentation/get/${id}`

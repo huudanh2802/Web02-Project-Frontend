@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import PresentationKard from "../../../Common/Kard/PresentationKard";
 import ViewPresentationDTO from "../../../../dtos/ViewPresentationDTO";
 import { axiosPrivate } from "../../../../token/axiosPrivate";
+import ConfirmModal from "../../../Common/ConfirmModal/ConfirmModal";
 
 function PresentationTab({
   presentationsOwn,
@@ -20,7 +21,10 @@ function PresentationTab({
 }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
+  const handleCloseConfirm = () => setShowConfirm(false);
+  const handleShowConfirm = () => setShowConfirm(true);
   function deletePresentation(presentation: ViewPresentationDTO) {
     setLoading(true);
     axiosPrivate({
@@ -34,6 +38,7 @@ function PresentationTab({
         setPresentationsOwn((current) =>
           current.filter((e) => e.id !== presentation.id)
         );
+        handleCloseConfirm();
       })
       .catch((err: any) => {
         toast.error(err.response.data.error, {
@@ -50,6 +55,7 @@ function PresentationTab({
           <Spinner animation="border" variant="light" />
         </div>
       )}
+
       <Button onClick={() => navigate(`/group/newpresentation`)}>
         Create new Presentation
       </Button>
@@ -61,12 +67,17 @@ function PresentationTab({
           <>
             {presentationsOwn.map((presentation, idx) => (
               <Col>
+                <ConfirmModal
+                  show={showConfirm}
+                  handleClose={handleCloseConfirm}
+                  handleConfirm={() => deletePresentation(presentation)}
+                />
                 <PresentationKard
                   setPresentation={setPresentationsOwn}
                   presentation={presentation}
                   index={idx}
                   collabs={false}
-                  deletePresentation={() => deletePresentation(presentation)}
+                  deletePresentation={() => handleShowConfirm()}
                 />
               </Col>
             ))}

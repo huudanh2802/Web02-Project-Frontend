@@ -91,6 +91,7 @@ function GroupInfo({
         toast.error(err.response.data.error, {
           className: "toast_container"
         });
+        navigate("/");
       })
       .finally(() => setLoading(false));
   }

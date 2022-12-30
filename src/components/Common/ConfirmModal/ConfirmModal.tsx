@@ -12,10 +12,7 @@ export default function ConfirmModal({
   show: boolean;
 }) {
   return (
-    <div
-      className="modal show"
-      style={{ display: "block", position: "initial" }}
-    >
+    <div className="modal show" style={{ zIndex: "99" }}>
       <Modal show={show}>
         <Modal.Header closeButton />
 

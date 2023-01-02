@@ -29,3 +29,14 @@ export interface AnswerCounterDTO {
   id: string;
   count: number;
 }
+
+export default interface GameDTO {
+  id: string;
+  game: string;
+  groupId: string | null;
+  result: ResultItemDTO[];
+  chat: ChatItemDTO[];
+  question: QuestionItemDTO[];
+  ended: boolean;
+  createdAt: Date;
+}

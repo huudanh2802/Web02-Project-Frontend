@@ -67,22 +67,22 @@ function MemberRole({
       <Col lg={2}>
         <FaUserCircle size={40} />
       </Col>
-      <Col>
+      <Col lg={3}>
         <p style={{ fontWeight: "bold", margin: "0" }}>{memberData.email}</p>
         <p style={{ color: "#8ea1b0" }}>{memberData.fullname}</p>
       </Col>
-      <Col className="d-flex flex-row justify-content-center">
+      <Col className="d-flex flex-row justify-content-center" lg={2}>
         <Button type="button" className="iconBtn" onClick={redirectProfile}>
           <FaInfo className="icon" />
         </Button>
       </Col>
-      <Col>
+      <Col lg={2}>
         <Button variant="danger" onClick={() => removeMember(memberData)}>
           Remove
         </Button>
       </Col>
       {add && (
-        <Col>
+        <Col lg={3}>
           <Select
             styles={{
               control: (baseStyles) => ({

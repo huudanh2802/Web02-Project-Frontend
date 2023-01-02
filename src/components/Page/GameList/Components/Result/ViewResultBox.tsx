@@ -34,11 +34,12 @@ function ViewResultBox({ game }: { game: GameDTO }) {
         </ButtonGroup>
       </Col>
       <Col className="view-list">
-        {game.result[questionIdx].result.map((result) => (
-          <Row>
-            <ViewResultItem result={result} />
-          </Row>
-        ))}
+        {game.result[questionIdx] &&
+          game.result[questionIdx].result.map((result) => (
+            <Row>
+              <ViewResultItem result={result} />
+            </Row>
+          ))}
       </Col>
     </>
   );

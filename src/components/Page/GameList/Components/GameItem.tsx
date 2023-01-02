@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import moment from "moment";
 
 import GameDTO from "../../../../dtos/GameDTO";
+
+import { axiosPrivate } from "../../../../token/axiosPrivate";
 
 function GameItem({
   idx,
@@ -15,6 +17,22 @@ function GameItem({
   selected: boolean;
   setCurGame: React.Dispatch<React.SetStateAction<number>>;
 }) {
+  // Role handling
+  const [groupName, setGroupName] = useState("Public");
+  const [tag, setTag] = useState("gold");
+
+  useEffect(() => {
+    if (game.groupId !== null) {
+      axiosPrivate({
+        method: "get",
+        url: `${process.env.REACT_APP_API_SERVER}/group/get/${game.groupId}`
+      }).then((response) => {
+        setGroupName(response.data.name);
+        setTag("teal");
+      });
+    }
+  }, [game.groupId]);
+
   const style = {
     marginBottom: "8px",
     borderColor: selected ? "#4bb8ad" : "black",
@@ -32,7 +50,16 @@ function GameItem({
           blockSize: "fit-content"
         }}
       >
-        {game.game}
+        {game.game}{" "}
+        <span
+          className={`tag tag-${tag}`}
+          style={{
+            width: "fit-content",
+            blockSize: "fit-content"
+          }}
+        >
+          {groupName}
+        </span>
       </header>
       <small style={{ color: selected ? "#dfe6f2" : "gray" }}>
         {moment(game.createdAt.toString()).format("DD/MM/YYYY • hh:mm:ss")}

@@ -14,6 +14,7 @@ import MyProfile from "../components/Page/ManageUser/MyProfile";
 import OtherProfile from "../components/Page/ManageUser/OtherProfile";
 import NewPresentation from "../components/Page/Presentation/NewPresentation/NewPresentation";
 import Presentation from "../components/Page/Presentation/Presentation";
+import GameList from "../components/Page/GameList/GameList";
 
 export default function GroupRouter({
   setGame,
@@ -41,6 +42,7 @@ export default function GroupRouter({
           path="presentation/:id"
           element={<Presentation setGame={setGame} socket={socket} />}
         />
+        <Route path="gamelist/:id" element={<GameList />} />
       </Routes>
     </>
   );

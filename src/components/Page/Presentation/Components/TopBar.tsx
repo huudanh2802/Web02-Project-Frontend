@@ -11,7 +11,8 @@ import {
   FaEdit,
   FaPlay,
   FaSave,
-  FaUserPlus
+  FaUserPlus,
+  FaDesktop
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PresentationDTO } from "../../../../dtos/PresentationDTO";
@@ -23,6 +24,7 @@ import CollabsModal from "./Collabs/CollabsModal";
 
 function TopBar({
   sendSlide,
+  viewGames,
   present,
   detailPresentation,
   setPresentation,
@@ -31,6 +33,7 @@ function TopBar({
   checkOwn
 }: {
   sendSlide: () => Promise<void>;
+  viewGames: (() => void) | undefined;
   present: (() => void) | undefined;
   detailPresentation: PresentationDTO;
   setPresentation: React.Dispatch<React.SetStateAction<PresentationDTO>>;
@@ -80,20 +83,30 @@ function TopBar({
             />
           </h2>
         </Col>
-        <Col lg={6}>
+        <Col lg={5}>
           <Row>
-            <Col />
             <Col>
               <Button
-                className="p-present-button"
+                className="p-button"
                 variant="outline-dark"
                 onClick={sendSlide}
               >
                 <FaSave style={{ margin: "0 8px 4px 0" }} /> Save
               </Button>
+
+              {viewGames && (
+                <Button
+                  className="p-button"
+                  variant="outline-dark"
+                  onClick={viewGames}
+                >
+                  <FaDesktop style={{ margin: "0 8px 4px 0" }} /> Game Sessions
+                </Button>
+              )}
+
               {checkOwn && (
                 <Button
-                  className="p-present-button"
+                  className="p-button"
                   variant="outline-dark"
                   onClick={handleShowCollabs}
                 >
@@ -104,7 +117,7 @@ function TopBar({
 
               {present && (
                 <Button
-                  className="p-present-button ml-2"
+                  className="p-button ml-2"
                   variant="primary"
                   onClick={() => present()}
                 >

@@ -137,6 +137,7 @@ function NewPresentation() {
       )}
       <TopBar
         sendSlide={() => sendSlide()}
+        viewGames={undefined}
         present={undefined}
         detailPresentation={newPresentation}
         setPresentation={setNewPresentation}

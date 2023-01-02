@@ -73,7 +73,6 @@ function GroupInfo({
   }
 
   function checkCoOwner(ownerId: string) {
-    console.log("ha");
     const checkOwnerDTO: CheckOwnerDTO = {
       ownerId,
       groupId: groupId!
@@ -87,6 +86,26 @@ function GroupInfo({
       .then((response) => {
         setCoowner(response.data);
       })
+      .catch((err: any) => {
+        toast.error(err.response.data.error, {
+          className: "toast_container"
+        });
+        navigate("/");
+      })
+      .finally(() => setLoading(false));
+  }
+  function checkAuthor(ownerId: string) {
+    const checkOwnerDTO: CheckOwnerDTO = {
+      ownerId,
+      groupId: groupId!
+    };
+    setLoading(true);
+    axiosPrivate({
+      method: "post",
+      url: `${process.env.REACT_APP_API_SERVER}/group/checkautho/`,
+      data: checkOwnerDTO
+    })
+      .then(() => {})
       .catch((err: any) => {
         toast.error(err.response.data.error, {
           className: "toast_container"
@@ -117,6 +136,7 @@ function GroupInfo({
   useEffect(() => {
     const ownerId = localStorage.getItem("id");
     if (ownerId) {
+      checkAuthor(ownerId);
       checkOwner(ownerId);
       checkCoOwner(ownerId);
     }

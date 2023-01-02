@@ -187,6 +187,10 @@ function Presentation({
     setCurrentSlide(slideChange);
   };
 
+  const viewGames = () => {
+    navigate(`/group/gamelist/${id}`);
+  };
+
   const present = () => {
     const game = Math.floor(Math.random() * 10000);
     // Backend
@@ -223,6 +227,7 @@ function Presentation({
       )}
       <TopBar
         sendSlide={() => sendSlide()}
+        viewGames={viewGames}
         present={present}
         detailPresentation={detailPresentation}
         setPresentation={setPresentation}

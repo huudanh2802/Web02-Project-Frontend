@@ -1,0 +1,21 @@
+.game-list {
+  height: 70vh;
+  overflow-y: auto;
+}
+
+.view-list {
+  height: 57vh;
+  overflow-y: auto;
+  padding: 0 24px 0;
+}
+
+.view-result-list {
+  height: 50vh;
+  overflow-y: auto;
+  padding: 0 24px 0;
+}
+
+.view-result-button-group {
+  margin-left: 12px;
+  margin-bottom: 16px;
+}

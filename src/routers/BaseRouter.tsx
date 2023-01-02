@@ -25,6 +25,7 @@ import Game from "../components/Page/Realtime/Viewer/Game";
 import GameHost from "../components/Page/Realtime/Host/GameHost";
 import ForgotPassword from "../components/Page/Authentication/ForgotPassword";
 import NotFound from "../components/Page/NotFound/NotFound";
+import GameList from "../components/Page/GameList/GameList";
 
 // Socket IO
 const socket = io(`${process.env.REACT_APP_API_SERVER}`);
@@ -78,6 +79,7 @@ function BaseRouter() {
           path="presentation/:id"
           element={<Presentation setGame={setGame} socket={socket} />}
         />
+        <Route path="gamelist/:id" element={<GameList />} />
       </Route>
       <Route path="/login" element={<Login setUsername={setUsername} />} />
       <Route path="/signup" element={<Signup setUsername={setUsername} />} />

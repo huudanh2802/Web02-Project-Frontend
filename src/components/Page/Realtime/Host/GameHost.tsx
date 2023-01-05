@@ -73,24 +73,7 @@ function GameHost({
     ]
   });
   const [idx, setIdx] = useState(0);
-  const [answer, setAnswer] = useState<AnswerCounterDTO[]>([
-    {
-      id: "A",
-      count: 0
-    },
-    {
-      id: "B",
-      count: 0
-    },
-    {
-      id: "C",
-      count: 0
-    },
-    {
-      id: "D",
-      count: 0
-    }
-  ]);
+  const [answer, setAnswer] = useState<AnswerCounterDTO[]>([]);
   const [showAnswer, setShowAnswer] = useState(false);
 
   // Game handling

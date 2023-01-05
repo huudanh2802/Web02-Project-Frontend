@@ -27,10 +27,17 @@ import {
 import "../../Realtime.css";
 import AnswerHost from "./AnswerHost";
 
-interface AnswerCounter {
-  id: string;
-  count: number;
+function getAnswerTemplate(answerCount: number) {
+  const answerTemplate = [];
+  for (let i = 0; i < answerCount; i += 1) {
+    answerTemplate.push({
+      id: String.fromCharCode(65 + i),
+      count: 0
+    });
+  }
+  return answerTemplate;
 }
+
 export default function MutipleChoiceHost({
   slide,
   idx,
@@ -65,6 +72,10 @@ export default function MutipleChoiceHost({
   setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { groupId } = useParams();
+
+  useEffect(() => {
+    setAnswer(getAnswerTemplate(slide.answers.length));
+  }, [slide.answers.length, slide, setAnswer]);
 
   useEffect(() => {
     socket.on(
@@ -105,28 +116,8 @@ export default function MutipleChoiceHost({
       setSlide(presentation?.slides[idx]);
       setNewResultCount(0);
       setShowAnswer(false);
-      setAnswer([
-        {
-          id: "A",
-          count: 0
-        },
-        {
-          id: "B",
-          count: 0
-        },
-        {
-          id: "C",
-          count: 0
-        },
-        {
-          id: "D",
-          count: 0
-        }
-      ]);
-      setIdx(idx + 1);
-      setSlide(presentation?.slides[idx]);
+      setAnswer([]);
       setResult([]);
-      setNewResultCount(0);
     });
 
     socket.on("show_answer", () => {
@@ -150,7 +141,8 @@ export default function MutipleChoiceHost({
     setIdx,
     setSlide,
     setAnswer,
-    setShowAnswer
+    setShowAnswer,
+    slide.answers.length
   ]);
 
   // Button handling
@@ -162,26 +154,9 @@ export default function MutipleChoiceHost({
 
   const handleNextQuestion = () => {
     setShowAnswer(false);
-    setAnswer([
-      {
-        id: "A",
-        count: 0
-      },
-      {
-        id: "B",
-        count: 0
-      },
-      {
-        id: "C",
-        count: 0
-      },
-      {
-        id: "D",
-        count: 0
-      }
-    ]);
     setIdx(idx + 1);
     setSlide(presentation?.slides[idx]);
+    setAnswer([]);
     setResult([]);
     setNewResultCount(0);
     socket.emit("next_question", { game, slide });

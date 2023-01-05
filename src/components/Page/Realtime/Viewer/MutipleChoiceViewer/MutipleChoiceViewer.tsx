@@ -19,6 +19,17 @@ import { AnswerCounterDTO } from "../../../../../dtos/GameDTO";
 import Answer from "./Answer";
 import "../../Realtime.css";
 
+function getAnswerTemplate(answerCount: number) {
+  const answerTemplate = [];
+  for (let i = 0; i < answerCount; i += 1) {
+    answerTemplate.push({
+      id: String.fromCharCode(65 + i),
+      count: 0
+    });
+  }
+  return answerTemplate;
+}
+
 export default function MutipleChoiceAnswer({
   slide,
   idx,
@@ -48,6 +59,10 @@ export default function MutipleChoiceAnswer({
   showAnswer: boolean;
   setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  useEffect(() => {
+    setGameAnswer(getAnswerTemplate(slide.answers.length));
+  }, [slide.answers.length, slide, setGameAnswer]);
+
   const [submitted, setSubmitted] = useState(false);
   const [answer, setAnswer] = useState("");
   useEffect(() => {
@@ -64,24 +79,7 @@ export default function MutipleChoiceAnswer({
       setIdx(idx + 1);
       setSlide(presentation?.slides[idx]);
       setShowAnswer(false);
-      setGameAnswer([
-        {
-          id: "A",
-          count: 0
-        },
-        {
-          id: "B",
-          count: 0
-        },
-        {
-          id: "C",
-          count: 0
-        },
-        {
-          id: "D",
-          count: 0
-        }
-      ]);
+      setGameAnswer([]);
       setAnswer("");
       setSubmitted(false);
       setBg("primary");

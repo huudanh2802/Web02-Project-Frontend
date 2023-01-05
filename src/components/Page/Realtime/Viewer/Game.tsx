@@ -41,24 +41,7 @@ function Game({
   });
   const [idx, setIdx] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [gameAnswer, setGameAnswer] = useState<AnswerCounterDTO[]>([
-    {
-      id: "A",
-      count: 0
-    },
-    {
-      id: "B",
-      count: 0
-    },
-    {
-      id: "C",
-      count: 0
-    },
-    {
-      id: "D",
-      count: 0
-    }
-  ]);
+  const [gameAnswer, setGameAnswer] = useState<AnswerCounterDTO[]>([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
